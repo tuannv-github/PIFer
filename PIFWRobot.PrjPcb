@@ -120,7 +120,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=AOCDLXGJ
 
 [Document6]
 DocumentPath=..\altium_lib\Header-Connector\Header-Connector.SchLib
