@@ -290,7 +290,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=QHPPEFOR
 
 [Document16]
 DocumentPath=..\..\..\altium_lib\Active-Component\BJT.SchLib
@@ -307,7 +307,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=XRPVOBRF
 
 [Document17]
 DocumentPath=..\..\..\altium_lib\Active-Component\Diode.PcbLib
@@ -341,7 +341,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=YBRYYTJX
 
 [Document19]
 DocumentPath=..\..\..\altium_lib\Active-Component\LED.PcbLib
@@ -375,7 +375,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=HMRCDVKR
 
 [Document21]
 DocumentPath=..\..\..\altium_lib\Active-Component\MOSFET.PcbLib
@@ -392,7 +392,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=FOLIKYBY
 
 [Document22]
 DocumentPath=..\..\..\altium_lib\Active-Component\MOSFET.SchLib
@@ -409,7 +409,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=LNXXSBOO
 
 [Document23]
 DocumentPath=..\..\..\altium_lib\Header-Connector\Header-Connector.PcbLib
@@ -443,7 +443,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=TSGCLNVU
 
 [Document25]
 DocumentPath=..\..\..\altium_lib\Power-IC\PI.PcbLib
@@ -477,7 +477,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=HYAMIXMJ
 
 [Document27]
 DocumentPath=..\..\..\altium_lib\Passive-Component\Capacitor.PcbLib
@@ -511,7 +511,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=XYNEQVDB
 
 [Document29]
 DocumentPath=..\..\..\altium_lib\Passive-Component\Capacitor-TH.PcbLib
@@ -545,7 +545,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=EUPNPBXO
 
 [Document31]
 DocumentPath=..\..\..\altium_lib\Passive-Component\Inductor.PcbLib
@@ -579,7 +579,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=CRUMGFOI
 
 [Document33]
 DocumentPath=..\..\..\altium_lib\Passive-Component\Resistor.PcbLib
@@ -613,7 +613,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=VKSCYEKR
 
 [Document35]
 DocumentPath=..\..\..\altium_lib\Passive-Component\Resistor-TH.PcbLib
@@ -647,7 +647,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=KKMLDFHN
 
 [Document37]
 DocumentPath=..\..\..\altium_lib\MicroController\MC.PcbLib
@@ -681,7 +681,24 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=BAPTHKTN
+
+[Document39]
+DocumentPath=decawave.SchDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=8
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=GTWJHALM
 
 [GeneratedDocument1]
 DocumentPath=Project Outputs for PIFWRobot\NC Drill\PIFWRobot.DRR
