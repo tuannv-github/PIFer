@@ -173,18 +173,18 @@ Configuration10_Name1=OutputConfigurationParameter1
 Configuration10_Item1=Record=SchPrintView|ShowNoERC=True|ShowParamSet=True|ShowProbe=True|ShowBlanket=True|NoERCSymbolsToShow="Thin Cross","Thick Cross","Small Cross",Checkbox,Triangle|ShowNote=True|ShowNoteCollapsed=True|ShowOpenEnds=True|ExpandDesignator=True|ExpandNetLabel=False|ExpandPort=False|ExpandSheetNum=False|ExpandDocNum=False|PrintArea=0|PrintAreaRect.X1=0|PrintAreaRect.Y1=0|PrintAreaRect.X2=0|PrintAreaRect.Y2=0
 
 [PublishSettings]
-OutputFilePath2=Project Outputs for Free Documents\.PDF
+OutputFilePath2=E:\Projects\PIFWRobot\Hardware\Board\Project Outputs for PIFWRobot\PIFWRobot-2020-06-20\
 ReleaseManaged2=1
 OutputBasePath2=Project Outputs for PIFWRobot
-OutputPathMedia2=
-OutputPathMediaValue2=
-OutputPathOutputer2=[Output Type]
-OutputPathOutputerPrefix2=
-OutputPathOutputerValue2=
+OutputPathMedia2==PIFWRobot+'-'+currentDate
+OutputPathMediaValue2==PIFWRobot+'-'+currentDate
+OutputPathOutputer2=
+OutputPathOutputerPrefix2==PIFWRobot+'-'+ currentDate + '--' + CurrentTime
+OutputPathOutputerValue2==PIFWRobot+'-'+ currentDate + '--' + CurrentTime
 OutputFileName2=Job.PDF
 OutputFileNameMulti2=
-UseOutputNameForMulti2=1
-OutputFileNameSpecial2=
+UseOutputNameForMulti2=0
+OutputFileNameSpecial2==PIFWRobot+'-'+ currentDate + '--' + CurrentTime
 OpenOutput2=1
 PromptOverwrite2=1
 PublishMethod2=0
@@ -252,7 +252,7 @@ WmvVideoCodecName4=Windows Media Video V7
 WmvQuality4=80
 
 [GeneratedFilesSettings]
-RelativeOutputPath2=Project Outputs for Free Documents\.PDF
+RelativeOutputPath2=E:\Projects\PIFWRobot\Hardware\Board\Project Outputs for PIFWRobot\PIFWRobot-2020-06-20\
 OpenOutputs2=1
 RelativeOutputPath3=Project Outputs for Free Documents\
 OpenOutputs3=1
