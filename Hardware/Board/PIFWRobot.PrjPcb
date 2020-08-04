@@ -123,57 +123,6 @@ GenerateClassCluster=0
 DocumentUniqueId=
 
 [Document6]
-DocumentPath=691322110004_Altium_WR-TBL_rev19a.IntLib
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=
-
-[Document7]
-DocumentPath=434111043826_Altium_WS-TASV_rev20a.IntLib
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=
-
-[Document8]
-DocumentPath=150080BS75000_Altium_WL-SMCW_rev20a.IntLib
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=
-
-[Document9]
 DocumentPath=motor_controller.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -190,7 +139,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=DRAKHHHB
 
-[Document10]
+[Document7]
 DocumentPath=mcu.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -207,7 +156,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=UEKAYBVI
 
-[Document11]
+[Document8]
 DocumentPath=sensor.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -224,7 +173,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=QSIXHSOY
 
-[Document12]
+[Document9]
 DocumentPath=bluetooth.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -241,7 +190,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=HEUKABHR
 
-[Document13]
+[Document10]
 DocumentPath=wifi.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -258,7 +207,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=NTDHVNVY
 
-[Document14]
+[Document11]
 DocumentPath=radio_frequency.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -275,7 +224,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=ODPYDEUT
 
-[Document15]
+[Document12]
 DocumentPath=..\..\..\altium_lib\Active-Component\BJT.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -292,7 +241,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=QHPPEFOR
 
-[Document16]
+[Document13]
 DocumentPath=..\..\..\altium_lib\Active-Component\BJT.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -309,7 +258,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=XRPVOBRF
 
-[Document17]
+[Document14]
 DocumentPath=..\..\..\altium_lib\Active-Component\Diode.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -326,7 +275,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document18]
+[Document15]
 DocumentPath=..\..\..\altium_lib\Active-Component\Diode.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -343,7 +292,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=YBRYYTJX
 
-[Document19]
+[Document16]
 DocumentPath=..\..\..\altium_lib\Active-Component\LED.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -360,7 +309,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document20]
+[Document17]
 DocumentPath=..\..\..\altium_lib\Active-Component\LED.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -377,7 +326,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=HMRCDVKR
 
-[Document21]
+[Document18]
 DocumentPath=..\..\..\altium_lib\Active-Component\MOSFET.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -394,7 +343,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=FOLIKYBY
 
-[Document22]
+[Document19]
 DocumentPath=..\..\..\altium_lib\Active-Component\MOSFET.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -411,7 +360,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=LNXXSBOO
 
-[Document23]
+[Document20]
 DocumentPath=..\..\..\altium_lib\Header-Connector\Header-Connector.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -428,7 +377,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=AOCDLXGJ
 
-[Document24]
+[Document21]
 DocumentPath=..\..\..\altium_lib\Header-Connector\Header-Connector.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -445,7 +394,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=TSGCLNVU
 
-[Document25]
+[Document22]
 DocumentPath=..\..\..\altium_lib\Power-IC\PI.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -462,7 +411,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document26]
+[Document23]
 DocumentPath=..\..\..\altium_lib\Power-IC\PI.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -479,7 +428,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=HYAMIXMJ
 
-[Document27]
+[Document24]
 DocumentPath=..\..\..\altium_lib\Passive-Component\Capacitor.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -496,7 +445,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document28]
+[Document25]
 DocumentPath=..\..\..\altium_lib\Passive-Component\Capacitor.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -513,7 +462,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=XYNEQVDB
 
-[Document29]
+[Document26]
 DocumentPath=..\..\..\altium_lib\Passive-Component\Capacitor-TH.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -530,7 +479,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document30]
+[Document27]
 DocumentPath=..\..\..\altium_lib\Passive-Component\Capacitor-TH.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -547,7 +496,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=EUPNPBXO
 
-[Document31]
+[Document28]
 DocumentPath=..\..\..\altium_lib\Passive-Component\Inductor.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -564,7 +513,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document32]
+[Document29]
 DocumentPath=..\..\..\altium_lib\Passive-Component\Inductor.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -581,7 +530,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=CRUMGFOI
 
-[Document33]
+[Document30]
 DocumentPath=..\..\..\altium_lib\Passive-Component\Resistor.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -598,7 +547,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document34]
+[Document31]
 DocumentPath=..\..\..\altium_lib\Passive-Component\Resistor.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -615,7 +564,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=VKSCYEKR
 
-[Document35]
+[Document32]
 DocumentPath=..\..\..\altium_lib\Passive-Component\Resistor-TH.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -632,7 +581,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document36]
+[Document33]
 DocumentPath=..\..\..\altium_lib\Passive-Component\Resistor-TH.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -649,7 +598,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=KKMLDFHN
 
-[Document37]
+[Document34]
 DocumentPath=..\..\..\altium_lib\MicroController\MC.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -666,7 +615,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=AQVRGGVX
 
-[Document38]
+[Document35]
 DocumentPath=..\..\..\altium_lib\MicroController\MC.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -683,7 +632,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=BAPTHKTN
 
-[Document39]
+[Document36]
 DocumentPath=decawave.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -700,24 +649,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=GTWJHALM
 
-[Document40]
-DocumentPath=418117270901_Altium_WS-DITV_rev19a.IntLib
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=
-
-[Document41]
+[Document37]
 DocumentPath=logo_PIF\LogoCLB.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -734,7 +666,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document42]
+[Document38]
 DocumentPath=logo_PIF\LogoCLB.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -751,7 +683,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=IQOTYVES
 
-[Document43]
+[Document39]
 DocumentPath=..\..\..\altium_lib\Switch\dip_sw.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -768,7 +700,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=TYEISYLL
 
-[Document44]
+[Document40]
 DocumentPath=..\..\..\altium_lib\Switch\dip_sw.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -785,7 +717,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=PVAOMEEV
 
-[Document45]
+[Document41]
 DocumentPath=..\..\..\altium_lib\Header-Connector\terminal_block.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -802,7 +734,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=EQDNDLET
 
-[Document46]
+[Document42]
 DocumentPath=..\..\..\altium_lib\Header-Connector\terminal_block.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -819,7 +751,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=AJAYJQGK
 
-[Document47]
+[Document43]
 DocumentPath=..\..\..\altium_lib\Switch\swicth.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -836,7 +768,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document48]
+[Document44]
 DocumentPath=..\..\..\altium_lib\Switch\switch.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -852,14 +784,6 @@ ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
-
-[GeneratedDocument1]
-DocumentPath=Project Outputs for PIFWRobot\PIFWRobot-2020-07-18\BOM\Bill of Materials-PIFWRobot.xlsx
-DItemRevisionGUID=
-
-[GeneratedDocument2]
-DocumentPath=Project Outputs for PIFWRobot\Design Rule Check - PIFWRobot.html
-DItemRevisionGUID=
 
 [Configuration1]
 Name=Sources
