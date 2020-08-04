@@ -664,7 +664,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=AQVRGGVX
 
 [Document38]
 DocumentPath=..\..\..\altium_lib\MicroController\MC.SchLib
@@ -751,112 +751,114 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=IQOTYVES
 
+[Document43]
+DocumentPath=..\..\..\altium_lib\Switch\dip_sw.PcbLib
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=TYEISYLL
+
+[Document44]
+DocumentPath=..\..\..\altium_lib\Switch\dip_sw.SchLib
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=PVAOMEEV
+
+[Document45]
+DocumentPath=..\..\..\altium_lib\Header-Connector\terminal_block.PcbLib
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=EQDNDLET
+
+[Document46]
+DocumentPath=..\..\..\altium_lib\Header-Connector\terminal_block.SchLib
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=AJAYJQGK
+
+[Document47]
+DocumentPath=..\..\..\altium_lib\Switch\swicth.PcbLib
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=
+
+[Document48]
+DocumentPath=..\..\..\altium_lib\Switch\switch.SchLib
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=
+
 [GeneratedDocument1]
-DocumentPath=Project Outputs for PIFWRobot\Design Rule Check - PIFWRobot.html
+DocumentPath=Project Outputs for PIFWRobot\PIFWRobot-2020-07-18\BOM\Bill of Materials-PIFWRobot.xlsx
 DItemRevisionGUID=
 
 [GeneratedDocument2]
-DocumentPath=Project Outputs for PIFWRobot\PIFWRobot-2020-06-27\NC Drill\PIFWRobot.DRR
-DItemRevisionGUID=
-
-[GeneratedDocument3]
-DocumentPath=Project Outputs for PIFWRobot\PIFWRobot-2020-06-27\Gerber\PIFWRobot.EXTREP
-DItemRevisionGUID=
-
-[GeneratedDocument4]
-DocumentPath=Project Outputs for PIFWRobot\PIFWRobot-2020-06-27\Gerber\PIFWRobot.GBL
-DItemRevisionGUID=
-
-[GeneratedDocument5]
-DocumentPath=Project Outputs for PIFWRobot\PIFWRobot-2020-06-27\Gerber\PIFWRobot.GBO
-DItemRevisionGUID=
-
-[GeneratedDocument6]
-DocumentPath=Project Outputs for PIFWRobot\PIFWRobot-2020-06-27\Gerber\PIFWRobot.GBP
-DItemRevisionGUID=
-
-[GeneratedDocument7]
-DocumentPath=Project Outputs for PIFWRobot\PIFWRobot-2020-06-27\Gerber\PIFWRobot.GBS
-DItemRevisionGUID=
-
-[GeneratedDocument8]
-DocumentPath=Project Outputs for PIFWRobot\PIFWRobot-2020-06-27\Gerber\PIFWRobot.GD1
-DItemRevisionGUID=
-
-[GeneratedDocument9]
-DocumentPath=Project Outputs for PIFWRobot\PIFWRobot-2020-06-27\Gerber\PIFWRobot.GG1
-DItemRevisionGUID=
-
-[GeneratedDocument10]
-DocumentPath=Project Outputs for PIFWRobot\PIFWRobot-2020-06-27\Gerber\PIFWRobot.GKO
-DItemRevisionGUID=
-
-[GeneratedDocument11]
-DocumentPath=Project Outputs for PIFWRobot\PIFWRobot-2020-06-27\Gerber\PIFWRobot.GM1
-DItemRevisionGUID=
-
-[GeneratedDocument12]
-DocumentPath=Project Outputs for PIFWRobot\PIFWRobot-2020-06-27\Gerber\PIFWRobot.GM5
-DItemRevisionGUID=
-
-[GeneratedDocument13]
-DocumentPath=Project Outputs for PIFWRobot\PIFWRobot-2020-06-27\Gerber\PIFWRobot.GM13
-DItemRevisionGUID=
-
-[GeneratedDocument14]
-DocumentPath=Project Outputs for PIFWRobot\PIFWRobot-2020-06-27\Gerber\PIFWRobot.GM14
-DItemRevisionGUID=
-
-[GeneratedDocument15]
-DocumentPath=Project Outputs for PIFWRobot\PIFWRobot-2020-06-27\Gerber\PIFWRobot.GM15
-DItemRevisionGUID=
-
-[GeneratedDocument16]
-DocumentPath=Project Outputs for PIFWRobot\PIFWRobot-2020-06-27\Gerber\PIFWRobot.GM16
-DItemRevisionGUID=
-
-[GeneratedDocument17]
-DocumentPath=Project Outputs for PIFWRobot\PIFWRobot-2020-06-27\Gerber\PIFWRobot.GM29
-DItemRevisionGUID=
-
-[GeneratedDocument18]
-DocumentPath=Project Outputs for PIFWRobot\PIFWRobot-2020-06-27\Gerber\PIFWRobot.GPB
-DItemRevisionGUID=
-
-[GeneratedDocument19]
-DocumentPath=Project Outputs for PIFWRobot\PIFWRobot-2020-06-27\Gerber\PIFWRobot.GPT
-DItemRevisionGUID=
-
-[GeneratedDocument20]
-DocumentPath=Project Outputs for PIFWRobot\PIFWRobot-2020-06-27\Gerber\PIFWRobot.GTL
-DItemRevisionGUID=
-
-[GeneratedDocument21]
-DocumentPath=Project Outputs for PIFWRobot\PIFWRobot-2020-06-27\Gerber\PIFWRobot.GTO
-DItemRevisionGUID=
-
-[GeneratedDocument22]
-DocumentPath=Project Outputs for PIFWRobot\PIFWRobot-2020-06-27\Gerber\PIFWRobot.GTP
-DItemRevisionGUID=
-
-[GeneratedDocument23]
-DocumentPath=Project Outputs for PIFWRobot\PIFWRobot-2020-06-27\Gerber\PIFWRobot.GTS
-DItemRevisionGUID=
-
-[GeneratedDocument24]
-DocumentPath=Project Outputs for PIFWRobot\PIFWRobot-2020-06-27\NC Drill\PIFWRobot.LDP
-DItemRevisionGUID=
-
-[GeneratedDocument25]
-DocumentPath=Project Outputs for PIFWRobot\PIFWRobot-2020-06-27\Gerber\PIFWRobot.REP
-DItemRevisionGUID=
-
-[GeneratedDocument26]
-DocumentPath=Project Outputs for PIFWRobot\PIFWRobot-2020-06-27\Gerber\PIFWRobot.RUL
-DItemRevisionGUID=
-
-[GeneratedDocument27]
-DocumentPath=Project Outputs for PIFWRobot\PIFWRobot-2020-06-27\NC Drill\PIFWRobot.TXT
+DocumentPath=Project Outputs for PIFWRobot\Design Rule Check - PIFWRobot.html
 DItemRevisionGUID=
 
 [Configuration1]
