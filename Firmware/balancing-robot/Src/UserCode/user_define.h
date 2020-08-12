@@ -20,15 +20,15 @@
 //#define ROBOT_MODEL_OMNI
 
 // Motor 0 define
-#define MOTOR0_TIMER 	htim1
-#define MOTOR0_CHANNEL 	TIM_CHANNEL_4
-#define MOTOR0_ENCODER	htim2
+#define MOTOR0_TIMER 	htim2
+#define MOTOR0_CHANNEL 	TIM_CHANNEL_1
+#define MOTOR0_ENCODER	htim3
 #define MOTOR0_INVERT	// define if you want to change motor direction
 
 // Motor 1 define
-#define MOTOR1_TIMER 	htim1
-#define MOTOR1_CHANNEL 	TIM_CHANNEL_3
-#define MOTOR1_ENCODER	htim3
+#define MOTOR1_TIMER 	htim2
+#define MOTOR1_CHANNEL 	TIM_CHANNEL_2
+#define MOTOR1_ENCODER	htim4
 #define MOTOR1_INVERT	// define if you want to change motor direction
 
 // Motor common define
