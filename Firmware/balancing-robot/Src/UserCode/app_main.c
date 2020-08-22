@@ -12,6 +12,7 @@
 #include "UserCode/Com/Com.h"
 #include "UserCode/Params/Params.h"
 #include "UserCode/Encoder/Encoder.h"
+#include "UserCode/Timer/timer.h"
 
 #include <UserCode/Mode_RUN/Mode_RUN.h>
 #include <UserCode/Mode_HW/Mode_HW.h>
@@ -24,6 +25,13 @@ static rmode_t			gmode;				// Save current mode
 static func_t 		 	gmode_init;			// Save mode init function pointer
 static func_t 		 	gmode_deinit;		// Save mode de-init function pointer
 static on_mav_recv_t 	gon_mode_mav_recv;	// Save mode msg receive function pointer
+
+void LED_Callback(uint8_t *context);
+
+void LED_Callback(uint8_t *context)
+{
+	HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+}
 
 static void on_mavlink_recv(mavlink_message_t *msg){
 
@@ -82,7 +90,15 @@ static void on_mavlink_recv(mavlink_message_t *msg){
 
 void app_main(){
 	// Delay for other module to start
-	HAL_Delay(1500);
+	HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_SET);
+	HAL_Delay(250);
+	HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_RESET);
+	HAL_Delay(250);
+	HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_SET);
+	HAL_Delay(250);
+	HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_RESET);
+
+	timer_register_callback(LED_Callback, 1000, 0, TIMER_MODE_REPEAT);
 
 	// Load parameters from non-volatile memory
 	params_load();

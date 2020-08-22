@@ -29,7 +29,6 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "UserCode/Timer/timer.h"
 #include "UserCode/app_main.h"
 /* USER CODE END Includes */
 
@@ -57,15 +56,12 @@
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-void LED_Callback(uint8_t *context);
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void LED_Callback(uint8_t *context)
-{
-	HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-}
+
 /* USER CODE END 0 */
 
 /**
@@ -108,7 +104,6 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
-  timer_register_callback(LED_Callback, 1000, 0, TIMER_MODE_REPEAT);
   app_main();
 
   /* USER CODE END 2 */
