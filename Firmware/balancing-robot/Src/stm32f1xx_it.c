@@ -19,11 +19,11 @@
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
+#include <application/timer/timer.h>
 #include "main.h"
 #include "stm32f1xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "UserCode/Timer/timer.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
