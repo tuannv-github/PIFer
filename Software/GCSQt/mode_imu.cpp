@@ -62,6 +62,7 @@ void Mode_imu::mav_recv(mavlink_message_t *msg){
         {
             mavlink_evt_tilt_t tilt_msg;
             mavlink_msg_evt_tilt_decode(msg, &tilt_msg);
+            ui->txtb_tilt_0->setText(QString::number(tilt_msg.tilt));
             if(g_is_imu_calibrating){
                 g_angle_adjust = (g_angle_adjust + tilt_msg.tilt)/2;
                 ui->tb_angle_adjust->setText(QString::number(static_cast<double>(g_angle_adjust)));
