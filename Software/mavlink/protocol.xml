@@ -125,7 +125,6 @@
 			<field type="int16_t" name="gyro_x">Gyro X</field>
 			<field type="int16_t" name="gyro_y">Gyro Y</field>
 			<field type="int16_t" name="gyro_z">Gyro Z</field>
-			<field type="float"   name="roll">roll</field>
 		</message>
 
 		<message id="11" name="EVT_MAG_RAW">

@@ -595,11 +595,10 @@ static void mavlink_test_evt_gyro_raw(uint8_t system_id, uint8_t component_id, m
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
         uint16_t i;
     mavlink_evt_gyro_raw_t packet_in = {
-        17.0,17443,17547,17651
+        17235,17339,17443
     };
     mavlink_evt_gyro_raw_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
-        packet1.roll = packet_in.roll;
         packet1.gyro_x = packet_in.gyro_x;
         packet1.gyro_y = packet_in.gyro_y;
         packet1.gyro_z = packet_in.gyro_z;
@@ -617,12 +616,12 @@ static void mavlink_test_evt_gyro_raw(uint8_t system_id, uint8_t component_id, m
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_evt_gyro_raw_pack(system_id, component_id, &msg , packet1.gyro_x , packet1.gyro_y , packet1.gyro_z , packet1.roll );
+    mavlink_msg_evt_gyro_raw_pack(system_id, component_id, &msg , packet1.gyro_x , packet1.gyro_y , packet1.gyro_z );
     mavlink_msg_evt_gyro_raw_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_evt_gyro_raw_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.gyro_x , packet1.gyro_y , packet1.gyro_z , packet1.roll );
+    mavlink_msg_evt_gyro_raw_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.gyro_x , packet1.gyro_y , packet1.gyro_z );
     mavlink_msg_evt_gyro_raw_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -635,7 +634,7 @@ static void mavlink_test_evt_gyro_raw(uint8_t system_id, uint8_t component_id, m
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_evt_gyro_raw_send(MAVLINK_COMM_1 , packet1.gyro_x , packet1.gyro_y , packet1.gyro_z , packet1.roll );
+    mavlink_msg_evt_gyro_raw_send(MAVLINK_COMM_1 , packet1.gyro_x , packet1.gyro_y , packet1.gyro_z );
     mavlink_msg_evt_gyro_raw_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 }

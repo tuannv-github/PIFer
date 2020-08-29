@@ -1,8 +1,9 @@
 #ifndef _MPU6050_H_
 #define _MPU6050_H_
 
-#include "stdbool.h"
-#include "UserCode/user_define.h"
+#include <stdint.h>
+#include <stdbool.h>
+#include <UserCode/user_define.h>
 
 typedef enum{
 	MPU6050_INTERNAL_8MHZ_OSC 	= 0 << 0,

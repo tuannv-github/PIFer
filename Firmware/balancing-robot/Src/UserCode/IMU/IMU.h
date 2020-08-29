@@ -10,7 +10,8 @@
 
 #include <stdbool.h>
 #include <UserCode/IMU/MPU6050/MPU6050.h>
-#include "UserCode/Timer/timer.h"
+#include <UserCode/IMU/MPU9250/MPU9250.h>
+#include <UserCode/Timer/timer.h>
 
 typedef void (*connection_failed_cb_t)(void);
 

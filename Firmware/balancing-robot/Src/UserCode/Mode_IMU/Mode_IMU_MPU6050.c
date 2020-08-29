@@ -18,18 +18,22 @@
 static timer_id_t gtimer_ID_IMU_Raw;
 
 static void imu_raw_callback(uint8_t* ctx){
-//	mavlink_message_t msg;
-//	uint8_t gmav_send_buf[256];
-//
-//	int16_t raw[3];
-//	imu_get_gyro_raw(raw);
-//	mavlink_msg_evt_gyro_raw_pack(0,0,&msg,raw[0],raw[1],raw[2]);
-//	uint16_t len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
-//	com_send(gmav_send_buf, len);
-//
-//	mavlink_msg_evt_tilt_pack(0,0,&msg,imu_get_tilt());
-//	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
-//	com_send(gmav_send_buf, len);
+	mavlink_message_t msg;
+	uint8_t gmav_send_buf[256];
+
+	int16_t raw[3];
+	imu_get_gyro_raw(raw);
+	mavlink_msg_evt_gyro_raw_pack(0,0,&msg,raw[0],raw[1],raw[2]);
+	uint16_t len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
+	com_send(gmav_send_buf, len);
+
+#if (TILT==0)
+	mavlink_msg_evt_tilt_pack(0,0,&msg,imu_get_pitch());
+#elif (TILT==1)
+	mavlink_msg_evt_tilt_pack(0,0,&msg,imu_get_roll());
+#endif
+	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
+	com_send(gmav_send_buf, len);
 }
 
 static void load_imu_params(){

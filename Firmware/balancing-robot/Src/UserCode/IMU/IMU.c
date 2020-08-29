@@ -32,14 +32,21 @@ static void imu_callback(uint8_t* ctx){
 }
 
 bool imu_init(void){
-	MPU6050_init();
-	mpu6050_set_full_scale_gyro_range(MPU6050_FS_SEL_250);
-	mpu6050_set_full_scale_accel_range(MPU6050_AFS_SEL_2G);
-	if(!MPU6050_test_connection() && gconnection_failed_cb != 0) {
-		gconnection_failed_cb();
-		return false;
-	}
-	gtimer_ID_imu_callback = timer_register_callback(imu_callback, IMU_PERIOD, 0, TIMER_MODE_REPEAT);
+//	MPU6050_init();
+//	mpu6050_set_full_scale_gyro_range(MPU6050_FS_SEL_250);
+//	mpu6050_set_full_scale_accel_range(MPU6050_AFS_SEL_2G);
+//	if(!MPU6050_test_connection() && gconnection_failed_cb != 0) {
+//		gconnection_failed_cb();
+//		return false;
+//	}
+//	gtimer_ID_imu_callback = timer_register_callback(imu_callback, IMU_PERIOD, 0, TIMER_MODE_REPEAT);
+
+	gyro_params_t gyro_params;
+	accel_params_t accel_params;
+	mag_params_t mag_params;
+
+	mpu9250_init(gyro_params, accel_params, mag_params);
+
 	return true;
 }
 

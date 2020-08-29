@@ -5,10 +5,16 @@
  *      Author: 16138
  */
 
-#ifndef USERCODE_USER_DEFINE_H_
-#define USERCODE_USER_DEFINE_H_
+#ifndef _USERCODE_USER_DEFINE_H_
+#define _USERCODE_USER_DEFINE_H_
 
+#include "main.h"
+#include "dma.h"
+#include "i2c.h"
+#include "spi.h"
 #include "tim.h"
+#include "usart.h"
+#include "gpio.h"
 
 // Timer callback define
 #define MAX_CALLBACK_FUNC	15
@@ -37,8 +43,11 @@
 
 // IMU define
 #define MPU6050_I2C			hi2c1
+#define MPU9250_I2C			hi2c1
 #define MPU6050_ADDRESS 	(MPU6050_DEFAULT_ADDRESS << 1)
 #define IMU_PERIOD			5
+//#define PITCH				0
+//#define ROLL				1
 #define TILT				0 // 0: pitch, 1: roll
 #define IMU_RAW_RP_PERIOD	50
 
@@ -57,7 +66,7 @@
 #define HAVE_SAVED_DATA		0x01
 
 // ROBOT_MODEL_TWO_WHEELS mode RUN
-#define TILT_CONTROLLER_PERIOD		20
+#define TILT_CONTROLLER_PERIOD		10
 #define VEL_CONTROLLER_PERIOD		60
 #define IMU_STATUS_REPORT_PERIOD	100
 #define RPY_REPORT_PERIOD			100

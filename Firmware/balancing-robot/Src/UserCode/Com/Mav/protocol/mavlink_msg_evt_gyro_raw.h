@@ -5,19 +5,18 @@
 
 MAVPACKED(
 typedef struct __mavlink_evt_gyro_raw_t {
- float roll; /*<  roll*/
  int16_t gyro_x; /*<  Gyro X*/
  int16_t gyro_y; /*<  Gyro Y*/
  int16_t gyro_z; /*<  Gyro Z*/
 }) mavlink_evt_gyro_raw_t;
 
-#define MAVLINK_MSG_ID_EVT_GYRO_RAW_LEN 10
-#define MAVLINK_MSG_ID_EVT_GYRO_RAW_MIN_LEN 10
-#define MAVLINK_MSG_ID_10_LEN 10
-#define MAVLINK_MSG_ID_10_MIN_LEN 10
+#define MAVLINK_MSG_ID_EVT_GYRO_RAW_LEN 6
+#define MAVLINK_MSG_ID_EVT_GYRO_RAW_MIN_LEN 6
+#define MAVLINK_MSG_ID_10_LEN 6
+#define MAVLINK_MSG_ID_10_MIN_LEN 6
 
-#define MAVLINK_MSG_ID_EVT_GYRO_RAW_CRC 75
-#define MAVLINK_MSG_ID_10_CRC 75
+#define MAVLINK_MSG_ID_EVT_GYRO_RAW_CRC 152
+#define MAVLINK_MSG_ID_10_CRC 152
 
 
 
@@ -25,21 +24,19 @@ typedef struct __mavlink_evt_gyro_raw_t {
 #define MAVLINK_MESSAGE_INFO_EVT_GYRO_RAW { \
     10, \
     "EVT_GYRO_RAW", \
-    4, \
-    {  { "gyro_x", NULL, MAVLINK_TYPE_INT16_T, 0, 4, offsetof(mavlink_evt_gyro_raw_t, gyro_x) }, \
-         { "gyro_y", NULL, MAVLINK_TYPE_INT16_T, 0, 6, offsetof(mavlink_evt_gyro_raw_t, gyro_y) }, \
-         { "gyro_z", NULL, MAVLINK_TYPE_INT16_T, 0, 8, offsetof(mavlink_evt_gyro_raw_t, gyro_z) }, \
-         { "roll", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_evt_gyro_raw_t, roll) }, \
+    3, \
+    {  { "gyro_x", NULL, MAVLINK_TYPE_INT16_T, 0, 0, offsetof(mavlink_evt_gyro_raw_t, gyro_x) }, \
+         { "gyro_y", NULL, MAVLINK_TYPE_INT16_T, 0, 2, offsetof(mavlink_evt_gyro_raw_t, gyro_y) }, \
+         { "gyro_z", NULL, MAVLINK_TYPE_INT16_T, 0, 4, offsetof(mavlink_evt_gyro_raw_t, gyro_z) }, \
          } \
 }
 #else
 #define MAVLINK_MESSAGE_INFO_EVT_GYRO_RAW { \
     "EVT_GYRO_RAW", \
-    4, \
-    {  { "gyro_x", NULL, MAVLINK_TYPE_INT16_T, 0, 4, offsetof(mavlink_evt_gyro_raw_t, gyro_x) }, \
-         { "gyro_y", NULL, MAVLINK_TYPE_INT16_T, 0, 6, offsetof(mavlink_evt_gyro_raw_t, gyro_y) }, \
-         { "gyro_z", NULL, MAVLINK_TYPE_INT16_T, 0, 8, offsetof(mavlink_evt_gyro_raw_t, gyro_z) }, \
-         { "roll", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_evt_gyro_raw_t, roll) }, \
+    3, \
+    {  { "gyro_x", NULL, MAVLINK_TYPE_INT16_T, 0, 0, offsetof(mavlink_evt_gyro_raw_t, gyro_x) }, \
+         { "gyro_y", NULL, MAVLINK_TYPE_INT16_T, 0, 2, offsetof(mavlink_evt_gyro_raw_t, gyro_y) }, \
+         { "gyro_z", NULL, MAVLINK_TYPE_INT16_T, 0, 4, offsetof(mavlink_evt_gyro_raw_t, gyro_z) }, \
          } \
 }
 #endif
@@ -53,23 +50,20 @@ typedef struct __mavlink_evt_gyro_raw_t {
  * @param gyro_x  Gyro X
  * @param gyro_y  Gyro Y
  * @param gyro_z  Gyro Z
- * @param roll  roll
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_evt_gyro_raw_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               int16_t gyro_x, int16_t gyro_y, int16_t gyro_z, float roll)
+                               int16_t gyro_x, int16_t gyro_y, int16_t gyro_z)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_EVT_GYRO_RAW_LEN];
-    _mav_put_float(buf, 0, roll);
-    _mav_put_int16_t(buf, 4, gyro_x);
-    _mav_put_int16_t(buf, 6, gyro_y);
-    _mav_put_int16_t(buf, 8, gyro_z);
+    _mav_put_int16_t(buf, 0, gyro_x);
+    _mav_put_int16_t(buf, 2, gyro_y);
+    _mav_put_int16_t(buf, 4, gyro_z);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_EVT_GYRO_RAW_LEN);
 #else
     mavlink_evt_gyro_raw_t packet;
-    packet.roll = roll;
     packet.gyro_x = gyro_x;
     packet.gyro_y = gyro_y;
     packet.gyro_z = gyro_z;
@@ -90,24 +84,21 @@ static inline uint16_t mavlink_msg_evt_gyro_raw_pack(uint8_t system_id, uint8_t 
  * @param gyro_x  Gyro X
  * @param gyro_y  Gyro Y
  * @param gyro_z  Gyro Z
- * @param roll  roll
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_evt_gyro_raw_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   int16_t gyro_x,int16_t gyro_y,int16_t gyro_z,float roll)
+                                   int16_t gyro_x,int16_t gyro_y,int16_t gyro_z)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_EVT_GYRO_RAW_LEN];
-    _mav_put_float(buf, 0, roll);
-    _mav_put_int16_t(buf, 4, gyro_x);
-    _mav_put_int16_t(buf, 6, gyro_y);
-    _mav_put_int16_t(buf, 8, gyro_z);
+    _mav_put_int16_t(buf, 0, gyro_x);
+    _mav_put_int16_t(buf, 2, gyro_y);
+    _mav_put_int16_t(buf, 4, gyro_z);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_EVT_GYRO_RAW_LEN);
 #else
     mavlink_evt_gyro_raw_t packet;
-    packet.roll = roll;
     packet.gyro_x = gyro_x;
     packet.gyro_y = gyro_y;
     packet.gyro_z = gyro_z;
@@ -129,7 +120,7 @@ static inline uint16_t mavlink_msg_evt_gyro_raw_pack_chan(uint8_t system_id, uin
  */
 static inline uint16_t mavlink_msg_evt_gyro_raw_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_evt_gyro_raw_t* evt_gyro_raw)
 {
-    return mavlink_msg_evt_gyro_raw_pack(system_id, component_id, msg, evt_gyro_raw->gyro_x, evt_gyro_raw->gyro_y, evt_gyro_raw->gyro_z, evt_gyro_raw->roll);
+    return mavlink_msg_evt_gyro_raw_pack(system_id, component_id, msg, evt_gyro_raw->gyro_x, evt_gyro_raw->gyro_y, evt_gyro_raw->gyro_z);
 }
 
 /**
@@ -143,7 +134,7 @@ static inline uint16_t mavlink_msg_evt_gyro_raw_encode(uint8_t system_id, uint8_
  */
 static inline uint16_t mavlink_msg_evt_gyro_raw_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_evt_gyro_raw_t* evt_gyro_raw)
 {
-    return mavlink_msg_evt_gyro_raw_pack_chan(system_id, component_id, chan, msg, evt_gyro_raw->gyro_x, evt_gyro_raw->gyro_y, evt_gyro_raw->gyro_z, evt_gyro_raw->roll);
+    return mavlink_msg_evt_gyro_raw_pack_chan(system_id, component_id, chan, msg, evt_gyro_raw->gyro_x, evt_gyro_raw->gyro_y, evt_gyro_raw->gyro_z);
 }
 
 /**
@@ -153,23 +144,20 @@ static inline uint16_t mavlink_msg_evt_gyro_raw_encode_chan(uint8_t system_id, u
  * @param gyro_x  Gyro X
  * @param gyro_y  Gyro Y
  * @param gyro_z  Gyro Z
- * @param roll  roll
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_evt_gyro_raw_send(mavlink_channel_t chan, int16_t gyro_x, int16_t gyro_y, int16_t gyro_z, float roll)
+static inline void mavlink_msg_evt_gyro_raw_send(mavlink_channel_t chan, int16_t gyro_x, int16_t gyro_y, int16_t gyro_z)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_EVT_GYRO_RAW_LEN];
-    _mav_put_float(buf, 0, roll);
-    _mav_put_int16_t(buf, 4, gyro_x);
-    _mav_put_int16_t(buf, 6, gyro_y);
-    _mav_put_int16_t(buf, 8, gyro_z);
+    _mav_put_int16_t(buf, 0, gyro_x);
+    _mav_put_int16_t(buf, 2, gyro_y);
+    _mav_put_int16_t(buf, 4, gyro_z);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_EVT_GYRO_RAW, buf, MAVLINK_MSG_ID_EVT_GYRO_RAW_MIN_LEN, MAVLINK_MSG_ID_EVT_GYRO_RAW_LEN, MAVLINK_MSG_ID_EVT_GYRO_RAW_CRC);
 #else
     mavlink_evt_gyro_raw_t packet;
-    packet.roll = roll;
     packet.gyro_x = gyro_x;
     packet.gyro_y = gyro_y;
     packet.gyro_z = gyro_z;
@@ -186,7 +174,7 @@ static inline void mavlink_msg_evt_gyro_raw_send(mavlink_channel_t chan, int16_t
 static inline void mavlink_msg_evt_gyro_raw_send_struct(mavlink_channel_t chan, const mavlink_evt_gyro_raw_t* evt_gyro_raw)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    mavlink_msg_evt_gyro_raw_send(chan, evt_gyro_raw->gyro_x, evt_gyro_raw->gyro_y, evt_gyro_raw->gyro_z, evt_gyro_raw->roll);
+    mavlink_msg_evt_gyro_raw_send(chan, evt_gyro_raw->gyro_x, evt_gyro_raw->gyro_y, evt_gyro_raw->gyro_z);
 #else
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_EVT_GYRO_RAW, (const char *)evt_gyro_raw, MAVLINK_MSG_ID_EVT_GYRO_RAW_MIN_LEN, MAVLINK_MSG_ID_EVT_GYRO_RAW_LEN, MAVLINK_MSG_ID_EVT_GYRO_RAW_CRC);
 #endif
@@ -200,19 +188,17 @@ static inline void mavlink_msg_evt_gyro_raw_send_struct(mavlink_channel_t chan, 
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_evt_gyro_raw_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  int16_t gyro_x, int16_t gyro_y, int16_t gyro_z, float roll)
+static inline void mavlink_msg_evt_gyro_raw_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  int16_t gyro_x, int16_t gyro_y, int16_t gyro_z)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
-    _mav_put_float(buf, 0, roll);
-    _mav_put_int16_t(buf, 4, gyro_x);
-    _mav_put_int16_t(buf, 6, gyro_y);
-    _mav_put_int16_t(buf, 8, gyro_z);
+    _mav_put_int16_t(buf, 0, gyro_x);
+    _mav_put_int16_t(buf, 2, gyro_y);
+    _mav_put_int16_t(buf, 4, gyro_z);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_EVT_GYRO_RAW, buf, MAVLINK_MSG_ID_EVT_GYRO_RAW_MIN_LEN, MAVLINK_MSG_ID_EVT_GYRO_RAW_LEN, MAVLINK_MSG_ID_EVT_GYRO_RAW_CRC);
 #else
     mavlink_evt_gyro_raw_t *packet = (mavlink_evt_gyro_raw_t *)msgbuf;
-    packet->roll = roll;
     packet->gyro_x = gyro_x;
     packet->gyro_y = gyro_y;
     packet->gyro_z = gyro_z;
@@ -234,7 +220,7 @@ static inline void mavlink_msg_evt_gyro_raw_send_buf(mavlink_message_t *msgbuf, 
  */
 static inline int16_t mavlink_msg_evt_gyro_raw_get_gyro_x(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_int16_t(msg,  4);
+    return _MAV_RETURN_int16_t(msg,  0);
 }
 
 /**
@@ -244,7 +230,7 @@ static inline int16_t mavlink_msg_evt_gyro_raw_get_gyro_x(const mavlink_message_
  */
 static inline int16_t mavlink_msg_evt_gyro_raw_get_gyro_y(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_int16_t(msg,  6);
+    return _MAV_RETURN_int16_t(msg,  2);
 }
 
 /**
@@ -254,17 +240,7 @@ static inline int16_t mavlink_msg_evt_gyro_raw_get_gyro_y(const mavlink_message_
  */
 static inline int16_t mavlink_msg_evt_gyro_raw_get_gyro_z(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_int16_t(msg,  8);
-}
-
-/**
- * @brief Get field roll from evt_gyro_raw message
- *
- * @return  roll
- */
-static inline float mavlink_msg_evt_gyro_raw_get_roll(const mavlink_message_t* msg)
-{
-    return _MAV_RETURN_float(msg,  0);
+    return _MAV_RETURN_int16_t(msg,  4);
 }
 
 /**
@@ -276,7 +252,6 @@ static inline float mavlink_msg_evt_gyro_raw_get_roll(const mavlink_message_t* m
 static inline void mavlink_msg_evt_gyro_raw_decode(const mavlink_message_t* msg, mavlink_evt_gyro_raw_t* evt_gyro_raw)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    evt_gyro_raw->roll = mavlink_msg_evt_gyro_raw_get_roll(msg);
     evt_gyro_raw->gyro_x = mavlink_msg_evt_gyro_raw_get_gyro_x(msg);
     evt_gyro_raw->gyro_y = mavlink_msg_evt_gyro_raw_get_gyro_y(msg);
     evt_gyro_raw->gyro_z = mavlink_msg_evt_gyro_raw_get_gyro_z(msg);
