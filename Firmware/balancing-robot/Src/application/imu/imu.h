@@ -15,15 +15,16 @@
 
 typedef void (*connection_failed_cb_t)(void);
 
-bool  imu_init(void);
-bool  imu_deinit(void);
-bool  imu_test_connection();
-void  imu_set_failed_cb(connection_failed_cb_t connection_failed_cb);
+int  imu_init(void);
+int  imu_deinit(void);
+int  imu_test_connection();
 
 float imu_get_roll(void);
 float imu_get_pitch(void);
 float imu_get_yaw(void);
-float imu_get_tilt(void);
-void  imu_get_gyro_raw(int16_t raw[3]);
+
+int imu_get_accel_raw(float raw[3]);
+int imu_get_gyro_raw(float raw[3]);
+int imu_get_mag_raw(float raw[3]);
 
 #endif /* APPLICATION_IMU_IMU_H_ */

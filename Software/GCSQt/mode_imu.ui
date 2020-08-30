@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>640</width>
-    <height>379</height>
+    <height>431</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,86 +19,17 @@
      <x>10</x>
      <y>40</y>
      <width>621</width>
-     <height>171</height>
+     <height>141</height>
     </rect>
    </property>
    <property name="title">
-    <string>Raw value</string>
+    <string>Value</string>
    </property>
-   <widget class="QLineEdit" name="tb_gx">
-    <property name="geometry">
-     <rect>
-      <x>70</x>
-      <y>20</y>
-      <width>91</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_13">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>20</y>
-      <width>21</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Gx:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_14">
-    <property name="geometry">
-     <rect>
-      <x>190</x>
-      <y>20</y>
-      <width>21</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Gy:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_15">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>20</y>
-      <width>21</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Gz:</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="tb_gy">
+   <widget class="QLineEdit" name="tb_my">
     <property name="geometry">
      <rect>
       <x>250</x>
-      <y>20</y>
-      <width>91</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="tb_gz">
-    <property name="geometry">
-     <rect>
-      <x>430</x>
-      <y>20</y>
-      <width>91</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="tb_gy_2">
-    <property name="geometry">
-     <rect>
-      <x>250</x>
-      <y>50</y>
+      <y>80</y>
       <width>91</width>
       <height>20</height>
      </rect>
@@ -108,7 +39,7 @@
     <property name="geometry">
      <rect>
       <x>370</x>
-      <y>50</y>
+      <y>80</y>
       <width>21</width>
       <height>16</height>
      </rect>
@@ -121,7 +52,7 @@
     <property name="geometry">
      <rect>
       <x>190</x>
-      <y>50</y>
+      <y>80</y>
       <width>21</width>
       <height>16</height>
      </rect>
@@ -130,21 +61,21 @@
      <string>My:</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="tb_gx_2">
+   <widget class="QLineEdit" name="tb_mx">
     <property name="geometry">
      <rect>
       <x>70</x>
-      <y>50</y>
+      <y>80</y>
       <width>91</width>
       <height>20</height>
      </rect>
     </property>
    </widget>
-   <widget class="QLineEdit" name="tb_gz_2">
+   <widget class="QLineEdit" name="tb_mz">
     <property name="geometry">
      <rect>
       <x>430</x>
-      <y>50</y>
+      <y>80</y>
       <width>91</width>
       <height>20</height>
      </rect>
@@ -154,7 +85,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>50</y>
+      <y>80</y>
       <width>21</width>
       <height>16</height>
      </rect>
@@ -163,11 +94,11 @@
      <string>Mx:</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="tb_gy_3">
+   <widget class="QLineEdit" name="tb_ay">
     <property name="geometry">
      <rect>
       <x>250</x>
-      <y>80</y>
+      <y>20</y>
       <width>91</width>
       <height>20</height>
      </rect>
@@ -177,7 +108,7 @@
     <property name="geometry">
      <rect>
       <x>370</x>
-      <y>80</y>
+      <y>20</y>
       <width>21</width>
       <height>16</height>
      </rect>
@@ -190,7 +121,7 @@
     <property name="geometry">
      <rect>
       <x>190</x>
-      <y>80</y>
+      <y>20</y>
       <width>21</width>
       <height>16</height>
      </rect>
@@ -199,21 +130,21 @@
      <string>Ay:</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="tb_gx_3">
+   <widget class="QLineEdit" name="tb_ax">
     <property name="geometry">
      <rect>
       <x>70</x>
-      <y>80</y>
+      <y>20</y>
       <width>91</width>
       <height>20</height>
      </rect>
     </property>
    </widget>
-   <widget class="QLineEdit" name="tb_gz_3">
+   <widget class="QLineEdit" name="tb_az">
     <property name="geometry">
      <rect>
       <x>430</x>
-      <y>80</y>
+      <y>20</y>
       <width>91</width>
       <height>20</height>
      </rect>
@@ -223,7 +154,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>80</y>
+      <y>20</y>
       <width>21</width>
       <height>16</height>
      </rect>
@@ -232,162 +163,11 @@
      <string>Ax:</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="tb_gx_offset_4">
-    <property name="geometry">
-     <rect>
-      <x>70</x>
-      <y>110</y>
-      <width>91</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="tb_gy_offset_4">
-    <property name="geometry">
-     <rect>
-      <x>250</x>
-      <y>110</y>
-      <width>91</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="tb_gz_offset_4">
-    <property name="geometry">
-     <rect>
-      <x>430</x>
-      <y>110</y>
-      <width>91</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_64">
-    <property name="geometry">
-     <rect>
-      <x>190</x>
-      <y>110</y>
-      <width>51</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>My max:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_65">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>110</y>
-      <width>51</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Mx max:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_66">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>110</y>
-      <width>51</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Mz max:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_67">
-    <property name="geometry">
-     <rect>
-      <x>190</x>
-      <y>140</y>
-      <width>51</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Mz min:</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="tb_gx_offset_5">
-    <property name="geometry">
-     <rect>
-      <x>70</x>
-      <y>140</y>
-      <width>91</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_68">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>140</y>
-      <width>51</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Mz min:</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="tb_gz_offset_5">
-    <property name="geometry">
-     <rect>
-      <x>430</x>
-      <y>140</y>
-      <width>91</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="tb_gy_offset_5">
-    <property name="geometry">
-     <rect>
-      <x>250</x>
-      <y>140</y>
-      <width>91</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_74">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>140</y>
-      <width>51</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Mz min:</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btn_gyro_calib">
-    <property name="geometry">
-     <rect>
-      <x>540</x>
-      <y>20</y>
-      <width>71</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>G Calibrate</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="btn_gyro_calib_2">
     <property name="geometry">
      <rect>
       <x>540</x>
-      <y>50</y>
+      <y>80</y>
       <width>71</width>
       <height>21</height>
      </rect>
@@ -400,13 +180,164 @@
     <property name="geometry">
      <rect>
       <x>540</x>
-      <y>80</y>
+      <y>20</y>
       <width>71</width>
       <height>21</height>
      </rect>
     </property>
     <property name="text">
      <string>A Calibrate</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_gyro_calib">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>50</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>G Calibrate</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="tb_gx">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>50</y>
+      <width>91</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="tb_gz">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>50</y>
+      <width>91</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_14">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>50</y>
+      <width>21</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Gy:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_13">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>50</y>
+      <width>21</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Gx:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_15">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>50</y>
+      <width>21</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Gz:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="tb_gy">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>50</y>
+      <width>91</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="tb_roll">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>110</y>
+      <width>91</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_30">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>110</y>
+      <width>31</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Pitch:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_31">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>110</y>
+      <width>21</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Roll:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="tb_pitch">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>110</y>
+      <width>91</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="tb_yaw">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>110</y>
+      <width>91</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_32">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>110</y>
+      <width>21</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Yaw:</string>
     </property>
    </widget>
   </widget>
@@ -427,7 +358,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>220</y>
+     <y>190</y>
      <width>621</width>
      <height>151</height>
     </rect>

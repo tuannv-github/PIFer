@@ -27,7 +27,7 @@ static mavlink_message_t msg;
 static float tilt_setpoint;
 
 static void tilt_controller_callback(uint8_t* ctx){
-	float tilt = imu_get_tilt() - params.angle_adjusted;
+	float tilt ;//= imu_get_tilt() - params.angle_adjusted;
 
 	float speed = pid_compute(&params.pid[0], tilt_setpoint, tilt);
 	if(tilt > 90 || tilt < -90) {
@@ -122,7 +122,7 @@ static void write_param(mavlink_message_t *msg){
 static void tilt_report_callback(uint8_t *ctx){
 	mavlink_message_t msg;
 	uint8_t mav_send_buf[256];
-	float tilt = imu_get_tilt() - params.angle_adjusted;
+	float tilt;// = imu_get_tilt() - params.angle_adjusted;
 	mavlink_msg_evt_tilt_pack(0,0,&msg,tilt);
 	uint16_t len = mavlink_msg_to_send_buffer(mav_send_buf, &msg);
 	com_send(mav_send_buf, len);

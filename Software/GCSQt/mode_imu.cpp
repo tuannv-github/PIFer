@@ -1,9 +1,7 @@
 #include "mode_imu.h"
 #include "ui_mode_imu.h"
 
-Mode_imu::Mode_imu(QWidget *parent) :
-    Mode_common(parent),
-    ui(new Ui::Mode_imu)
+Mode_imu::Mode_imu(QWidget *parent) : Mode_common(parent), ui(new Ui::Mode_imu)
 {
     ui->setupUi(this);
 }
@@ -15,6 +13,13 @@ Mode_imu::~Mode_imu()
 
 void Mode_imu::mav_recv(mavlink_message_t *msg){
     switch(msg->msgid) {
+    case MAVLINK_MSG_ID_EVT_ACCEL_RAW:
+        mavlink_evt_accel_raw_t accel_raw_msg;
+        mavlink_msg_evt_accel_raw_decode(msg, &accel_raw_msg);
+        ui->tb_ax->setText(QString::number(accel_raw_msg.acc_x));
+        ui->tb_ay->setText(QString::number(accel_raw_msg.acc_y));
+        ui->tb_az->setText(QString::number(accel_raw_msg.acc_z));
+        break;
     case MAVLINK_MSG_ID_EVT_GYRO_RAW:
         mavlink_evt_gyro_raw_t gyro_raw_msg;
         mavlink_msg_evt_gyro_raw_decode(msg, &gyro_raw_msg);
@@ -29,6 +34,20 @@ void Mode_imu::mav_recv(mavlink_message_t *msg){
             ui->tb_gy_offset->setText(QString::number(g_gy_offset));
             ui->tb_gz_offset->setText(QString::number(g_gz_offset));
         }
+        break;
+    case MAVLINK_MSG_ID_EVT_MAG_RAW:
+        mavlink_evt_mag_raw_t mag_raw_msg;
+        mavlink_msg_evt_mag_raw_decode(msg, &mag_raw_msg);
+        ui->tb_mx->setText(QString::number(mag_raw_msg.mag_x));
+        ui->tb_my->setText(QString::number(mag_raw_msg.mag_y));
+        ui->tb_mz->setText(QString::number(mag_raw_msg.mag_z));
+        break;
+    case MAVLINK_MSG_ID_EVT_RPY:
+        mavlink_evt_rpy_t rpy_msg;
+        mavlink_msg_evt_rpy_decode(msg, &rpy_msg);
+        ui->tb_roll->setText(QString::number(rpy_msg.roll));
+        ui->tb_pitch->setText(QString::number(rpy_msg.pitch));
+        ui->tb_yaw->setText(QString::number(rpy_msg.yaw));
         break;
     case MAVLINK_MSG_ID_RESPOND:
         if(is_timing()){

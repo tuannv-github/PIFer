@@ -18,14 +18,14 @@ typedef struct{
 
 static cmd_velocity_t gcmd_velocity;
 
-static timer_id_t gtimerid_tilt_controller;
-static timer_id_t gtimerid_vel_controller;
-static timer_id_t gtimerid_imu_tilt;
+TID(gtid_tilt_controller);
+TID(gtid_vel_controller);
+TID(gtid_imu_tilt);
 
 static float tilt_setpoint;
 
 static void tilt_controller_callback(uint8_t* ctx){
-	float tilt = imu_get_tilt() - params.angle_adjusted;
+	float tilt;// = imu_get_tilt() - params.angle_adjusted;
 
 	float speed = pid_compute(&params.pid[0], tilt_setpoint, tilt);
 	if(tilt > 90 || tilt < -90) {
@@ -57,7 +57,7 @@ static void vel_controller_callback(uint8_t* ctx){
 static void tilt_report_callback(uint8_t *ctx){
 	mavlink_message_t msg;
 	uint8_t mav_send_buf[256];
-	float tilt = imu_get_tilt() - params.angle_adjusted;
+	float tilt;// = imu_get_tilt() - params.angle_adjusted;
 	mavlink_msg_evt_tilt_pack(0,0,&msg,tilt);
 	uint16_t len = mavlink_msg_to_send_buffer(mav_send_buf, &msg);
 	com_send(mav_send_buf, len);
@@ -68,17 +68,14 @@ void mode_run_init(){
 	motors_init();
 	imu_init();
 
-	params.pid[1].maxIPart = 5;
-	params.pid[1].minIpart = -5;
-
 	pid_reset(&params.pid[0]);
 	pid_reset(&params.pid[1]);
 	pid_reset(&params.pid[2]);
 
-	// Periodic task initialization
-	gtimerid_tilt_controller = timer_register_callback(tilt_controller_callback, TILT_CONTROLLER_PERIOD, 0, TIMER_MODE_REPEAT);
-	gtimerid_vel_controller = timer_register_callback(vel_controller_callback, VEL_CONTROLLER_PERIOD, 0, TIMER_MODE_REPEAT);
-	gtimerid_imu_tilt = timer_register_callback(tilt_report_callback, TILT_REPORT_PERIOD, 0, TIMER_MODE_REPEAT);
+//	// Periodic task initialization
+//	gtid_tilt_controller = timer_register_callback(tilt_controller_callback, TILT_CONTROLLER_PERIOD, 0, TIMER_MODE_REPEAT);
+//	gtid_vel_controller = timer_register_callback(vel_controller_callback, VEL_CONTROLLER_PERIOD, 0, TIMER_MODE_REPEAT);
+//	gtid_imu_tilt = timer_register_callback(tilt_report_callback, TILT_REPORT_PERIOD, 0, TIMER_MODE_REPEAT);
 }
 
 void mode_run_deinit(){
@@ -87,9 +84,9 @@ void mode_run_deinit(){
 	imu_deinit();
 
 	// Periodic task de-initialization
-	timer_unregister_callback(gtimerid_tilt_controller);
-	timer_unregister_callback(gtimerid_vel_controller);
-	timer_unregister_callback(gtimerid_imu_tilt);
+	timer_unregister_callback(gtid_tilt_controller);
+	timer_unregister_callback(gtid_vel_controller);
+	timer_unregister_callback(gtid_imu_tilt);
 }
 
 void on_mode_run_mavlink_recv(mavlink_message_t *msg){

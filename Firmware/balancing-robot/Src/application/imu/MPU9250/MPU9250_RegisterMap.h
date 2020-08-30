@@ -129,6 +129,9 @@ enum ak8963_register {
 #define MPU9250_WAI_RESULT	0x71
 #define AK8963_WAI_RESULT	0x48
 
+#define H_RESET				(0b1 << 0)
+#define H_RESET_MASK		(0b1 << 0)
+
 #define CLKSEL				(0b1 << 0)
 #define CLKSEL_MASK			(0b111 << 0)
 

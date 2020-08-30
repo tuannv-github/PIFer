@@ -1,42 +1,42 @@
 #pragma once
 // MESSAGE EVT_ACCEL_RAW PACKING
 
-#define MAVLINK_MSG_ID_EVT_ACCEL_RAW 12
+#define MAVLINK_MSG_ID_EVT_ACCEL_RAW 10
 
 MAVPACKED(
 typedef struct __mavlink_evt_accel_raw_t {
- int16_t acc_x; /*<  Accel X*/
- int16_t acc_y; /*<  Accel Y*/
- int16_t acc_z; /*<  Accel Z*/
+ float acc_x; /*<  Accel X*/
+ float acc_y; /*<  Accel Y*/
+ float acc_z; /*<  Accel Z*/
 }) mavlink_evt_accel_raw_t;
 
-#define MAVLINK_MSG_ID_EVT_ACCEL_RAW_LEN 6
-#define MAVLINK_MSG_ID_EVT_ACCEL_RAW_MIN_LEN 6
-#define MAVLINK_MSG_ID_12_LEN 6
-#define MAVLINK_MSG_ID_12_MIN_LEN 6
+#define MAVLINK_MSG_ID_EVT_ACCEL_RAW_LEN 12
+#define MAVLINK_MSG_ID_EVT_ACCEL_RAW_MIN_LEN 12
+#define MAVLINK_MSG_ID_10_LEN 12
+#define MAVLINK_MSG_ID_10_MIN_LEN 12
 
-#define MAVLINK_MSG_ID_EVT_ACCEL_RAW_CRC 180
-#define MAVLINK_MSG_ID_12_CRC 180
+#define MAVLINK_MSG_ID_EVT_ACCEL_RAW_CRC 117
+#define MAVLINK_MSG_ID_10_CRC 117
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_EVT_ACCEL_RAW { \
-    12, \
+    10, \
     "EVT_ACCEL_RAW", \
     3, \
-    {  { "acc_x", NULL, MAVLINK_TYPE_INT16_T, 0, 0, offsetof(mavlink_evt_accel_raw_t, acc_x) }, \
-         { "acc_y", NULL, MAVLINK_TYPE_INT16_T, 0, 2, offsetof(mavlink_evt_accel_raw_t, acc_y) }, \
-         { "acc_z", NULL, MAVLINK_TYPE_INT16_T, 0, 4, offsetof(mavlink_evt_accel_raw_t, acc_z) }, \
+    {  { "acc_x", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_evt_accel_raw_t, acc_x) }, \
+         { "acc_y", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_evt_accel_raw_t, acc_y) }, \
+         { "acc_z", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_evt_accel_raw_t, acc_z) }, \
          } \
 }
 #else
 #define MAVLINK_MESSAGE_INFO_EVT_ACCEL_RAW { \
     "EVT_ACCEL_RAW", \
     3, \
-    {  { "acc_x", NULL, MAVLINK_TYPE_INT16_T, 0, 0, offsetof(mavlink_evt_accel_raw_t, acc_x) }, \
-         { "acc_y", NULL, MAVLINK_TYPE_INT16_T, 0, 2, offsetof(mavlink_evt_accel_raw_t, acc_y) }, \
-         { "acc_z", NULL, MAVLINK_TYPE_INT16_T, 0, 4, offsetof(mavlink_evt_accel_raw_t, acc_z) }, \
+    {  { "acc_x", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_evt_accel_raw_t, acc_x) }, \
+         { "acc_y", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_evt_accel_raw_t, acc_y) }, \
+         { "acc_z", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_evt_accel_raw_t, acc_z) }, \
          } \
 }
 #endif
@@ -53,13 +53,13 @@ typedef struct __mavlink_evt_accel_raw_t {
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_evt_accel_raw_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               int16_t acc_x, int16_t acc_y, int16_t acc_z)
+                               float acc_x, float acc_y, float acc_z)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_EVT_ACCEL_RAW_LEN];
-    _mav_put_int16_t(buf, 0, acc_x);
-    _mav_put_int16_t(buf, 2, acc_y);
-    _mav_put_int16_t(buf, 4, acc_z);
+    _mav_put_float(buf, 0, acc_x);
+    _mav_put_float(buf, 4, acc_y);
+    _mav_put_float(buf, 8, acc_z);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_EVT_ACCEL_RAW_LEN);
 #else
@@ -88,13 +88,13 @@ static inline uint16_t mavlink_msg_evt_accel_raw_pack(uint8_t system_id, uint8_t
  */
 static inline uint16_t mavlink_msg_evt_accel_raw_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   int16_t acc_x,int16_t acc_y,int16_t acc_z)
+                                   float acc_x,float acc_y,float acc_z)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_EVT_ACCEL_RAW_LEN];
-    _mav_put_int16_t(buf, 0, acc_x);
-    _mav_put_int16_t(buf, 2, acc_y);
-    _mav_put_int16_t(buf, 4, acc_z);
+    _mav_put_float(buf, 0, acc_x);
+    _mav_put_float(buf, 4, acc_y);
+    _mav_put_float(buf, 8, acc_z);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_EVT_ACCEL_RAW_LEN);
 #else
@@ -147,13 +147,13 @@ static inline uint16_t mavlink_msg_evt_accel_raw_encode_chan(uint8_t system_id, 
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_evt_accel_raw_send(mavlink_channel_t chan, int16_t acc_x, int16_t acc_y, int16_t acc_z)
+static inline void mavlink_msg_evt_accel_raw_send(mavlink_channel_t chan, float acc_x, float acc_y, float acc_z)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_EVT_ACCEL_RAW_LEN];
-    _mav_put_int16_t(buf, 0, acc_x);
-    _mav_put_int16_t(buf, 2, acc_y);
-    _mav_put_int16_t(buf, 4, acc_z);
+    _mav_put_float(buf, 0, acc_x);
+    _mav_put_float(buf, 4, acc_y);
+    _mav_put_float(buf, 8, acc_z);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_EVT_ACCEL_RAW, buf, MAVLINK_MSG_ID_EVT_ACCEL_RAW_MIN_LEN, MAVLINK_MSG_ID_EVT_ACCEL_RAW_LEN, MAVLINK_MSG_ID_EVT_ACCEL_RAW_CRC);
 #else
@@ -188,13 +188,13 @@ static inline void mavlink_msg_evt_accel_raw_send_struct(mavlink_channel_t chan,
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_evt_accel_raw_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  int16_t acc_x, int16_t acc_y, int16_t acc_z)
+static inline void mavlink_msg_evt_accel_raw_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  float acc_x, float acc_y, float acc_z)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
-    _mav_put_int16_t(buf, 0, acc_x);
-    _mav_put_int16_t(buf, 2, acc_y);
-    _mav_put_int16_t(buf, 4, acc_z);
+    _mav_put_float(buf, 0, acc_x);
+    _mav_put_float(buf, 4, acc_y);
+    _mav_put_float(buf, 8, acc_z);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_EVT_ACCEL_RAW, buf, MAVLINK_MSG_ID_EVT_ACCEL_RAW_MIN_LEN, MAVLINK_MSG_ID_EVT_ACCEL_RAW_LEN, MAVLINK_MSG_ID_EVT_ACCEL_RAW_CRC);
 #else
@@ -218,9 +218,9 @@ static inline void mavlink_msg_evt_accel_raw_send_buf(mavlink_message_t *msgbuf,
  *
  * @return  Accel X
  */
-static inline int16_t mavlink_msg_evt_accel_raw_get_acc_x(const mavlink_message_t* msg)
+static inline float mavlink_msg_evt_accel_raw_get_acc_x(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_int16_t(msg,  0);
+    return _MAV_RETURN_float(msg,  0);
 }
 
 /**
@@ -228,9 +228,9 @@ static inline int16_t mavlink_msg_evt_accel_raw_get_acc_x(const mavlink_message_
  *
  * @return  Accel Y
  */
-static inline int16_t mavlink_msg_evt_accel_raw_get_acc_y(const mavlink_message_t* msg)
+static inline float mavlink_msg_evt_accel_raw_get_acc_y(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_int16_t(msg,  2);
+    return _MAV_RETURN_float(msg,  4);
 }
 
 /**
@@ -238,9 +238,9 @@ static inline int16_t mavlink_msg_evt_accel_raw_get_acc_y(const mavlink_message_
  *
  * @return  Accel Z
  */
-static inline int16_t mavlink_msg_evt_accel_raw_get_acc_z(const mavlink_message_t* msg)
+static inline float mavlink_msg_evt_accel_raw_get_acc_z(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_int16_t(msg,  4);
+    return _MAV_RETURN_float(msg,  8);
 }
 
 /**

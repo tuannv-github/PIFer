@@ -50,3 +50,11 @@ void respond_ok(void){
 	uint16_t len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
 	com_send(gmav_send_buf, len);
 }
+
+void respond_error(void){
+	mavlink_message_t msg;
+	uint8_t gmav_send_buf[255];
+	mavlink_msg_respond_pack(0,0,&msg,RESPOND_ERROR);
+	uint16_t len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
+	com_send(gmav_send_buf, len);
+}

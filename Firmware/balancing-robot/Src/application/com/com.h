@@ -24,5 +24,6 @@ void com_set_on_mav_recv(on_mav_recv_t on_mav_recv);
 
 // Quick respond OK for a command
 void respond_ok(void);
+void respond_error(void);
 
 #endif /* APPLICATION_COM_COM_H_ */

@@ -16,7 +16,6 @@
 #include <application/timer/timer.h>
 #include <application/params/params.h>
 
-
 void app_main(void);
 
 #endif /* APPLICATION_APP_MAIN_H_ */
