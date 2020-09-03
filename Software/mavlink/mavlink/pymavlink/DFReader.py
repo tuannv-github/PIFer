@@ -122,7 +122,7 @@ class DFFormat(object):
         return ("DFFormat(%s,%s,%s,%s)" %
                 (self.type, self.name, self.format, self.columns))
 
-
+# Swiped into mavgen_python.py
 def to_string(s):
     '''desperate attempt to convert a string regardless of what garbage we get'''
     try:
@@ -460,10 +460,16 @@ class DFReader(object):
         self.verbose = False
         self.params = {}
         self._flightmodes = None
+        self.messages = {}
 
     def _rewind(self):
         '''reset state on rewind'''
-        self.messages = {'MAV': self}
+        # be careful not to replace self.messages with a new hash;
+        # some people have taken a reference to self.messages and we
+        # need their messages to disappear to.  If they want their own
+        # copy they can copy.copy it!
+        self.messages.clear()
+        self.messages['MAV'] = self
         if self._flightmodes is not None and len(self._flightmodes) > 0:
             self.flightmode = self._flightmodes[0][0]
         else:
@@ -752,20 +758,28 @@ class DFReader_binary(DFReader):
         while ofs+3 < self.data_len:
             hdr = self.data_map[ofs:ofs+3]
             if hdr[0] != HEAD1 or hdr[1] != HEAD2:
-                print("bad header 0x%02x 0x%02x" % (u_ord(hdr[0]), u_ord(hdr[1])), file=sys.stderr)
-                break
+                # avoid end of file garbage, 528 bytes has been use consistently throughout this implementation
+                # but it needs to be at least 249 bytes which is the block based logging page size (256) less a 6 byte header and
+                # one byte of data. Block based logs are sized in pages which means they can have up to 249 bytes of trailing space.
+                if self.data_len - ofs >= 528 or self.data_len < 528:
+                    print("bad header 0x%02x 0x%02x at %d" % (u_ord(hdr[0]), u_ord(hdr[1]), ofs), file=sys.stderr)
+                ofs += 1
+                continue
             mtype = u_ord(hdr[2])
             self.offsets[mtype].append(ofs)
 
             if lengths[mtype] == -1:
                 if not mtype in self.formats:
-                    print("unknown msg type 0x%02x (%u)" % (mtype, mtype),
-                          file=sys.stderr)
+                    if self.data_len - ofs >= 528 or self.data_len < 528:
+                        print("unknown msg type 0x%02x (%u) at %d" % (mtype, mtype, ofs),
+                              file=sys.stderr)
                     break
                 self.offset = ofs
                 self._parse_next()
                 fmt = self.formats[mtype]
                 lengths[mtype] = fmt.len
+            elif self.formats[mtype].instance_field is not None:
+                self._parse_next()
 
             self.counts[mtype] += 1
             mlen = lengths[mtype]

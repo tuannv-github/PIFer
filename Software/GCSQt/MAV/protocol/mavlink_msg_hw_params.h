@@ -3,14 +3,14 @@
 
 #define MAVLINK_MSG_ID_HW_PARAMS 8
 
-MAVPACKED(
+
 typedef struct __mavlink_hw_params_t {
  int8_t motor0_invert; /*<  Motor 0 Invert*/
  int8_t motor1_invert; /*<  Motor 1 Invert*/
  int8_t encoder0_invert; /*<  Encoder 0 Invert*/
  int8_t encoder1_invert; /*<  Encoder 1 Invert*/
  int8_t encoder_exchange; /*<  Switch to invert encoder from motor 0 to motor 1 and vice versa*/
-}) mavlink_hw_params_t;
+} mavlink_hw_params_t;
 
 #define MAVLINK_MSG_ID_HW_PARAMS_LEN 5
 #define MAVLINK_MSG_ID_HW_PARAMS_MIN_LEN 5

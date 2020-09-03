@@ -162,16 +162,15 @@ int mpu9250_test(){
 int mpu9250_get_accel_gyro(float *ax, float *ay, float *az, float *gx, float *gy, float *gz){
 	uint8_t buffer[14] = {};
 	if(mpu6500_read_bytes(MPU9250_ACCEL_XOUT_H, buffer, 14) < 0){
-		*ax=0; *ay=0; *az=0; *gx=0; *gy=0; *gz=0;
 		return -1;
 	}
 
-    *ax = (((int16_t)buffer[0])  << 8) | buffer[1];	 *ax /= g_lsb_per_g;
-    *ay = (((int16_t)buffer[2])  << 8) | buffer[3];  *ay /= g_lsb_per_g;
-    *az = (((int16_t)buffer[4])  << 8) | buffer[5];  *az /= g_lsb_per_g;
-    *gx = (((int16_t)buffer[8])  << 8) | buffer[9];	 *gx /= g_lsb_per_dpfs;
-    *gy = (((int16_t)buffer[10]) << 8) | buffer[11]; *gy /= g_lsb_per_dpfs;
-    *gz = (((int16_t)buffer[12]) << 8) | buffer[13]; *gz /= g_lsb_per_dpfs;
+    *ax = (int16_t)((int16_t)buffer[0]  << 8) | buffer[1];	*ax /= g_lsb_per_g;
+    *ay = (int16_t)((int16_t)buffer[2]  << 8) | buffer[3];  *ay /= g_lsb_per_g;
+    *az = (int16_t)((int16_t)buffer[4]  << 8) | buffer[5];  *az /= g_lsb_per_g;
+    *gx = (int16_t)((int16_t)buffer[8]  << 8) | buffer[9];	*gx /= g_lsb_per_dpfs;
+    *gy = (int16_t)((int16_t)buffer[10] << 8) | buffer[11]; *gy /= g_lsb_per_dpfs;
+    *gz = (int16_t)((int16_t)buffer[12] << 8) | buffer[13]; *gz /= g_lsb_per_dpfs;
 
 	return 0;
 }

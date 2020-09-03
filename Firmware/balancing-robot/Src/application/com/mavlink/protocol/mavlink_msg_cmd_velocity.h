@@ -3,11 +3,11 @@
 
 #define MAVLINK_MSG_ID_CMD_VELOCITY 3
 
-MAVPACKED(
+
 typedef struct __mavlink_cmd_velocity_t {
  int16_t v; /*<  Velocity*/
  int16_t omega; /*<  Omega*/
-}) mavlink_cmd_velocity_t;
+} mavlink_cmd_velocity_t;
 
 #define MAVLINK_MSG_ID_CMD_VELOCITY_LEN 4
 #define MAVLINK_MSG_ID_CMD_VELOCITY_MIN_LEN 4

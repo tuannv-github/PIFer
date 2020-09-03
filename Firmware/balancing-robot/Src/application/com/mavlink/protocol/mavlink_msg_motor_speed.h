@@ -3,11 +3,11 @@
 
 #define MAVLINK_MSG_ID_MOTOR_SPEED 7
 
-MAVPACKED(
+
 typedef struct __mavlink_motor_speed_t {
  int16_t motor_speed_0; /*<  Motor 0 speed*/
  int16_t motor_speed_1; /*<  Motor 1 Speed*/
-}) mavlink_motor_speed_t;
+} mavlink_motor_speed_t;
 
 #define MAVLINK_MSG_ID_MOTOR_SPEED_LEN 4
 #define MAVLINK_MSG_ID_MOTOR_SPEED_MIN_LEN 4

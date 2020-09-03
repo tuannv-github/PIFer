@@ -3,10 +3,10 @@
 
 #define MAVLINK_MSG_ID_RESPOND 0
 
-MAVPACKED(
+
 typedef struct __mavlink_respond_t {
  uint8_t respond; /*<  Respond*/
-}) mavlink_respond_t;
+} mavlink_respond_t;
 
 #define MAVLINK_MSG_ID_RESPOND_LEN 1
 #define MAVLINK_MSG_ID_RESPOND_MIN_LEN 1

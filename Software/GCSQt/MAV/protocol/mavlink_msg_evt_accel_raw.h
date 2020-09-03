@@ -1,28 +1,28 @@
 #pragma once
 // MESSAGE EVT_ACCEL_RAW PACKING
 
-#define MAVLINK_MSG_ID_EVT_ACCEL_RAW 10
+#define MAVLINK_MSG_ID_EVT_ACCEL_RAW 11
 
-MAVPACKED(
+
 typedef struct __mavlink_evt_accel_raw_t {
  float acc_x; /*<  Accel X*/
  float acc_y; /*<  Accel Y*/
  float acc_z; /*<  Accel Z*/
-}) mavlink_evt_accel_raw_t;
+} mavlink_evt_accel_raw_t;
 
 #define MAVLINK_MSG_ID_EVT_ACCEL_RAW_LEN 12
 #define MAVLINK_MSG_ID_EVT_ACCEL_RAW_MIN_LEN 12
-#define MAVLINK_MSG_ID_10_LEN 12
-#define MAVLINK_MSG_ID_10_MIN_LEN 12
+#define MAVLINK_MSG_ID_11_LEN 12
+#define MAVLINK_MSG_ID_11_MIN_LEN 12
 
 #define MAVLINK_MSG_ID_EVT_ACCEL_RAW_CRC 117
-#define MAVLINK_MSG_ID_10_CRC 117
+#define MAVLINK_MSG_ID_11_CRC 117
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_EVT_ACCEL_RAW { \
-    10, \
+    11, \
     "EVT_ACCEL_RAW", \
     3, \
     {  { "acc_x", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_evt_accel_raw_t, acc_x) }, \

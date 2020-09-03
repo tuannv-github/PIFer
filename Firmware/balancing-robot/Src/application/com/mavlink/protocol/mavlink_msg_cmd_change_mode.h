@@ -3,10 +3,10 @@
 
 #define MAVLINK_MSG_ID_CMD_CHANGE_MODE 1
 
-MAVPACKED(
+
 typedef struct __mavlink_cmd_change_mode_t {
  uint8_t cmd_change_mode; /*<  Mode*/
-}) mavlink_cmd_change_mode_t;
+} mavlink_cmd_change_mode_t;
 
 #define MAVLINK_MSG_ID_CMD_CHANGE_MODE_LEN 1
 #define MAVLINK_MSG_ID_CMD_CHANGE_MODE_MIN_LEN 1

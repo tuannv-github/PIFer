@@ -1,28 +1,28 @@
 #pragma once
 // MESSAGE EVT_MAG_RAW PACKING
 
-#define MAVLINK_MSG_ID_EVT_MAG_RAW 12
+#define MAVLINK_MSG_ID_EVT_MAG_RAW 14
 
-MAVPACKED(
+
 typedef struct __mavlink_evt_mag_raw_t {
  float mag_x; /*<  Mag X*/
  float mag_y; /*<  Mag Y*/
  float mag_z; /*<  Mag Z*/
-}) mavlink_evt_mag_raw_t;
+} mavlink_evt_mag_raw_t;
 
 #define MAVLINK_MSG_ID_EVT_MAG_RAW_LEN 12
 #define MAVLINK_MSG_ID_EVT_MAG_RAW_MIN_LEN 12
-#define MAVLINK_MSG_ID_12_LEN 12
-#define MAVLINK_MSG_ID_12_MIN_LEN 12
+#define MAVLINK_MSG_ID_14_LEN 12
+#define MAVLINK_MSG_ID_14_MIN_LEN 12
 
 #define MAVLINK_MSG_ID_EVT_MAG_RAW_CRC 76
-#define MAVLINK_MSG_ID_12_CRC 76
+#define MAVLINK_MSG_ID_14_CRC 76
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_EVT_MAG_RAW { \
-    12, \
+    14, \
     "EVT_MAG_RAW", \
     3, \
     {  { "mag_x", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_evt_mag_raw_t, mag_x) }, \

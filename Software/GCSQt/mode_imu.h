@@ -11,6 +11,8 @@ namespace Ui {
 class Mode_imu;
 }
 
+#define  UPDATE_COEFF 0.01
+
 class Mode_imu : public Mode_common
 {
     Q_OBJECT
@@ -29,17 +31,20 @@ private slots:
     void on_btn_gyro_calib_clicked();
     void on_btn_change_mode_imu_clicked();
 
+    void on_btn_tilt_calib_clicked();
+
 private:
     Ui::Mode_imu *ui;
     QStatusBar *g_q_status_bar = nullptr;
 
-    int16_t g_gx_offset;
-    int16_t g_gy_offset;
-    int16_t g_gz_offset;
-    float g_angle_adjust;
+    float g_gx_offset;
+    float g_gy_offset;
+    float g_gz_offset;
+    float g_tilt_offset;
     float g_gbelive;
-    bool g_is_imu_calibrating = false;
 
+    bool g_is_gyro_calibrating = false;
+    bool g_is_tilt_calibrating = false;
 };
 
 #endif // MODE_IMU_H

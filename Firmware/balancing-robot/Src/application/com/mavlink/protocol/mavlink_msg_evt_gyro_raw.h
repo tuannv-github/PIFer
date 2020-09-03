@@ -1,28 +1,28 @@
 #pragma once
 // MESSAGE EVT_GYRO_RAW PACKING
 
-#define MAVLINK_MSG_ID_EVT_GYRO_RAW 11
+#define MAVLINK_MSG_ID_EVT_GYRO_RAW 12
 
-MAVPACKED(
+
 typedef struct __mavlink_evt_gyro_raw_t {
  float gyro_x; /*<  Gyro X*/
  float gyro_y; /*<  Gyro Y*/
  float gyro_z; /*<  Gyro Z*/
-}) mavlink_evt_gyro_raw_t;
+} mavlink_evt_gyro_raw_t;
 
 #define MAVLINK_MSG_ID_EVT_GYRO_RAW_LEN 12
 #define MAVLINK_MSG_ID_EVT_GYRO_RAW_MIN_LEN 12
-#define MAVLINK_MSG_ID_11_LEN 12
-#define MAVLINK_MSG_ID_11_MIN_LEN 12
+#define MAVLINK_MSG_ID_12_LEN 12
+#define MAVLINK_MSG_ID_12_MIN_LEN 12
 
 #define MAVLINK_MSG_ID_EVT_GYRO_RAW_CRC 142
-#define MAVLINK_MSG_ID_11_CRC 142
+#define MAVLINK_MSG_ID_12_CRC 142
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_EVT_GYRO_RAW { \
-    11, \
+    12, \
     "EVT_GYRO_RAW", \
     3, \
     {  { "gyro_x", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_evt_gyro_raw_t, gyro_x) }, \

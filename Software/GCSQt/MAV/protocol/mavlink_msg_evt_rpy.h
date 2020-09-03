@@ -3,12 +3,12 @@
 
 #define MAVLINK_MSG_ID_EVT_RPY 5
 
-MAVPACKED(
+
 typedef struct __mavlink_evt_rpy_t {
  float roll; /*<  Roll*/
  float pitch; /*<  Pitch*/
  float yaw; /*<  Yaw*/
-}) mavlink_evt_rpy_t;
+} mavlink_evt_rpy_t;
 
 #define MAVLINK_MSG_ID_EVT_RPY_LEN 12
 #define MAVLINK_MSG_ID_EVT_RPY_MIN_LEN 12

@@ -46,10 +46,11 @@
 #define MPU9250_I2C			hi2c1
 #define MPU6050_ADDRESS 	(MPU6050_DEFAULT_ADDRESS << 1)
 #define IMU_PERIOD			5
-//#define PITCH				0
-//#define ROLL				1
-#define TILT				0 // 0: pitch, 1: roll
-#define IMU_RAW_RP_PERIOD	50
+#define TILT_ROLL			0
+#define TILT_PITCH			1
+#define TILT				TILT_PITCH
+#define IMU_RAW_RP_PERIOD	45
+#define IMU_RES_RP_PERIOD	55
 
 // COM define
 #define COM_USART			huart3

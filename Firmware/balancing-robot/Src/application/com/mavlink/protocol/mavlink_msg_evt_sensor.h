@@ -3,10 +3,10 @@
 
 #define MAVLINK_MSG_ID_EVT_SENSOR 6
 
-MAVPACKED(
+
 typedef struct __mavlink_evt_sensor_t {
  int8_t imu_status; /*<  IMU status*/
-}) mavlink_evt_sensor_t;
+} mavlink_evt_sensor_t;
 
 #define MAVLINK_MSG_ID_EVT_SENSOR_LEN 1
 #define MAVLINK_MSG_ID_EVT_SENSOR_MIN_LEN 1

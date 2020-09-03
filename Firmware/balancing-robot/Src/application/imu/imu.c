@@ -21,8 +21,6 @@ TID(gtid_imu_callback);
 
 static void imu_callback(uint8_t* ctx){
 	if(mpu9250_get_accel_gyro(&motion_6[0], &motion_6[1], &motion_6[2], &motion_6[3], &motion_6[4], &motion_6[5]) < 0){
-		motion_6[0]=0;motion_6[1]=0;motion_6[2]=0;
-		motion_6[3]=0;motion_6[4]=0;motion_6[5]=0;
 		return;
 	}
 
@@ -30,8 +28,8 @@ static void imu_callback(uint8_t* ctx){
 	float accel_pitch = atan2(-motion_6[0], sqrt(motion_6[1]*motion_6[1] + motion_6[2]*motion_6[2]))*360.f/M_PI;
 	float roll_rate = ((motion_6[3]-params.gx_offset)*250.0/32768.0)/100.0;
 	float pitch_rate = ((motion_6[4]-params.gy_offset)*250.0/32768.0)/100.0;
-	roll = params.believe_in_gyro *(roll+roll_rate) + (1-params.believe_in_gyro)*accel_roll;
-	pitch = params.believe_in_gyro *(pitch+pitch_rate) + (1-params.believe_in_gyro)*accel_pitch;
+	roll = params.g_believe *(roll+roll_rate) + (1-params.g_believe)*accel_roll;
+	pitch = params.g_believe *(pitch+pitch_rate) + (1-params.g_believe)*accel_pitch;
 	if(isnan(roll)) roll = 0;
 	if(isnan(pitch)) pitch = 0;
 }
