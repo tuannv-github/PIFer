@@ -40,7 +40,7 @@ static void tilt_controller_callback(uint8_t* ctx){
 	tilt -= params.tilt_offset;
 
 	float speed = pid_compute(&params.pid[0], tilt_setpoint, tilt);
-	if(tilt > 135 || tilt < -135) {
+	if(tilt > 70 || tilt < -70) {
 		speed = 0;
 		pid_reset(&params.pid[0]);
 		pid_reset(&params.pid[1]);

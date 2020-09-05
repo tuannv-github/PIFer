@@ -52,6 +52,11 @@ static int hw_params(mavlink_message_t *msg){
 		params.encoder_exchange = true;
 	}else params.encoder_exchange = false;
 
+	params.motor0_pos_deadband = hw_params_msg.motor0_pos_deadband;
+	params.motor0_neg_deadband = hw_params_msg.motor0_neg_deadband;
+	params.motor1_pos_deadband = hw_params_msg.motor1_pos_deadband;
+	params.motor1_neg_deadband = hw_params_msg.motor1_neg_deadband;
+
 	enc_init();
 
 	return 0;
@@ -70,7 +75,8 @@ static int load_params(){
 	bool_t encoder1_invert = params.encoder1_invert == true ? MAV_TRUE : MAV_FALSE;
 	bool_t encoder_ex = params.encoder_exchange == true ? MAV_TRUE : MAV_FALSE;
 
-	mavlink_msg_hw_params_pack(0,0,&hw_msg,motor0_invert,motor1_invert,encoder0_invert,encoder1_invert,encoder_ex);
+	mavlink_msg_hw_params_pack(0,0,&hw_msg,motor0_invert,motor1_invert,encoder0_invert,encoder1_invert,encoder_ex,
+			params.motor0_pos_deadband, params.motor0_neg_deadband, params.motor1_pos_deadband, params.motor1_neg_deadband);
 	uint16_t len = mavlink_msg_to_send_buffer(gmav_send_buf, &hw_msg);
 	com_send(gmav_send_buf, len);
 

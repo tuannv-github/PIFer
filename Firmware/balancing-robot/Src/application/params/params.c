@@ -67,7 +67,7 @@ params_t params = {
 
 		.gx_offset = 1,
 		.gy_offset = 2,
-		.gz_offset = 3
+		.gz_offset = 3,
 };
 
 static uint32_t address = PARAMS_PAGE_ADDRESS;
@@ -135,6 +135,12 @@ void params_save(){
 	write((uint32_t*)(&params.encoder0_invert));
 	write((uint32_t*)(&params.encoder1_invert));
 	write((uint32_t*)(&params.encoder_exchange));
+
+	write((uint32_t*)(&params.motor0_pos_deadband));
+	write((uint32_t*)(&params.motor0_neg_deadband));
+	write((uint32_t*)(&params.motor1_pos_deadband));
+	write((uint32_t*)(&params.motor1_neg_deadband));
+
 	HAL_FLASH_Lock();
 }
 
@@ -181,6 +187,11 @@ bool params_load(){
 	read((uint32_t*)(&params.encoder0_invert));
 	read((uint32_t*)(&params.encoder1_invert));
 	read((uint32_t*)(&params.encoder_exchange));
+
+	read((uint32_t*)(&params.motor0_pos_deadband));
+	read((uint32_t*)(&params.motor0_neg_deadband));
+	read((uint32_t*)(&params.motor1_pos_deadband));
+	read((uint32_t*)(&params.motor1_neg_deadband));
 
 	return true;
 }

@@ -36,6 +36,11 @@ typedef struct{
 	bool encoder0_invert;
 	bool encoder1_invert;
 	bool encoder_exchange;
+	int16_t motor0_pos_deadband;
+	int16_t motor0_neg_deadband;
+	int16_t motor1_pos_deadband;
+	int16_t motor1_neg_deadband;
+
 }params_t;
 
 extern params_t params;

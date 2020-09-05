@@ -92,13 +92,17 @@ static void motor1_setspeed_invert(int32_t speed){
 }
 
 void motors_setspeed(motors_t motor, int32_t speed){
-	if(speed > 999) speed = 999;
-	if(speed < -999) speed = -999;
 	switch(motor){
 	case MOTOR_0:
+		if(speed!=0) speed = speed > 0 ? (speed+params.motor0_pos_deadband) : (speed+params.motor0_neg_deadband);
+		if(speed > 999) speed = 999;
+		if(speed < -999) speed = -999;
 		gset_speed_motor0(speed);
 		break;
 	case MOTOR_1:
+		if(speed!=0) speed = speed > 0 ? (speed+params.motor1_pos_deadband) : (speed+params.motor1_neg_deadband);
+		if(speed > 999) speed = 999;
+		if(speed < -999) speed = -999;
 		gset_speed_motor1(speed);
 		break;
 	}

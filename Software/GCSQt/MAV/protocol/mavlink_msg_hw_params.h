@@ -5,6 +5,10 @@
 
 
 typedef struct __mavlink_hw_params_t {
+ int16_t motor0_pos_deadband; /*<  Motor 0 positive deadband*/
+ int16_t motor0_neg_deadband; /*<  Motor 0 negative deadband*/
+ int16_t motor1_pos_deadband; /*<  Motor 1 positive deadband*/
+ int16_t motor1_neg_deadband; /*<  Motor 1 negative deadband*/
  int8_t motor0_invert; /*<  Motor 0 Invert*/
  int8_t motor1_invert; /*<  Motor 1 Invert*/
  int8_t encoder0_invert; /*<  Encoder 0 Invert*/
@@ -12,13 +16,13 @@ typedef struct __mavlink_hw_params_t {
  int8_t encoder_exchange; /*<  Switch to invert encoder from motor 0 to motor 1 and vice versa*/
 } mavlink_hw_params_t;
 
-#define MAVLINK_MSG_ID_HW_PARAMS_LEN 5
-#define MAVLINK_MSG_ID_HW_PARAMS_MIN_LEN 5
-#define MAVLINK_MSG_ID_8_LEN 5
-#define MAVLINK_MSG_ID_8_MIN_LEN 5
+#define MAVLINK_MSG_ID_HW_PARAMS_LEN 13
+#define MAVLINK_MSG_ID_HW_PARAMS_MIN_LEN 13
+#define MAVLINK_MSG_ID_8_LEN 13
+#define MAVLINK_MSG_ID_8_MIN_LEN 13
 
-#define MAVLINK_MSG_ID_HW_PARAMS_CRC 213
-#define MAVLINK_MSG_ID_8_CRC 213
+#define MAVLINK_MSG_ID_HW_PARAMS_CRC 55
+#define MAVLINK_MSG_ID_8_CRC 55
 
 
 
@@ -26,23 +30,31 @@ typedef struct __mavlink_hw_params_t {
 #define MAVLINK_MESSAGE_INFO_HW_PARAMS { \
     8, \
     "HW_PARAMS", \
-    5, \
-    {  { "motor0_invert", NULL, MAVLINK_TYPE_INT8_T, 0, 0, offsetof(mavlink_hw_params_t, motor0_invert) }, \
-         { "motor1_invert", NULL, MAVLINK_TYPE_INT8_T, 0, 1, offsetof(mavlink_hw_params_t, motor1_invert) }, \
-         { "encoder0_invert", NULL, MAVLINK_TYPE_INT8_T, 0, 2, offsetof(mavlink_hw_params_t, encoder0_invert) }, \
-         { "encoder1_invert", NULL, MAVLINK_TYPE_INT8_T, 0, 3, offsetof(mavlink_hw_params_t, encoder1_invert) }, \
-         { "encoder_exchange", NULL, MAVLINK_TYPE_INT8_T, 0, 4, offsetof(mavlink_hw_params_t, encoder_exchange) }, \
+    9, \
+    {  { "motor0_invert", NULL, MAVLINK_TYPE_INT8_T, 0, 8, offsetof(mavlink_hw_params_t, motor0_invert) }, \
+         { "motor1_invert", NULL, MAVLINK_TYPE_INT8_T, 0, 9, offsetof(mavlink_hw_params_t, motor1_invert) }, \
+         { "encoder0_invert", NULL, MAVLINK_TYPE_INT8_T, 0, 10, offsetof(mavlink_hw_params_t, encoder0_invert) }, \
+         { "encoder1_invert", NULL, MAVLINK_TYPE_INT8_T, 0, 11, offsetof(mavlink_hw_params_t, encoder1_invert) }, \
+         { "encoder_exchange", NULL, MAVLINK_TYPE_INT8_T, 0, 12, offsetof(mavlink_hw_params_t, encoder_exchange) }, \
+         { "motor0_pos_deadband", NULL, MAVLINK_TYPE_INT16_T, 0, 0, offsetof(mavlink_hw_params_t, motor0_pos_deadband) }, \
+         { "motor0_neg_deadband", NULL, MAVLINK_TYPE_INT16_T, 0, 2, offsetof(mavlink_hw_params_t, motor0_neg_deadband) }, \
+         { "motor1_pos_deadband", NULL, MAVLINK_TYPE_INT16_T, 0, 4, offsetof(mavlink_hw_params_t, motor1_pos_deadband) }, \
+         { "motor1_neg_deadband", NULL, MAVLINK_TYPE_INT16_T, 0, 6, offsetof(mavlink_hw_params_t, motor1_neg_deadband) }, \
          } \
 }
 #else
 #define MAVLINK_MESSAGE_INFO_HW_PARAMS { \
     "HW_PARAMS", \
-    5, \
-    {  { "motor0_invert", NULL, MAVLINK_TYPE_INT8_T, 0, 0, offsetof(mavlink_hw_params_t, motor0_invert) }, \
-         { "motor1_invert", NULL, MAVLINK_TYPE_INT8_T, 0, 1, offsetof(mavlink_hw_params_t, motor1_invert) }, \
-         { "encoder0_invert", NULL, MAVLINK_TYPE_INT8_T, 0, 2, offsetof(mavlink_hw_params_t, encoder0_invert) }, \
-         { "encoder1_invert", NULL, MAVLINK_TYPE_INT8_T, 0, 3, offsetof(mavlink_hw_params_t, encoder1_invert) }, \
-         { "encoder_exchange", NULL, MAVLINK_TYPE_INT8_T, 0, 4, offsetof(mavlink_hw_params_t, encoder_exchange) }, \
+    9, \
+    {  { "motor0_invert", NULL, MAVLINK_TYPE_INT8_T, 0, 8, offsetof(mavlink_hw_params_t, motor0_invert) }, \
+         { "motor1_invert", NULL, MAVLINK_TYPE_INT8_T, 0, 9, offsetof(mavlink_hw_params_t, motor1_invert) }, \
+         { "encoder0_invert", NULL, MAVLINK_TYPE_INT8_T, 0, 10, offsetof(mavlink_hw_params_t, encoder0_invert) }, \
+         { "encoder1_invert", NULL, MAVLINK_TYPE_INT8_T, 0, 11, offsetof(mavlink_hw_params_t, encoder1_invert) }, \
+         { "encoder_exchange", NULL, MAVLINK_TYPE_INT8_T, 0, 12, offsetof(mavlink_hw_params_t, encoder_exchange) }, \
+         { "motor0_pos_deadband", NULL, MAVLINK_TYPE_INT16_T, 0, 0, offsetof(mavlink_hw_params_t, motor0_pos_deadband) }, \
+         { "motor0_neg_deadband", NULL, MAVLINK_TYPE_INT16_T, 0, 2, offsetof(mavlink_hw_params_t, motor0_neg_deadband) }, \
+         { "motor1_pos_deadband", NULL, MAVLINK_TYPE_INT16_T, 0, 4, offsetof(mavlink_hw_params_t, motor1_pos_deadband) }, \
+         { "motor1_neg_deadband", NULL, MAVLINK_TYPE_INT16_T, 0, 6, offsetof(mavlink_hw_params_t, motor1_neg_deadband) }, \
          } \
 }
 #endif
@@ -58,22 +70,34 @@ typedef struct __mavlink_hw_params_t {
  * @param encoder0_invert  Encoder 0 Invert
  * @param encoder1_invert  Encoder 1 Invert
  * @param encoder_exchange  Switch to invert encoder from motor 0 to motor 1 and vice versa
+ * @param motor0_pos_deadband  Motor 0 positive deadband
+ * @param motor0_neg_deadband  Motor 0 negative deadband
+ * @param motor1_pos_deadband  Motor 1 positive deadband
+ * @param motor1_neg_deadband  Motor 1 negative deadband
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_hw_params_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               int8_t motor0_invert, int8_t motor1_invert, int8_t encoder0_invert, int8_t encoder1_invert, int8_t encoder_exchange)
+                               int8_t motor0_invert, int8_t motor1_invert, int8_t encoder0_invert, int8_t encoder1_invert, int8_t encoder_exchange, int16_t motor0_pos_deadband, int16_t motor0_neg_deadband, int16_t motor1_pos_deadband, int16_t motor1_neg_deadband)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_HW_PARAMS_LEN];
-    _mav_put_int8_t(buf, 0, motor0_invert);
-    _mav_put_int8_t(buf, 1, motor1_invert);
-    _mav_put_int8_t(buf, 2, encoder0_invert);
-    _mav_put_int8_t(buf, 3, encoder1_invert);
-    _mav_put_int8_t(buf, 4, encoder_exchange);
+    _mav_put_int16_t(buf, 0, motor0_pos_deadband);
+    _mav_put_int16_t(buf, 2, motor0_neg_deadband);
+    _mav_put_int16_t(buf, 4, motor1_pos_deadband);
+    _mav_put_int16_t(buf, 6, motor1_neg_deadband);
+    _mav_put_int8_t(buf, 8, motor0_invert);
+    _mav_put_int8_t(buf, 9, motor1_invert);
+    _mav_put_int8_t(buf, 10, encoder0_invert);
+    _mav_put_int8_t(buf, 11, encoder1_invert);
+    _mav_put_int8_t(buf, 12, encoder_exchange);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_HW_PARAMS_LEN);
 #else
     mavlink_hw_params_t packet;
+    packet.motor0_pos_deadband = motor0_pos_deadband;
+    packet.motor0_neg_deadband = motor0_neg_deadband;
+    packet.motor1_pos_deadband = motor1_pos_deadband;
+    packet.motor1_neg_deadband = motor1_neg_deadband;
     packet.motor0_invert = motor0_invert;
     packet.motor1_invert = motor1_invert;
     packet.encoder0_invert = encoder0_invert;
@@ -98,23 +122,35 @@ static inline uint16_t mavlink_msg_hw_params_pack(uint8_t system_id, uint8_t com
  * @param encoder0_invert  Encoder 0 Invert
  * @param encoder1_invert  Encoder 1 Invert
  * @param encoder_exchange  Switch to invert encoder from motor 0 to motor 1 and vice versa
+ * @param motor0_pos_deadband  Motor 0 positive deadband
+ * @param motor0_neg_deadband  Motor 0 negative deadband
+ * @param motor1_pos_deadband  Motor 1 positive deadband
+ * @param motor1_neg_deadband  Motor 1 negative deadband
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_hw_params_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   int8_t motor0_invert,int8_t motor1_invert,int8_t encoder0_invert,int8_t encoder1_invert,int8_t encoder_exchange)
+                                   int8_t motor0_invert,int8_t motor1_invert,int8_t encoder0_invert,int8_t encoder1_invert,int8_t encoder_exchange,int16_t motor0_pos_deadband,int16_t motor0_neg_deadband,int16_t motor1_pos_deadband,int16_t motor1_neg_deadband)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_HW_PARAMS_LEN];
-    _mav_put_int8_t(buf, 0, motor0_invert);
-    _mav_put_int8_t(buf, 1, motor1_invert);
-    _mav_put_int8_t(buf, 2, encoder0_invert);
-    _mav_put_int8_t(buf, 3, encoder1_invert);
-    _mav_put_int8_t(buf, 4, encoder_exchange);
+    _mav_put_int16_t(buf, 0, motor0_pos_deadband);
+    _mav_put_int16_t(buf, 2, motor0_neg_deadband);
+    _mav_put_int16_t(buf, 4, motor1_pos_deadband);
+    _mav_put_int16_t(buf, 6, motor1_neg_deadband);
+    _mav_put_int8_t(buf, 8, motor0_invert);
+    _mav_put_int8_t(buf, 9, motor1_invert);
+    _mav_put_int8_t(buf, 10, encoder0_invert);
+    _mav_put_int8_t(buf, 11, encoder1_invert);
+    _mav_put_int8_t(buf, 12, encoder_exchange);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_HW_PARAMS_LEN);
 #else
     mavlink_hw_params_t packet;
+    packet.motor0_pos_deadband = motor0_pos_deadband;
+    packet.motor0_neg_deadband = motor0_neg_deadband;
+    packet.motor1_pos_deadband = motor1_pos_deadband;
+    packet.motor1_neg_deadband = motor1_neg_deadband;
     packet.motor0_invert = motor0_invert;
     packet.motor1_invert = motor1_invert;
     packet.encoder0_invert = encoder0_invert;
@@ -138,7 +174,7 @@ static inline uint16_t mavlink_msg_hw_params_pack_chan(uint8_t system_id, uint8_
  */
 static inline uint16_t mavlink_msg_hw_params_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_hw_params_t* hw_params)
 {
-    return mavlink_msg_hw_params_pack(system_id, component_id, msg, hw_params->motor0_invert, hw_params->motor1_invert, hw_params->encoder0_invert, hw_params->encoder1_invert, hw_params->encoder_exchange);
+    return mavlink_msg_hw_params_pack(system_id, component_id, msg, hw_params->motor0_invert, hw_params->motor1_invert, hw_params->encoder0_invert, hw_params->encoder1_invert, hw_params->encoder_exchange, hw_params->motor0_pos_deadband, hw_params->motor0_neg_deadband, hw_params->motor1_pos_deadband, hw_params->motor1_neg_deadband);
 }
 
 /**
@@ -152,7 +188,7 @@ static inline uint16_t mavlink_msg_hw_params_encode(uint8_t system_id, uint8_t c
  */
 static inline uint16_t mavlink_msg_hw_params_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_hw_params_t* hw_params)
 {
-    return mavlink_msg_hw_params_pack_chan(system_id, component_id, chan, msg, hw_params->motor0_invert, hw_params->motor1_invert, hw_params->encoder0_invert, hw_params->encoder1_invert, hw_params->encoder_exchange);
+    return mavlink_msg_hw_params_pack_chan(system_id, component_id, chan, msg, hw_params->motor0_invert, hw_params->motor1_invert, hw_params->encoder0_invert, hw_params->encoder1_invert, hw_params->encoder_exchange, hw_params->motor0_pos_deadband, hw_params->motor0_neg_deadband, hw_params->motor1_pos_deadband, hw_params->motor1_neg_deadband);
 }
 
 /**
@@ -164,22 +200,34 @@ static inline uint16_t mavlink_msg_hw_params_encode_chan(uint8_t system_id, uint
  * @param encoder0_invert  Encoder 0 Invert
  * @param encoder1_invert  Encoder 1 Invert
  * @param encoder_exchange  Switch to invert encoder from motor 0 to motor 1 and vice versa
+ * @param motor0_pos_deadband  Motor 0 positive deadband
+ * @param motor0_neg_deadband  Motor 0 negative deadband
+ * @param motor1_pos_deadband  Motor 1 positive deadband
+ * @param motor1_neg_deadband  Motor 1 negative deadband
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_hw_params_send(mavlink_channel_t chan, int8_t motor0_invert, int8_t motor1_invert, int8_t encoder0_invert, int8_t encoder1_invert, int8_t encoder_exchange)
+static inline void mavlink_msg_hw_params_send(mavlink_channel_t chan, int8_t motor0_invert, int8_t motor1_invert, int8_t encoder0_invert, int8_t encoder1_invert, int8_t encoder_exchange, int16_t motor0_pos_deadband, int16_t motor0_neg_deadband, int16_t motor1_pos_deadband, int16_t motor1_neg_deadband)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_HW_PARAMS_LEN];
-    _mav_put_int8_t(buf, 0, motor0_invert);
-    _mav_put_int8_t(buf, 1, motor1_invert);
-    _mav_put_int8_t(buf, 2, encoder0_invert);
-    _mav_put_int8_t(buf, 3, encoder1_invert);
-    _mav_put_int8_t(buf, 4, encoder_exchange);
+    _mav_put_int16_t(buf, 0, motor0_pos_deadband);
+    _mav_put_int16_t(buf, 2, motor0_neg_deadband);
+    _mav_put_int16_t(buf, 4, motor1_pos_deadband);
+    _mav_put_int16_t(buf, 6, motor1_neg_deadband);
+    _mav_put_int8_t(buf, 8, motor0_invert);
+    _mav_put_int8_t(buf, 9, motor1_invert);
+    _mav_put_int8_t(buf, 10, encoder0_invert);
+    _mav_put_int8_t(buf, 11, encoder1_invert);
+    _mav_put_int8_t(buf, 12, encoder_exchange);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_HW_PARAMS, buf, MAVLINK_MSG_ID_HW_PARAMS_MIN_LEN, MAVLINK_MSG_ID_HW_PARAMS_LEN, MAVLINK_MSG_ID_HW_PARAMS_CRC);
 #else
     mavlink_hw_params_t packet;
+    packet.motor0_pos_deadband = motor0_pos_deadband;
+    packet.motor0_neg_deadband = motor0_neg_deadband;
+    packet.motor1_pos_deadband = motor1_pos_deadband;
+    packet.motor1_neg_deadband = motor1_neg_deadband;
     packet.motor0_invert = motor0_invert;
     packet.motor1_invert = motor1_invert;
     packet.encoder0_invert = encoder0_invert;
@@ -198,7 +246,7 @@ static inline void mavlink_msg_hw_params_send(mavlink_channel_t chan, int8_t mot
 static inline void mavlink_msg_hw_params_send_struct(mavlink_channel_t chan, const mavlink_hw_params_t* hw_params)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    mavlink_msg_hw_params_send(chan, hw_params->motor0_invert, hw_params->motor1_invert, hw_params->encoder0_invert, hw_params->encoder1_invert, hw_params->encoder_exchange);
+    mavlink_msg_hw_params_send(chan, hw_params->motor0_invert, hw_params->motor1_invert, hw_params->encoder0_invert, hw_params->encoder1_invert, hw_params->encoder_exchange, hw_params->motor0_pos_deadband, hw_params->motor0_neg_deadband, hw_params->motor1_pos_deadband, hw_params->motor1_neg_deadband);
 #else
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_HW_PARAMS, (const char *)hw_params, MAVLINK_MSG_ID_HW_PARAMS_MIN_LEN, MAVLINK_MSG_ID_HW_PARAMS_LEN, MAVLINK_MSG_ID_HW_PARAMS_CRC);
 #endif
@@ -212,19 +260,27 @@ static inline void mavlink_msg_hw_params_send_struct(mavlink_channel_t chan, con
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_hw_params_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  int8_t motor0_invert, int8_t motor1_invert, int8_t encoder0_invert, int8_t encoder1_invert, int8_t encoder_exchange)
+static inline void mavlink_msg_hw_params_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  int8_t motor0_invert, int8_t motor1_invert, int8_t encoder0_invert, int8_t encoder1_invert, int8_t encoder_exchange, int16_t motor0_pos_deadband, int16_t motor0_neg_deadband, int16_t motor1_pos_deadband, int16_t motor1_neg_deadband)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
-    _mav_put_int8_t(buf, 0, motor0_invert);
-    _mav_put_int8_t(buf, 1, motor1_invert);
-    _mav_put_int8_t(buf, 2, encoder0_invert);
-    _mav_put_int8_t(buf, 3, encoder1_invert);
-    _mav_put_int8_t(buf, 4, encoder_exchange);
+    _mav_put_int16_t(buf, 0, motor0_pos_deadband);
+    _mav_put_int16_t(buf, 2, motor0_neg_deadband);
+    _mav_put_int16_t(buf, 4, motor1_pos_deadband);
+    _mav_put_int16_t(buf, 6, motor1_neg_deadband);
+    _mav_put_int8_t(buf, 8, motor0_invert);
+    _mav_put_int8_t(buf, 9, motor1_invert);
+    _mav_put_int8_t(buf, 10, encoder0_invert);
+    _mav_put_int8_t(buf, 11, encoder1_invert);
+    _mav_put_int8_t(buf, 12, encoder_exchange);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_HW_PARAMS, buf, MAVLINK_MSG_ID_HW_PARAMS_MIN_LEN, MAVLINK_MSG_ID_HW_PARAMS_LEN, MAVLINK_MSG_ID_HW_PARAMS_CRC);
 #else
     mavlink_hw_params_t *packet = (mavlink_hw_params_t *)msgbuf;
+    packet->motor0_pos_deadband = motor0_pos_deadband;
+    packet->motor0_neg_deadband = motor0_neg_deadband;
+    packet->motor1_pos_deadband = motor1_pos_deadband;
+    packet->motor1_neg_deadband = motor1_neg_deadband;
     packet->motor0_invert = motor0_invert;
     packet->motor1_invert = motor1_invert;
     packet->encoder0_invert = encoder0_invert;
@@ -248,7 +304,7 @@ static inline void mavlink_msg_hw_params_send_buf(mavlink_message_t *msgbuf, mav
  */
 static inline int8_t mavlink_msg_hw_params_get_motor0_invert(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_int8_t(msg,  0);
+    return _MAV_RETURN_int8_t(msg,  8);
 }
 
 /**
@@ -258,7 +314,7 @@ static inline int8_t mavlink_msg_hw_params_get_motor0_invert(const mavlink_messa
  */
 static inline int8_t mavlink_msg_hw_params_get_motor1_invert(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_int8_t(msg,  1);
+    return _MAV_RETURN_int8_t(msg,  9);
 }
 
 /**
@@ -268,7 +324,7 @@ static inline int8_t mavlink_msg_hw_params_get_motor1_invert(const mavlink_messa
  */
 static inline int8_t mavlink_msg_hw_params_get_encoder0_invert(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_int8_t(msg,  2);
+    return _MAV_RETURN_int8_t(msg,  10);
 }
 
 /**
@@ -278,7 +334,7 @@ static inline int8_t mavlink_msg_hw_params_get_encoder0_invert(const mavlink_mes
  */
 static inline int8_t mavlink_msg_hw_params_get_encoder1_invert(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_int8_t(msg,  3);
+    return _MAV_RETURN_int8_t(msg,  11);
 }
 
 /**
@@ -288,7 +344,47 @@ static inline int8_t mavlink_msg_hw_params_get_encoder1_invert(const mavlink_mes
  */
 static inline int8_t mavlink_msg_hw_params_get_encoder_exchange(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_int8_t(msg,  4);
+    return _MAV_RETURN_int8_t(msg,  12);
+}
+
+/**
+ * @brief Get field motor0_pos_deadband from hw_params message
+ *
+ * @return  Motor 0 positive deadband
+ */
+static inline int16_t mavlink_msg_hw_params_get_motor0_pos_deadband(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  0);
+}
+
+/**
+ * @brief Get field motor0_neg_deadband from hw_params message
+ *
+ * @return  Motor 0 negative deadband
+ */
+static inline int16_t mavlink_msg_hw_params_get_motor0_neg_deadband(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  2);
+}
+
+/**
+ * @brief Get field motor1_pos_deadband from hw_params message
+ *
+ * @return  Motor 1 positive deadband
+ */
+static inline int16_t mavlink_msg_hw_params_get_motor1_pos_deadband(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  4);
+}
+
+/**
+ * @brief Get field motor1_neg_deadband from hw_params message
+ *
+ * @return  Motor 1 negative deadband
+ */
+static inline int16_t mavlink_msg_hw_params_get_motor1_neg_deadband(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  6);
 }
 
 /**
@@ -300,6 +396,10 @@ static inline int8_t mavlink_msg_hw_params_get_encoder_exchange(const mavlink_me
 static inline void mavlink_msg_hw_params_decode(const mavlink_message_t* msg, mavlink_hw_params_t* hw_params)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    hw_params->motor0_pos_deadband = mavlink_msg_hw_params_get_motor0_pos_deadband(msg);
+    hw_params->motor0_neg_deadband = mavlink_msg_hw_params_get_motor0_neg_deadband(msg);
+    hw_params->motor1_pos_deadband = mavlink_msg_hw_params_get_motor1_pos_deadband(msg);
+    hw_params->motor1_neg_deadband = mavlink_msg_hw_params_get_motor1_neg_deadband(msg);
     hw_params->motor0_invert = mavlink_msg_hw_params_get_motor0_invert(msg);
     hw_params->motor1_invert = mavlink_msg_hw_params_get_motor1_invert(msg);
     hw_params->encoder0_invert = mavlink_msg_hw_params_get_encoder0_invert(msg);

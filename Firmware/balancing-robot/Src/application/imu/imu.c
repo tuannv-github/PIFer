@@ -23,9 +23,8 @@ static void imu_callback(uint8_t* ctx){
 	if(mpu9250_get_accel_gyro(&motion_6[0], &motion_6[1], &motion_6[2], &motion_6[3], &motion_6[4], &motion_6[5]) < 0){
 		return;
 	}
-
-	float accel_roll  = atan2(motion_6[1], sqrt(motion_6[0]*motion_6[0] + motion_6[2]*motion_6[2]))*360.f/M_PI;
-	float accel_pitch = atan2(-motion_6[0], sqrt(motion_6[1]*motion_6[1] + motion_6[2]*motion_6[2]))*360.f/M_PI;
+	float accel_roll  = atan2(motion_6[1], sqrt(motion_6[0]*motion_6[0] + motion_6[2]*motion_6[2]))*180.f/M_PI;
+	float accel_pitch = atan2(-motion_6[0], sqrt(motion_6[1]*motion_6[1] + motion_6[2]*motion_6[2]))*180.f/M_PI;
 	float roll_rate = (motion_6[3]-params.gx_offset)*0.001f/IMU_PERIOD;
 	float pitch_rate = (motion_6[4]-params.gy_offset)*0.001f/IMU_PERIOD;
 	roll = params.g_believe *(roll+roll_rate) + (1-params.g_believe)*accel_roll;

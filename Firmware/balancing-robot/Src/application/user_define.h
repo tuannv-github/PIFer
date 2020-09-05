@@ -45,7 +45,7 @@
 #define MPU6050_I2C			hi2c1
 #define MPU9250_I2C			hi2c1
 #define MPU6050_ADDRESS 	(MPU6050_DEFAULT_ADDRESS << 1)
-#define IMU_PERIOD			1
+#define IMU_PERIOD			2
 #define TILT_ROLL			0
 #define TILT_PITCH			1
 #define TILT				TILT_PITCH
@@ -58,7 +58,7 @@
 #define RX_DMA_BUF_SIZE		512
 #define TX_CIR_BUF_SIZE 	512
 #define RX_CIR_BUF_SIZE 	512
-#define SERIAL_PERIOD		10	// UART transmission
+#define SERIAL_PERIOD		5	// UART transmission
 #define MAV_BUFF_SIZE 		512
 #define MAVLINK_CB_PERIOD	10	// Mavlink read message callback
 
@@ -72,7 +72,6 @@
 #define IMU_STATUS_REPORT_PERIOD	100
 #define RPY_REPORT_PERIOD			100
 #define TILT_REPORT_PERIOD			100
-#define PID_REPORT_PERIOD			100
 #define CONTROL_TIMEOUT_MS			1000
 #define VX_TO_TILT					0.04
 #define OMEGA_COEFF					3.0

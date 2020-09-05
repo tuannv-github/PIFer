@@ -100,6 +100,10 @@
 			<field type="int8_t" name="encoder0_invert" enum="bool_t">Encoder 0 Invert</field>
 			<field type="int8_t" name="encoder1_invert" enum="bool_t">Encoder 1 Invert</field>
 			<field type="int8_t" name="encoder_exchange" enum="bool_t">Switch to invert encoder from motor 0 to motor 1 and vice versa</field>
+			<field type="int16_t" name="motor0_pos_deadband">Motor 0 positive deadband</field>
+			<field type="int16_t" name="motor0_neg_deadband">Motor 0 negative deadband</field>
+			<field type="int16_t" name="motor1_pos_deadband">Motor 1 positive deadband</field>
+			<field type="int16_t" name="motor1_neg_deadband">Motor 1 negative deadband</field>
 		</message>
 
 		<message id="9" name="GYRO_PARAMS">

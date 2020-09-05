@@ -473,10 +473,14 @@ static void mavlink_test_hw_params(uint8_t system_id, uint8_t component_id, mavl
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
         uint16_t i;
     mavlink_hw_params_t packet_in = {
-        5,72,139,206,17
+        17235,17339,17443,17547,29,96,163,230,41
     };
     mavlink_hw_params_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
+        packet1.motor0_pos_deadband = packet_in.motor0_pos_deadband;
+        packet1.motor0_neg_deadband = packet_in.motor0_neg_deadband;
+        packet1.motor1_pos_deadband = packet_in.motor1_pos_deadband;
+        packet1.motor1_neg_deadband = packet_in.motor1_neg_deadband;
         packet1.motor0_invert = packet_in.motor0_invert;
         packet1.motor1_invert = packet_in.motor1_invert;
         packet1.encoder0_invert = packet_in.encoder0_invert;
@@ -496,12 +500,12 @@ static void mavlink_test_hw_params(uint8_t system_id, uint8_t component_id, mavl
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_hw_params_pack(system_id, component_id, &msg , packet1.motor0_invert , packet1.motor1_invert , packet1.encoder0_invert , packet1.encoder1_invert , packet1.encoder_exchange );
+    mavlink_msg_hw_params_pack(system_id, component_id, &msg , packet1.motor0_invert , packet1.motor1_invert , packet1.encoder0_invert , packet1.encoder1_invert , packet1.encoder_exchange , packet1.motor0_pos_deadband , packet1.motor0_neg_deadband , packet1.motor1_pos_deadband , packet1.motor1_neg_deadband );
     mavlink_msg_hw_params_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_hw_params_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.motor0_invert , packet1.motor1_invert , packet1.encoder0_invert , packet1.encoder1_invert , packet1.encoder_exchange );
+    mavlink_msg_hw_params_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.motor0_invert , packet1.motor1_invert , packet1.encoder0_invert , packet1.encoder1_invert , packet1.encoder_exchange , packet1.motor0_pos_deadband , packet1.motor0_neg_deadband , packet1.motor1_pos_deadband , packet1.motor1_neg_deadband );
     mavlink_msg_hw_params_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -514,7 +518,7 @@ static void mavlink_test_hw_params(uint8_t system_id, uint8_t component_id, mavl
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_hw_params_send(MAVLINK_COMM_1 , packet1.motor0_invert , packet1.motor1_invert , packet1.encoder0_invert , packet1.encoder1_invert , packet1.encoder_exchange );
+    mavlink_msg_hw_params_send(MAVLINK_COMM_1 , packet1.motor0_invert , packet1.motor1_invert , packet1.encoder0_invert , packet1.encoder1_invert , packet1.encoder_exchange , packet1.motor0_pos_deadband , packet1.motor0_neg_deadband , packet1.motor1_pos_deadband , packet1.motor1_neg_deadband );
     mavlink_msg_hw_params_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 }
