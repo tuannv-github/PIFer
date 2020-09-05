@@ -18,14 +18,12 @@ Mode_hw_tw::~Mode_hw_tw()
 void Mode_hw_tw::mav_recv(mavlink_message_t *msg){
     switch(msg->msgid) {
     case MAVLINK_MSG_ID_RESPOND:
-//        if(is_timing()){
-//            mavlink_respond_t evt_respond;
-//            mavlink_msg_respond_decode(msg,&evt_respond);
-//            if(evt_respond.respond == RESPOND_OK){
-//                reset_timeout();
-//                show_status("Succeed to write or save params",2000);
-//            }
-//        }
+        {
+            mavlink_respond_t respond_msg;
+            mavlink_msg_respond_decode(msg,&respond_msg);
+            if(respond_msg.respond == RESPOND_OK) succeed();
+            else failed();
+        }
         break;
     case MAVLINK_MSG_ID_HW_PARAMS:
         {

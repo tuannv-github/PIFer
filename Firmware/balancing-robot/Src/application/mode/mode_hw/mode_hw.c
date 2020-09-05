@@ -21,7 +21,15 @@ static void speed_report_callback(uint8_t* ctx){
 	com_send(gmav_send_buf, len);
 }
 
-static void on_hw_cmd(mavlink_message_t *msg){
+static int motor_speed(mavlink_message_t *msg){
+	mavlink_motor_speed_t motor_speed_msg;
+	mavlink_msg_motor_speed_decode(msg, &motor_speed_msg);
+	motors_setspeed(MOTOR_0, motor_speed_msg.motor_speed_0);
+	motors_setspeed(MOTOR_1, motor_speed_msg.motor_speed_1);
+	return 0;
+}
+
+static int hw_params(mavlink_message_t *msg){
 	mavlink_hw_params_t hw_params_msg;
 	mavlink_msg_hw_params_decode(msg,&hw_params_msg);
 
@@ -43,12 +51,14 @@ static void on_hw_cmd(mavlink_message_t *msg){
 	if(hw_params_msg.encoder_exchange == MAV_TRUE){
 		params.encoder_exchange = true;
 	}else params.encoder_exchange = false;
+
 	enc_init();
 
+	return 0;
 	respond_ok();
 }
 
-static void load_params(){
+static int load_params(){
 	params_load();
 
 	mavlink_message_t hw_msg;
@@ -63,16 +73,19 @@ static void load_params(){
 	mavlink_msg_hw_params_pack(0,0,&hw_msg,motor0_invert,motor1_invert,encoder0_invert,encoder1_invert,encoder_ex);
 	uint16_t len = mavlink_msg_to_send_buffer(gmav_send_buf, &hw_msg);
 	com_send(gmav_send_buf, len);
+
+	return 0;
 }
 
-static void save_params(){
+static int save_params(){
 	params_save();
-	respond_ok();
+	return 0;
 }
 
 void mode_hw_init(){
 	// Hardware initialization
 	motors_init();
+	enc_init();
 
 	// Periodic task initialization
 	gtimerid_speed_report = timer_register_callback(speed_report_callback, ENC_RP_PERIOD, 0, TIMER_MODE_REPEAT);
@@ -81,6 +94,7 @@ void mode_hw_init(){
 void mode_hw_deinit(){
 	// Hardware de-initialization
 	motors_deinit();
+	enc_deinit();
 
 	// Background task de-initialization
 	timer_unregister_callback(gtimerid_speed_report);
@@ -89,23 +103,27 @@ void mode_hw_deinit(){
 void on_mode_hw_mavlink_recv(mavlink_message_t *msg){
 	switch(msg->msgid){
 	case MAVLINK_MSG_ID_MOTOR_SPEED:
-		{
-			mavlink_motor_speed_t motor_speed_msg;
-			mavlink_msg_motor_speed_decode(msg, &motor_speed_msg);
-			motors_setspeed(MOTOR_0, motor_speed_msg.motor_speed_0);
-			motors_setspeed(MOTOR_1, motor_speed_msg.motor_speed_1);
-		}
+		if(motor_speed(msg) != 0) respond_error();
+		else respond_ok();
 		break;
 	case MAVLINK_MSG_ID_CMD_PARAMS:
 		{
 			mavlink_cmd_params_t cmd_params_msg;
 			mavlink_msg_cmd_params_decode(msg,&cmd_params_msg);
-			if(cmd_params_msg.cmd_params == CMD_LOAD) load_params();
-			else if(cmd_params_msg.cmd_params == CMD_SAVE) save_params();
+			if(cmd_params_msg.cmd_params == CMD_LOAD){
+				if(load_params() != 0) respond_error();
+				else respond_ok();
+			}
+
+			else if(cmd_params_msg.cmd_params == CMD_SAVE){
+				if(save_params() != 0) respond_error();
+				else respond_ok();
+			}
 		}
 	break;
 	case MAVLINK_MSG_ID_HW_PARAMS:
-		on_hw_cmd(msg);
+		if(hw_params(msg) != 0) respond_error();
+		else respond_ok();
 		break;
 	default:
 		break;

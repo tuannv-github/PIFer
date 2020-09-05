@@ -17,20 +17,30 @@ typedef struct{
 }cmd_velocity_t;
 
 static cmd_velocity_t gcmd_velocity;
-
-static timer_id_t gtimerid_tilt_controller;
-static timer_id_t gtimerid_vel_controller;
-static timer_id_t gtimerid_imu_tilt;
-static timer_id_t gtimerid_pid_report;
 static mavlink_message_t msg;
-
 static float tilt_setpoint;
 
+TID(gtid_tilt_controller);
+TID(gtid_vel_controller);
+TID(gtid_imu_tilt);
+TID(gtid_pid_report);
+
 static void tilt_controller_callback(uint8_t* ctx){
-	float tilt ;//= imu_get_tilt() - params.angle_adjusted;
+	float tilt;
+	switch(params.tilt_type){
+	case ROLL:
+		tilt = imu_get_roll();
+		break;
+	case PITCH:
+		tilt = imu_get_pitch();
+		break;
+	default:
+		tilt = 0;
+	}
+	tilt -= params.tilt_offset;
 
 	float speed = pid_compute(&params.pid[0], tilt_setpoint, tilt);
-	if(tilt > 90 || tilt < -90) {
+	if(tilt > 135 || tilt < -135) {
 		speed = 0;
 		pid_reset(&params.pid[0]);
 		pid_reset(&params.pid[1]);
@@ -56,7 +66,7 @@ static void vel_controller_callback(uint8_t* ctx){
 	tilt_setpoint = pid_compute(&params.pid[1], gcmd_velocity.vx, direction);
 }
 
-static void load_params(){
+static int load_params(){
 	// Load parameters from non-volatile memory
 	params_load();
 
@@ -79,17 +89,17 @@ static void load_params(){
 	pid_reset(&params.pid[0]);
 	pid_reset(&params.pid[1]);
 	pid_reset(&params.pid[2]);
+
+	return 0;
 }
 
-static void save_params(){
+static int save_params(){
 	// Save parameters to non-volatile memory
 	params_save();
-
-	// Respond for a successful operation
-	respond_ok();
+	return 0;
 }
 
-static void write_param(mavlink_message_t *msg){
+static int write_param(mavlink_message_t *msg){
 	// Change current parameters according to GCS
 	mavlink_pid_params_t pid_msg;
 	mavlink_msg_pid_params_decode(msg,&pid_msg);
@@ -97,32 +107,24 @@ static void write_param(mavlink_message_t *msg){
 		params.pid[0].KP = pid_msg.KP;
 		params.pid[0].KI = pid_msg.KI;
 		params.pid[0].KD = pid_msg.KD;
-
-		// Respond for a successful operation
-		respond_ok();
 	}
 	else if(pid_msg.pid_control == PID_VEL){
 		params.pid[1].KP = pid_msg.KP;
 		params.pid[1].KI = pid_msg.KI;
 		params.pid[1].KD = pid_msg.KD;
-
-		// Respond for a successful operation
-		respond_ok();
 	}
 	else if(pid_msg.pid_control == PID_POS){
 		params.pid[2].KP = pid_msg.KP;
 		params.pid[2].KI = pid_msg.KI;
 		params.pid[2].KD = pid_msg.KD;
-
-		// Respond for a successful operation
-		respond_ok();
 	}
+	return 0;
 }
 
 static void tilt_report_callback(uint8_t *ctx){
 	mavlink_message_t msg;
 	uint8_t mav_send_buf[256];
-	float tilt;// = imu_get_tilt() - params.angle_adjusted;
+	float tilt=0;// = imu_get_tilt() - params.angle_adjusted;
 	mavlink_msg_evt_tilt_pack(0,0,&msg,tilt);
 	uint16_t len = mavlink_msg_to_send_buffer(mav_send_buf, &msg);
 	com_send(mav_send_buf, len);
@@ -167,6 +169,7 @@ static void pid_report_callback(uint8_t *ctx){
 void mode_pidt_init(){
 	// Hardware initialization
 	motors_init();
+	enc_init();
 	imu_init();
 
 	params.pid[1].maxIPart = 5;
@@ -177,22 +180,23 @@ void mode_pidt_init(){
 	pid_reset(&params.pid[2]);
 
 	// Periodic task initialization
-	gtimerid_tilt_controller = timer_register_callback(tilt_controller_callback, TILT_CONTROLLER_PERIOD, 0, TIMER_MODE_REPEAT);
-	gtimerid_vel_controller = timer_register_callback(vel_controller_callback, VEL_CONTROLLER_PERIOD, 0, TIMER_MODE_REPEAT);
-	gtimerid_imu_tilt = timer_register_callback(tilt_report_callback, TILT_REPORT_PERIOD, 0, TIMER_MODE_REPEAT);
-	gtimerid_pid_report = timer_register_callback(pid_report_callback, PID_REPORT_PERIOD, 0, TIMER_MODE_REPEAT);
+	gtid_tilt_controller = timer_register_callback(tilt_controller_callback, TILT_CONTROLLER_PERIOD, 0, TIMER_MODE_REPEAT);
+	gtid_vel_controller = timer_register_callback(vel_controller_callback, VEL_CONTROLLER_PERIOD, 0, TIMER_MODE_REPEAT);
+	gtid_imu_tilt = timer_register_callback(tilt_report_callback, TILT_REPORT_PERIOD, 0, TIMER_MODE_REPEAT);
+	gtid_pid_report = timer_register_callback(pid_report_callback, PID_REPORT_PERIOD, 0, TIMER_MODE_REPEAT);
 }
 
 void mode_pidt_deinit(){
 	// Hardware de-initialization
 	motors_deinit();
+	enc_deinit();
 	imu_deinit();
 
 	// Periodic task de-initialization
-	timer_unregister_callback(gtimerid_tilt_controller);
-	timer_unregister_callback(gtimerid_vel_controller);
-	timer_unregister_callback(gtimerid_pid_report);
-	timer_unregister_callback(gtimerid_imu_tilt);
+	timer_unregister_callback(gtid_tilt_controller);
+	timer_unregister_callback(gtid_vel_controller);
+	timer_unregister_callback(gtid_imu_tilt);
+	timer_unregister_callback(gtid_pid_report);
 }
 
 void on_mode_pidt_mavlink_recv(mavlink_message_t *msg){
@@ -201,12 +205,19 @@ void on_mode_pidt_mavlink_recv(mavlink_message_t *msg){
 		{
 			mavlink_cmd_params_t cmd_msg;
 			mavlink_msg_cmd_params_decode(msg, &cmd_msg);
-			if(cmd_msg.cmd_params == CMD_LOAD) load_params();
-			else if(cmd_msg.cmd_params == CMD_SAVE) save_params();
+			if(cmd_msg.cmd_params == CMD_LOAD){
+				if(load_params() != 0) respond_error();
+				else respond_ok();
+			}
+			else if(cmd_msg.cmd_params == CMD_SAVE){
+				if(save_params() != 0) respond_error();
+				else respond_ok();
+			}
 		}
 		break;
 	case MAVLINK_MSG_ID_PID_PARAMS:
-		write_param(msg);
+		if(write_param(msg) != 0) respond_error();
+		else respond_ok();
 		break;
 	case MAVLINK_MSG_ID_CMD_VELOCITY:
 		{

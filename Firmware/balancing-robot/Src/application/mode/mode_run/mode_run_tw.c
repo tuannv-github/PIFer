@@ -25,7 +25,7 @@ TID(gtid_imu_tilt);
 static float tilt_setpoint;
 
 static void tilt_controller_callback(uint8_t* ctx){
-	float tilt;// = imu_get_tilt() - params.angle_adjusted;
+	float tilt = 0;// = imu_get_tilt() - params.angle_adjusted;
 
 	float speed = pid_compute(&params.pid[0], tilt_setpoint, tilt);
 	if(tilt > 90 || tilt < -90) {
@@ -57,7 +57,7 @@ static void vel_controller_callback(uint8_t* ctx){
 static void tilt_report_callback(uint8_t *ctx){
 	mavlink_message_t msg;
 	uint8_t mav_send_buf[256];
-	float tilt;// = imu_get_tilt() - params.angle_adjusted;
+	float tilt=0;// = imu_get_tilt() - params.angle_adjusted;
 	mavlink_msg_evt_tilt_pack(0,0,&msg,tilt);
 	uint16_t len = mavlink_msg_to_send_buffer(mav_send_buf, &msg);
 	com_send(mav_send_buf, len);
@@ -66,21 +66,23 @@ static void tilt_report_callback(uint8_t *ctx){
 void mode_run_init(){
 	// Hardware initialization
 	motors_init();
+	enc_init();
 	imu_init();
 
 	pid_reset(&params.pid[0]);
 	pid_reset(&params.pid[1]);
 	pid_reset(&params.pid[2]);
 
-//	// Periodic task initialization
-//	gtid_tilt_controller = timer_register_callback(tilt_controller_callback, TILT_CONTROLLER_PERIOD, 0, TIMER_MODE_REPEAT);
-//	gtid_vel_controller = timer_register_callback(vel_controller_callback, VEL_CONTROLLER_PERIOD, 0, TIMER_MODE_REPEAT);
-//	gtid_imu_tilt = timer_register_callback(tilt_report_callback, TILT_REPORT_PERIOD, 0, TIMER_MODE_REPEAT);
+	// Periodic task initialization
+	gtid_tilt_controller = timer_register_callback(tilt_controller_callback, TILT_CONTROLLER_PERIOD, 0, TIMER_MODE_REPEAT);
+	gtid_vel_controller = timer_register_callback(vel_controller_callback, VEL_CONTROLLER_PERIOD, 0, TIMER_MODE_REPEAT);
+	gtid_imu_tilt = timer_register_callback(tilt_report_callback, TILT_REPORT_PERIOD, 0, TIMER_MODE_REPEAT);
 }
 
 void mode_run_deinit(){
 	// Hardware de-initialization
 	motors_deinit();
+	enc_deinit();
 	imu_deinit();
 
 	// Periodic task de-initialization

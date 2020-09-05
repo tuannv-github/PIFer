@@ -42,9 +42,6 @@ float pid_compute(pid_params_t *pid_params, float sp, float fb){
 }
 
 void pid_reset(pid_params_t *pid_params){
-	pid_params->sp=0;
-	pid_params->fb=0;
-	pid_params->err=0;
 	pid_params->isFistCompute=true;
 	pid_params->preIPart = 0;
 	pid_params->preError = 0;

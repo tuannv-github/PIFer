@@ -49,19 +49,16 @@ void Mode_pidt_tw::mav_recv(mavlink_message_t *msg){
         }
         break;
     case MAVLINK_MSG_ID_RESPOND:
-//        if(is_timing()){
-//            mavlink_respond_t evt_respond;
-//            mavlink_msg_respond_decode(msg,&evt_respond);
-//            if(evt_respond.respond == RESPOND_OK){
-//                reset_timeout();
-//                show_status("Succeed to write or save params",2000);
-//            }
-//        }
+        {
+            mavlink_respond_t respond_msg;
+            mavlink_msg_respond_decode(msg,&respond_msg);
+            if(respond_msg.respond == RESPOND_OK) succeed();
+            else failed();
+        }
         break;
     case MAVLINK_MSG_ID_EVT_TILT:
         mavlink_evt_tilt_t tilt_msg;
         mavlink_msg_evt_tilt_decode(msg,&tilt_msg);
-//        on_tilt_recv(tilt_msg.tilt);
         break;
     case MAVLINK_MSG_ID_PID_REPORT:
         pid_report_recv(msg);
@@ -113,8 +110,8 @@ void Mode_pidt_tw::pid_report_recv(mavlink_message_t *msg){
         pid_tilt[4].append(static_cast<double>(pid_report_msg.U));
         truncate_matrix(pid_tilt);
 
-        pid_plot(tilt_cnt, pid_tilt, g_q_custom_plot[0]);
-        pid_plot(tilt_cnt, pid_tilt_sp_fb, g_q_custom_plot[1]);
+        pid_plot(tilt_cnt, pid_tilt_sp_fb, g_q_custom_plot[0]);
+        pid_plot(tilt_cnt, pid_tilt, g_q_custom_plot[1]);
 
         tilt_cnt++;
         break;
@@ -131,8 +128,8 @@ void Mode_pidt_tw::pid_report_recv(mavlink_message_t *msg){
         pid_vel[4].append(static_cast<double>(pid_report_msg.U));
         truncate_matrix(pid_vel);
 
-        pid_plot(vel_cnt, pid_vel, g_q_custom_plot[2]);
-        pid_plot(vel_cnt, pid_vel_sp_fb, g_q_custom_plot[3]);
+        pid_plot(vel_cnt, pid_vel_sp_fb, g_q_custom_plot[2]);
+        pid_plot(vel_cnt, pid_vel, g_q_custom_plot[3]);
 
         vel_cnt++;
         break;
@@ -149,8 +146,8 @@ void Mode_pidt_tw::pid_report_recv(mavlink_message_t *msg){
         pid_pos[4].append(static_cast<double>(pid_report_msg.U));
         truncate_matrix(pid_pos);
 
-        pid_plot(pos_cnt,pid_pos, g_q_custom_plot[4]);
-        pid_plot(pos_cnt,pid_pos_sp_fb, g_q_custom_plot[5]);
+        pid_plot(pos_cnt,pid_pos_sp_fb, g_q_custom_plot[4]);
+        pid_plot(pos_cnt,pid_pos, g_q_custom_plot[5]);
 
         pos_cnt++;
         break;

@@ -10,6 +10,11 @@
 
 static callback_t callbacks[MAX_CALLBACK_FUNC];
 
+int timer_init(){
+	HAL_TIM_Base_Start_IT(&htim1);
+	return 0;
+}
+
 timer_id_t timer_register_callback(timer_callback_func_t timer_callback_func, uint16_t period_ms, uint8_t* context, timer_mode_t mode){
 	for(uint8_t i = 0; i < MAX_CALLBACK_FUNC; i++){
 		if(callbacks[i].timer_callback_func == 0){

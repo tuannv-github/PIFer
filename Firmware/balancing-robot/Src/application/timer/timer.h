@@ -30,6 +30,7 @@ typedef struct{
 	timer_mode_t mode;
 }callback_t;
 
+int timer_init();
 timer_id_t timer_register_callback(timer_callback_func_t timer_callback_func, uint16_t period_ms, uint8_t* context, timer_mode_t mode);
 void timer_unregister_callback(timer_id_t id);
 

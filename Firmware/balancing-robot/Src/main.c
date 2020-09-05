@@ -104,7 +104,6 @@ int main(void)
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
 
-  HAL_TIM_Base_Start_IT(&htim1);
   app_main();
 
   /* USER CODE END 2 */
