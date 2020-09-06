@@ -7,7 +7,7 @@
 #include <application/pid/pid.h>
 #include "math.h"
 
-float pid_compute(pid_params_t *pid_params, float sp, float fb){
+float pid_compute(pid_params_t *pid_params, float sp, float fb, float dt){
 
 	// Save set point, feed back and error
 	pid_params->sp = sp;
@@ -18,7 +18,7 @@ float pid_compute(pid_params_t *pid_params, float sp, float fb){
 	pid_params->P_Part = pid_params->KP*pid_params->err;
 
 	// Compute I part and saturate it
-	pid_params->I_Part = pid_params->preIPart + pid_params->KI*pid_params->err;
+	pid_params->I_Part = pid_params->preIPart + pid_params->KI*pid_params->err*dt;
 	if(pid_params->I_Part < pid_params->minIpart) pid_params->I_Part = pid_params->minIpart;
 	if(pid_params->I_Part > pid_params->maxIPart) pid_params->I_Part = pid_params->maxIPart;
 	pid_params->preIPart = pid_params->I_Part;
@@ -28,7 +28,7 @@ float pid_compute(pid_params_t *pid_params, float sp, float fb){
 		pid_params->preError = pid_params->err;
 		pid_params->isFistCompute = false;
 	}
-	pid_params->D_Part = pid_params->KD*(pid_params->err-pid_params->preError);
+	pid_params->D_Part = pid_params->KD*(pid_params->err-pid_params->preError)/dt;
 	if(pid_params->D_Part < pid_params->minDpart) pid_params->D_Part = pid_params->minDpart;
 	if(pid_params->D_Part > pid_params->maxDPart) pid_params->D_Part = pid_params->maxDPart;
 	pid_params->preError = pid_params->err;

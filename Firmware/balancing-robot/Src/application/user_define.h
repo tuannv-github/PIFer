@@ -45,7 +45,7 @@
 #define MPU6050_I2C			hi2c1
 #define MPU9250_I2C			hi2c1
 #define MPU6050_ADDRESS 	(MPU6050_DEFAULT_ADDRESS << 1)
-#define IMU_PERIOD			2
+#define IMU_PERIOD			5
 #define TILT_ROLL			0
 #define TILT_PITCH			1
 #define TILT				TILT_PITCH
@@ -58,16 +58,16 @@
 #define RX_DMA_BUF_SIZE		512
 #define TX_CIR_BUF_SIZE 	512
 #define RX_CIR_BUF_SIZE 	512
-#define SERIAL_PERIOD		5	// UART transmission
+#define SERIAL_PERIOD		10	// UART transmission
 #define MAV_BUFF_SIZE 		512
-#define MAVLINK_CB_PERIOD	10	// Mavlink read message callback
+#define MAVLINK_CB_PERIOD	15	// Mavlink read message callback
 
 // Parameters define
 #define PARAMS_PAGE_ADDRESS 0x0800FC00
 #define HAVE_SAVED_DATA		0x01
 
 // ROBOT_MODEL_TWO_WHEELS mode RUN
-#define TILT_CONTROLLER_PERIOD		5
+#define TILT_CONTROLLER_PERIOD		10
 #define VEL_CONTROLLER_PERIOD		60
 #define IMU_STATUS_REPORT_PERIOD	100
 #define RPY_REPORT_PERIOD			100

@@ -25,10 +25,21 @@ TID(gtid_imu_tilt);
 static float tilt_setpoint;
 
 static void tilt_controller_callback(uint8_t* ctx){
-	float tilt = 0;// = imu_get_tilt() - params.angle_adjusted;
+	float tilt;
+	switch(params.tilt_type){
+	case ROLL:
+		tilt = imu_get_roll();
+		break;
+	case PITCH:
+		tilt = imu_get_pitch();
+		break;
+	default:
+		tilt = 0;
+	}
+	tilt -= params.tilt_offset;
 
-	float speed = pid_compute(&params.pid[0], tilt_setpoint, tilt);
-	if(tilt > 90 || tilt < -90) {
+	float speed = pid_compute(&params.pid[0], tilt_setpoint, tilt, 0.001f*TILT_CONTROLLER_PERIOD);
+	if(tilt > 70 || tilt < -70) {
 		speed = 0;
 		pid_reset(&params.pid[0]);
 		pid_reset(&params.pid[1]);
@@ -51,7 +62,7 @@ static void vel_controller_callback(uint8_t* ctx){
 	int16_t motor1_speed = enc_read(MOTOR_1);
 	float direction = -(motor0_speed + motor1_speed)/2;
 
-	tilt_setpoint = pid_compute(&params.pid[1], gcmd_velocity.vx, direction);
+	tilt_setpoint = pid_compute(&params.pid[1], gcmd_velocity.vx, direction, 0.001f*VEL_CONTROLLER_PERIOD);
 }
 
 static void tilt_report_callback(uint8_t *ctx){
