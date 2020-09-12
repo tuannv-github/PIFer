@@ -74,8 +74,8 @@
 #define TILT_REPORT_PERIOD			100
 #define CONTROL_TIMEOUT_MS			1000
 #define VX_TO_TILT					0.04
-#define OMEGA_COEFF					3.0
-#define THROTTLE_COEFF				5
+#define OMEGA_COEFF					200.0
+#define VELOC_COEFF					75.0
 
 // ROBOT_MODEL_TANK general define
 #define WHEEL_PERIOD				50

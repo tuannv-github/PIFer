@@ -5,17 +5,17 @@
 
 
 typedef struct __mavlink_cmd_velocity_t {
- int16_t v; /*<  Velocity*/
- int16_t omega; /*<  Omega*/
+ float v; /*<  Velocity*/
+ float omega; /*<  Omega*/
 } mavlink_cmd_velocity_t;
 
-#define MAVLINK_MSG_ID_CMD_VELOCITY_LEN 4
-#define MAVLINK_MSG_ID_CMD_VELOCITY_MIN_LEN 4
-#define MAVLINK_MSG_ID_3_LEN 4
-#define MAVLINK_MSG_ID_3_MIN_LEN 4
+#define MAVLINK_MSG_ID_CMD_VELOCITY_LEN 8
+#define MAVLINK_MSG_ID_CMD_VELOCITY_MIN_LEN 8
+#define MAVLINK_MSG_ID_3_LEN 8
+#define MAVLINK_MSG_ID_3_MIN_LEN 8
 
-#define MAVLINK_MSG_ID_CMD_VELOCITY_CRC 63
-#define MAVLINK_MSG_ID_3_CRC 63
+#define MAVLINK_MSG_ID_CMD_VELOCITY_CRC 202
+#define MAVLINK_MSG_ID_3_CRC 202
 
 
 
@@ -24,16 +24,16 @@ typedef struct __mavlink_cmd_velocity_t {
     3, \
     "CMD_VELOCITY", \
     2, \
-    {  { "v", NULL, MAVLINK_TYPE_INT16_T, 0, 0, offsetof(mavlink_cmd_velocity_t, v) }, \
-         { "omega", NULL, MAVLINK_TYPE_INT16_T, 0, 2, offsetof(mavlink_cmd_velocity_t, omega) }, \
+    {  { "v", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_cmd_velocity_t, v) }, \
+         { "omega", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_cmd_velocity_t, omega) }, \
          } \
 }
 #else
 #define MAVLINK_MESSAGE_INFO_CMD_VELOCITY { \
     "CMD_VELOCITY", \
     2, \
-    {  { "v", NULL, MAVLINK_TYPE_INT16_T, 0, 0, offsetof(mavlink_cmd_velocity_t, v) }, \
-         { "omega", NULL, MAVLINK_TYPE_INT16_T, 0, 2, offsetof(mavlink_cmd_velocity_t, omega) }, \
+    {  { "v", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_cmd_velocity_t, v) }, \
+         { "omega", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_cmd_velocity_t, omega) }, \
          } \
 }
 #endif
@@ -49,12 +49,12 @@ typedef struct __mavlink_cmd_velocity_t {
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_cmd_velocity_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               int16_t v, int16_t omega)
+                               float v, float omega)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_CMD_VELOCITY_LEN];
-    _mav_put_int16_t(buf, 0, v);
-    _mav_put_int16_t(buf, 2, omega);
+    _mav_put_float(buf, 0, v);
+    _mav_put_float(buf, 4, omega);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_CMD_VELOCITY_LEN);
 #else
@@ -81,12 +81,12 @@ static inline uint16_t mavlink_msg_cmd_velocity_pack(uint8_t system_id, uint8_t 
  */
 static inline uint16_t mavlink_msg_cmd_velocity_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   int16_t v,int16_t omega)
+                                   float v,float omega)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_CMD_VELOCITY_LEN];
-    _mav_put_int16_t(buf, 0, v);
-    _mav_put_int16_t(buf, 2, omega);
+    _mav_put_float(buf, 0, v);
+    _mav_put_float(buf, 4, omega);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_CMD_VELOCITY_LEN);
 #else
@@ -137,12 +137,12 @@ static inline uint16_t mavlink_msg_cmd_velocity_encode_chan(uint8_t system_id, u
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_cmd_velocity_send(mavlink_channel_t chan, int16_t v, int16_t omega)
+static inline void mavlink_msg_cmd_velocity_send(mavlink_channel_t chan, float v, float omega)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_CMD_VELOCITY_LEN];
-    _mav_put_int16_t(buf, 0, v);
-    _mav_put_int16_t(buf, 2, omega);
+    _mav_put_float(buf, 0, v);
+    _mav_put_float(buf, 4, omega);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_CMD_VELOCITY, buf, MAVLINK_MSG_ID_CMD_VELOCITY_MIN_LEN, MAVLINK_MSG_ID_CMD_VELOCITY_LEN, MAVLINK_MSG_ID_CMD_VELOCITY_CRC);
 #else
@@ -176,12 +176,12 @@ static inline void mavlink_msg_cmd_velocity_send_struct(mavlink_channel_t chan, 
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_cmd_velocity_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  int16_t v, int16_t omega)
+static inline void mavlink_msg_cmd_velocity_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  float v, float omega)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
-    _mav_put_int16_t(buf, 0, v);
-    _mav_put_int16_t(buf, 2, omega);
+    _mav_put_float(buf, 0, v);
+    _mav_put_float(buf, 4, omega);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_CMD_VELOCITY, buf, MAVLINK_MSG_ID_CMD_VELOCITY_MIN_LEN, MAVLINK_MSG_ID_CMD_VELOCITY_LEN, MAVLINK_MSG_ID_CMD_VELOCITY_CRC);
 #else
@@ -204,9 +204,9 @@ static inline void mavlink_msg_cmd_velocity_send_buf(mavlink_message_t *msgbuf, 
  *
  * @return  Velocity
  */
-static inline int16_t mavlink_msg_cmd_velocity_get_v(const mavlink_message_t* msg)
+static inline float mavlink_msg_cmd_velocity_get_v(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_int16_t(msg,  0);
+    return _MAV_RETURN_float(msg,  0);
 }
 
 /**
@@ -214,9 +214,9 @@ static inline int16_t mavlink_msg_cmd_velocity_get_v(const mavlink_message_t* ms
  *
  * @return  Omega
  */
-static inline int16_t mavlink_msg_cmd_velocity_get_omega(const mavlink_message_t* msg)
+static inline float mavlink_msg_cmd_velocity_get_omega(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_int16_t(msg,  2);
+    return _MAV_RETURN_float(msg,  4);
 }
 
 /**

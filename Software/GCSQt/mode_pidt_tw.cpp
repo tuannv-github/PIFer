@@ -286,8 +286,8 @@ void Mode_pidt_tw::on_btn_mode_pidt_write_params_pidt_pos_clicked()
 void Mode_pidt_tw::remote_control_pidt(){
     mavlink_message_t msg;
     uint8_t mav_send_buf[255];
-    int16_t VX = static_cast<int16_t>(ui->txtb_pidt_vx->text().toDouble()*100);
-    int16_t OMEGA = static_cast<int16_t>(ui->txtb_pidt_w->text().toDouble()*100);
+    float VX = ui->txtb_pidt_vx->text().toFloat();
+    float OMEGA = ui->txtb_pidt_w->text().toFloat();
     mavlink_msg_cmd_velocity_pack(0,0,&msg,VX,OMEGA);
     uint16_t len = mavlink_msg_to_send_buffer(mav_send_buf, &msg);
     emit mav_send(QByteArray::fromRawData(reinterpret_cast<char*>(mav_send_buf),len));

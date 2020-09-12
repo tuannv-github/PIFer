@@ -66,8 +66,8 @@
 
 		<message id="3" name="CMD_VELOCITY">
 			<description>Velocity command. No need a respond message for confimation</description>
-			<field type="int16_t" name="v">Velocity</field>
-			<field type="int16_t" name="omega">Omega</field>
+			<field type="float" name="v">Velocity</field>
+			<field type="float" name="omega">Omega</field>
 		</message>
 
 		<message id="4" name="EVT_TILT">

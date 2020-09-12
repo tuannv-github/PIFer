@@ -10,9 +10,9 @@
 #ifdef ROBOT_MODEL_TWO_WHEELS
 
 typedef struct{
-	int16_t vx;
-	int16_t vy;
-	int16_t omega;
+	float vx;
+	float vy;
+	float omega;
 	uint8_t cnt;
 }cmd_velocity_t;
 
@@ -40,14 +40,6 @@ static void tilt_controller_callback(uint8_t* ctx){
 		tilt = 0;
 	}
 	tilt -= params.tilt_offset;
-//	if(tilt > 0 && tilt_dir==false) {
-//		params.pid[0].preIPart = 0;
-//		tilt_dir = true;
-//	}
-//	if(tilt < 0 && tilt_dir==true) {
-//		params.pid[0].preIPart = 0;
-//		tilt_dir = false;
-//	}
 
 	float speed = pid_compute(&params.pid[0], tilt_setpoint, tilt, 0.001f*TILT_CONTROLLER_PERIOD);
 	if(tilt > 70 || tilt < -70) {
@@ -55,12 +47,11 @@ static void tilt_controller_callback(uint8_t* ctx){
 		pid_reset(&params.pid[0]);
 		pid_reset(&params.pid[1]);
 	}
-	motors_setspeed(MOTOR_0, speed + (float)gcmd_velocity.omega*OMEGA_COEFF);
-	motors_setspeed(MOTOR_1, speed - (float)gcmd_velocity.omega*OMEGA_COEFF);
+	motors_setspeed(MOTOR_0, speed - (float)gcmd_velocity.omega*OMEGA_COEFF);
+	motors_setspeed(MOTOR_1, speed + (float)gcmd_velocity.omega*OMEGA_COEFF);
 }
 
 static void vel_controller_callback(uint8_t* ctx){
-
 	if(gcmd_velocity.cnt == 0){
 		gcmd_velocity.vx = 0;
 		gcmd_velocity.omega = 0;
@@ -73,7 +64,7 @@ static void vel_controller_callback(uint8_t* ctx){
 	int16_t motor1_speed = enc_read(MOTOR_1);
 	float direction = -(motor0_speed + motor1_speed)/2;
 
-	tilt_setpoint = pid_compute(&params.pid[1], gcmd_velocity.vx, direction, 0.001f*VEL_CONTROLLER_PERIOD);
+	tilt_setpoint = pid_compute(&params.pid[1], gcmd_velocity.vx*VELOC_COEFF, direction, 0.001f*VEL_CONTROLLER_PERIOD);
 }
 
 static int load_params(){
@@ -233,8 +224,15 @@ void on_mode_pidt_mavlink_recv(mavlink_message_t *msg){
 		{
 			mavlink_cmd_velocity_t cmd_velocity;
 			mavlink_msg_cmd_velocity_decode(msg, &cmd_velocity);
+
 			gcmd_velocity.vx = cmd_velocity.v;
+			if(gcmd_velocity.vx > 1) gcmd_velocity.vx=1;
+			if(gcmd_velocity.vx < -1) gcmd_velocity.vx=-1;
+
 			gcmd_velocity.omega = cmd_velocity.omega;
+			if(gcmd_velocity.omega > 1) gcmd_velocity.omega=1;
+			if(gcmd_velocity.omega < -1) gcmd_velocity.omega=-1;
+
 			gcmd_velocity.cnt = (CONTROL_TIMEOUT_MS/VEL_CONTROLLER_PERIOD);
 		}
 		break;
