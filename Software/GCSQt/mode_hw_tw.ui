@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>653</width>
-    <height>162</height>
+    <height>211</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,9 +17,9 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>100</y>
+     <y>120</y>
      <width>631</width>
-     <height>51</height>
+     <height>81</height>
     </rect>
    </property>
    <property name="title">
@@ -28,7 +28,7 @@
    <widget class="QLineEdit" name="txtb_motor1_duty">
     <property name="geometry">
      <rect>
-      <x>40</x>
+      <x>60</x>
       <y>20</y>
       <width>111</width>
       <height>20</height>
@@ -54,7 +54,7 @@
    <widget class="QLabel" name="label_19">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>310</x>
       <y>20</y>
       <width>51</width>
       <height>20</height>
@@ -67,7 +67,7 @@
    <widget class="QLineEdit" name="txtb_enc1_speed">
     <property name="geometry">
      <rect>
-      <x>320</x>
+      <x>380</x>
       <y>20</y>
       <width>101</width>
       <height>20</height>
@@ -83,10 +83,10 @@
    <widget class="QPushButton" name="btn_set_duty1">
     <property name="geometry">
      <rect>
-      <x>160</x>
+      <x>180</x>
       <y>20</y>
       <width>71</width>
-      <height>23</height>
+      <height>21</height>
      </rect>
     </property>
     <property name="text">
@@ -96,7 +96,7 @@
    <widget class="QCheckBox" name="cb_motor1_invert">
     <property name="geometry">
      <rect>
-      <x>450</x>
+      <x>530</x>
       <y>20</y>
       <width>81</width>
       <height>17</height>
@@ -109,14 +109,66 @@
    <widget class="QCheckBox" name="cb_enc1_invert">
     <property name="geometry">
      <rect>
-      <x>550</x>
-      <y>20</y>
+      <x>530</x>
+      <y>50</y>
       <width>70</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
      <string>Enc Invert</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_22">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>50</y>
+      <width>51</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Neg db:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtb_motor1_neg_deadband">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>50</y>
+      <width>101</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtb_motor1_pos_deadband">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>50</y>
+      <width>111</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_23">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>50</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Pos db:</string>
     </property>
    </widget>
   </widget>
@@ -165,7 +217,7 @@
      <x>10</x>
      <y>40</y>
      <width>631</width>
-     <height>51</height>
+     <height>81</height>
     </rect>
    </property>
    <property name="title">
@@ -174,7 +226,7 @@
    <widget class="QLineEdit" name="txtb_motor0_duty">
     <property name="geometry">
      <rect>
-      <x>40</x>
+      <x>60</x>
       <y>20</y>
       <width>111</width>
       <height>20</height>
@@ -200,7 +252,7 @@
    <widget class="QLabel" name="label_18">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>310</x>
       <y>20</y>
       <width>71</width>
       <height>20</height>
@@ -213,7 +265,7 @@
    <widget class="QLineEdit" name="txtb_enc0_speed">
     <property name="geometry">
      <rect>
-      <x>320</x>
+      <x>380</x>
       <y>20</y>
       <width>101</width>
       <height>20</height>
@@ -229,7 +281,7 @@
    <widget class="QPushButton" name="btn_set_duty0">
     <property name="geometry">
      <rect>
-      <x>160</x>
+      <x>180</x>
       <y>20</y>
       <width>71</width>
       <height>23</height>
@@ -242,7 +294,7 @@
    <widget class="QCheckBox" name="cb_motor0_invert">
     <property name="geometry">
      <rect>
-      <x>450</x>
+      <x>530</x>
       <y>20</y>
       <width>81</width>
       <height>17</height>
@@ -255,14 +307,66 @@
    <widget class="QCheckBox" name="cb_enc0_invert">
     <property name="geometry">
      <rect>
-      <x>550</x>
-      <y>20</y>
+      <x>530</x>
+      <y>50</y>
       <width>70</width>
       <height>17</height>
      </rect>
     </property>
     <property name="text">
      <string>Enc Invert</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtb_motor0_pos_deadband">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>50</y>
+      <width>111</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_20">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>50</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Pos db:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtb_motor0_neg_deadband">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>50</y>
+      <width>101</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_21">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>50</y>
+      <width>51</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Neg db:</string>
     </property>
    </widget>
   </widget>

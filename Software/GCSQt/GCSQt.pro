@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui serialport network gamepad printsupport
+UI_DIR = $$PWD
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

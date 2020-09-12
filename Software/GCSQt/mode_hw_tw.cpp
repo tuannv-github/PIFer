@@ -18,13 +18,11 @@ Mode_hw_tw::~Mode_hw_tw()
 void Mode_hw_tw::mav_recv(mavlink_message_t *msg){
     switch(msg->msgid) {
     case MAVLINK_MSG_ID_RESPOND:
-        if(is_timing()){
-            mavlink_respond_t evt_respond;
-            mavlink_msg_respond_decode(msg,&evt_respond);
-            if(evt_respond.respond == RESPOND_OK){
-                reset_timeout();
-                show_status("Succeed to write or save params",2000);
-            }
+        {
+            mavlink_respond_t respond_msg;
+            mavlink_msg_respond_decode(msg,&respond_msg);
+            if(respond_msg.respond == RESPOND_OK) succeed();
+            else failed();
         }
         break;
     case MAVLINK_MSG_ID_HW_PARAMS:
@@ -36,6 +34,10 @@ void Mode_hw_tw::mav_recv(mavlink_message_t *msg){
             ui->cb_enc0_invert->setCheckState(hw_params_msg.encoder0_invert == MAV_TRUE  ? Qt::CheckState::Checked : Qt::CheckState::Unchecked);
             ui->cb_enc1_invert->setCheckState(hw_params_msg.encoder1_invert == MAV_TRUE  ? Qt::CheckState::Checked : Qt::CheckState::Unchecked);
             ui->cb_enc_exchange->setCheckState(hw_params_msg.encoder_exchange == MAV_TRUE  ? Qt::CheckState::Checked : Qt::CheckState::Unchecked);
+            ui->txtb_motor0_pos_deadband->setText(QString::number(hw_params_msg.motor0_pos_deadband));
+            ui->txtb_motor0_neg_deadband->setText(QString::number(hw_params_msg.motor0_neg_deadband));
+            ui->txtb_motor1_pos_deadband->setText(QString::number(hw_params_msg.motor1_pos_deadband));
+            ui->txtb_motor1_neg_deadband->setText(QString::number(hw_params_msg.motor1_neg_deadband));
             show_status("Succeed to load hardware params",2000);
             reset_timeout();
         }
@@ -69,8 +71,12 @@ void Mode_hw_tw::on_btn_mode_hw_write_params_clicked()
     int8_t encoder0_invert = ui->cb_enc0_invert->checkState() == Qt::CheckState::Checked ? MAV_TRUE : MAV_FALSE;
     int8_t encoder1_invert = ui->cb_enc1_invert->checkState() == Qt::CheckState::Checked ? MAV_TRUE : MAV_FALSE;
     int8_t encoder_ex = ui->cb_enc_exchange->checkState() == Qt::CheckState::Checked ? MAV_TRUE : MAV_FALSE;
-
-    mavlink_msg_hw_params_pack(0,0,&msg,motor0_invert,motor1_invert,encoder0_invert,encoder1_invert, encoder_ex);
+    int16_t motor0_pos_deadband = ui->txtb_motor0_pos_deadband->text().toInt();
+    int16_t motor0_neg_deadband = ui->txtb_motor0_neg_deadband->text().toInt();
+    int16_t motor1_pos_deadband = ui->txtb_motor1_pos_deadband->text().toInt();
+    int16_t motor1_neg_deadband = ui->txtb_motor1_neg_deadband->text().toInt();
+    mavlink_msg_hw_params_pack(0,0,&msg,motor0_invert,motor1_invert,encoder0_invert,encoder1_invert, encoder_ex,
+                               motor0_pos_deadband, motor0_neg_deadband, motor1_pos_deadband, motor1_neg_deadband);
     uint16_t len = mavlink_msg_to_send_buffer(mav_send_buf, &msg);
 
     emit mav_send(QByteArray::fromRawData(reinterpret_cast<char*>(mav_send_buf),len));

@@ -49,19 +49,16 @@ void Mode_pidt_tw::mav_recv(mavlink_message_t *msg){
         }
         break;
     case MAVLINK_MSG_ID_RESPOND:
-        if(is_timing()){
-            mavlink_respond_t evt_respond;
-            mavlink_msg_respond_decode(msg,&evt_respond);
-            if(evt_respond.respond == RESPOND_OK){
-                reset_timeout();
-                show_status("Succeed to write or save params",2000);
-            }
+        {
+            mavlink_respond_t respond_msg;
+            mavlink_msg_respond_decode(msg,&respond_msg);
+            if(respond_msg.respond == RESPOND_OK) succeed();
+            else failed();
         }
         break;
     case MAVLINK_MSG_ID_EVT_TILT:
         mavlink_evt_tilt_t tilt_msg;
         mavlink_msg_evt_tilt_decode(msg,&tilt_msg);
-//        on_tilt_recv(tilt_msg.tilt);
         break;
     case MAVLINK_MSG_ID_PID_REPORT:
         pid_report_recv(msg);
@@ -113,8 +110,8 @@ void Mode_pidt_tw::pid_report_recv(mavlink_message_t *msg){
         pid_tilt[4].append(static_cast<double>(pid_report_msg.U));
         truncate_matrix(pid_tilt);
 
-        pid_plot(tilt_cnt, pid_tilt, g_q_custom_plot[0]);
-        pid_plot(tilt_cnt, pid_tilt_sp_fb, g_q_custom_plot[1]);
+        pid_plot(tilt_cnt, pid_tilt_sp_fb, g_q_custom_plot[0]);
+        pid_plot(tilt_cnt, pid_tilt, g_q_custom_plot[1]);
 
         tilt_cnt++;
         break;
@@ -131,8 +128,8 @@ void Mode_pidt_tw::pid_report_recv(mavlink_message_t *msg){
         pid_vel[4].append(static_cast<double>(pid_report_msg.U));
         truncate_matrix(pid_vel);
 
-        pid_plot(vel_cnt, pid_vel, g_q_custom_plot[2]);
-        pid_plot(vel_cnt, pid_vel_sp_fb, g_q_custom_plot[3]);
+        pid_plot(vel_cnt, pid_vel_sp_fb, g_q_custom_plot[2]);
+        pid_plot(vel_cnt, pid_vel, g_q_custom_plot[3]);
 
         vel_cnt++;
         break;
@@ -149,8 +146,8 @@ void Mode_pidt_tw::pid_report_recv(mavlink_message_t *msg){
         pid_pos[4].append(static_cast<double>(pid_report_msg.U));
         truncate_matrix(pid_pos);
 
-        pid_plot(pos_cnt,pid_pos, g_q_custom_plot[4]);
-        pid_plot(pos_cnt,pid_pos_sp_fb, g_q_custom_plot[5]);
+        pid_plot(pos_cnt,pid_pos_sp_fb, g_q_custom_plot[4]);
+        pid_plot(pos_cnt,pid_pos, g_q_custom_plot[5]);
 
         pos_cnt++;
         break;
@@ -289,8 +286,8 @@ void Mode_pidt_tw::on_btn_mode_pidt_write_params_pidt_pos_clicked()
 void Mode_pidt_tw::remote_control_pidt(){
     mavlink_message_t msg;
     uint8_t mav_send_buf[255];
-    int16_t VX = static_cast<int16_t>(ui->txtb_pidt_vx->text().toDouble()*100);
-    int16_t OMEGA = static_cast<int16_t>(ui->txtb_pidt_w->text().toDouble()*100);
+    float VX = ui->txtb_pidt_vx->text().toFloat();
+    float OMEGA = ui->txtb_pidt_w->text().toFloat();
     mavlink_msg_cmd_velocity_pack(0,0,&msg,VX,OMEGA);
     uint16_t len = mavlink_msg_to_send_buffer(mav_send_buf, &msg);
     emit mav_send(QByteArray::fromRawData(reinterpret_cast<char*>(mav_send_buf),len));

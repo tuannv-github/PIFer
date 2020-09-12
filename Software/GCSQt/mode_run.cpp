@@ -36,7 +36,7 @@ void Mode_run::mav_recv(mavlink_message_t *msg){
     case MAVLINK_MSG_ID_EVT_TILT:
         mavlink_evt_tilt_t tilt_msg;
         mavlink_msg_evt_tilt_decode(msg,&tilt_msg);
-        // on_tilt_recv(tilt_msg.tilt);
+        ui->txtb_tilt_1->setText(QString::number(tilt_msg.tilt));
         break;
     }
 }
@@ -44,8 +44,8 @@ void Mode_run::mav_recv(mavlink_message_t *msg){
 void Mode_run::remote_controll_cmd(){
     mavlink_message_t msg;
     uint8_t mav_send_buf[255];
-    int16_t VX = static_cast<int16_t>(ui->txtb_pidt_vx->text().toDouble()*100);
-    int16_t OMEGA = static_cast<int16_t>(ui->txtb_pidt_w->text().toDouble()*100);
+    float VX = ui->txtb_pidt_vx->text().toFloat();
+    float OMEGA = ui->txtb_pidt_w->text().toFloat();
 
     mavlink_msg_cmd_velocity_pack(0,0,&msg,VX,OMEGA);
     uint16_t len = mavlink_msg_to_send_buffer(mav_send_buf, &msg);

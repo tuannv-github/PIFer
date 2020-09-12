@@ -1,42 +1,42 @@
 #pragma once
 // MESSAGE EVT_MAG_RAW PACKING
 
-#define MAVLINK_MSG_ID_EVT_MAG_RAW 11
+#define MAVLINK_MSG_ID_EVT_MAG_RAW 14
 
-MAVPACKED(
+
 typedef struct __mavlink_evt_mag_raw_t {
- int16_t mag_x; /*<  Mag X*/
- int16_t mag_y; /*<  Mag Y*/
- int16_t mag_z; /*<  Mag Z*/
-}) mavlink_evt_mag_raw_t;
+ float mag_x; /*<  Mag X*/
+ float mag_y; /*<  Mag Y*/
+ float mag_z; /*<  Mag Z*/
+} mavlink_evt_mag_raw_t;
 
-#define MAVLINK_MSG_ID_EVT_MAG_RAW_LEN 6
-#define MAVLINK_MSG_ID_EVT_MAG_RAW_MIN_LEN 6
-#define MAVLINK_MSG_ID_11_LEN 6
-#define MAVLINK_MSG_ID_11_MIN_LEN 6
+#define MAVLINK_MSG_ID_EVT_MAG_RAW_LEN 12
+#define MAVLINK_MSG_ID_EVT_MAG_RAW_MIN_LEN 12
+#define MAVLINK_MSG_ID_14_LEN 12
+#define MAVLINK_MSG_ID_14_MIN_LEN 12
 
-#define MAVLINK_MSG_ID_EVT_MAG_RAW_CRC 156
-#define MAVLINK_MSG_ID_11_CRC 156
+#define MAVLINK_MSG_ID_EVT_MAG_RAW_CRC 76
+#define MAVLINK_MSG_ID_14_CRC 76
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_EVT_MAG_RAW { \
-    11, \
+    14, \
     "EVT_MAG_RAW", \
     3, \
-    {  { "mag_x", NULL, MAVLINK_TYPE_INT16_T, 0, 0, offsetof(mavlink_evt_mag_raw_t, mag_x) }, \
-         { "mag_y", NULL, MAVLINK_TYPE_INT16_T, 0, 2, offsetof(mavlink_evt_mag_raw_t, mag_y) }, \
-         { "mag_z", NULL, MAVLINK_TYPE_INT16_T, 0, 4, offsetof(mavlink_evt_mag_raw_t, mag_z) }, \
+    {  { "mag_x", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_evt_mag_raw_t, mag_x) }, \
+         { "mag_y", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_evt_mag_raw_t, mag_y) }, \
+         { "mag_z", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_evt_mag_raw_t, mag_z) }, \
          } \
 }
 #else
 #define MAVLINK_MESSAGE_INFO_EVT_MAG_RAW { \
     "EVT_MAG_RAW", \
     3, \
-    {  { "mag_x", NULL, MAVLINK_TYPE_INT16_T, 0, 0, offsetof(mavlink_evt_mag_raw_t, mag_x) }, \
-         { "mag_y", NULL, MAVLINK_TYPE_INT16_T, 0, 2, offsetof(mavlink_evt_mag_raw_t, mag_y) }, \
-         { "mag_z", NULL, MAVLINK_TYPE_INT16_T, 0, 4, offsetof(mavlink_evt_mag_raw_t, mag_z) }, \
+    {  { "mag_x", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_evt_mag_raw_t, mag_x) }, \
+         { "mag_y", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_evt_mag_raw_t, mag_y) }, \
+         { "mag_z", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_evt_mag_raw_t, mag_z) }, \
          } \
 }
 #endif
@@ -53,13 +53,13 @@ typedef struct __mavlink_evt_mag_raw_t {
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_evt_mag_raw_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               int16_t mag_x, int16_t mag_y, int16_t mag_z)
+                               float mag_x, float mag_y, float mag_z)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_EVT_MAG_RAW_LEN];
-    _mav_put_int16_t(buf, 0, mag_x);
-    _mav_put_int16_t(buf, 2, mag_y);
-    _mav_put_int16_t(buf, 4, mag_z);
+    _mav_put_float(buf, 0, mag_x);
+    _mav_put_float(buf, 4, mag_y);
+    _mav_put_float(buf, 8, mag_z);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_EVT_MAG_RAW_LEN);
 #else
@@ -88,13 +88,13 @@ static inline uint16_t mavlink_msg_evt_mag_raw_pack(uint8_t system_id, uint8_t c
  */
 static inline uint16_t mavlink_msg_evt_mag_raw_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   int16_t mag_x,int16_t mag_y,int16_t mag_z)
+                                   float mag_x,float mag_y,float mag_z)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_EVT_MAG_RAW_LEN];
-    _mav_put_int16_t(buf, 0, mag_x);
-    _mav_put_int16_t(buf, 2, mag_y);
-    _mav_put_int16_t(buf, 4, mag_z);
+    _mav_put_float(buf, 0, mag_x);
+    _mav_put_float(buf, 4, mag_y);
+    _mav_put_float(buf, 8, mag_z);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_EVT_MAG_RAW_LEN);
 #else
@@ -147,13 +147,13 @@ static inline uint16_t mavlink_msg_evt_mag_raw_encode_chan(uint8_t system_id, ui
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_evt_mag_raw_send(mavlink_channel_t chan, int16_t mag_x, int16_t mag_y, int16_t mag_z)
+static inline void mavlink_msg_evt_mag_raw_send(mavlink_channel_t chan, float mag_x, float mag_y, float mag_z)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_EVT_MAG_RAW_LEN];
-    _mav_put_int16_t(buf, 0, mag_x);
-    _mav_put_int16_t(buf, 2, mag_y);
-    _mav_put_int16_t(buf, 4, mag_z);
+    _mav_put_float(buf, 0, mag_x);
+    _mav_put_float(buf, 4, mag_y);
+    _mav_put_float(buf, 8, mag_z);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_EVT_MAG_RAW, buf, MAVLINK_MSG_ID_EVT_MAG_RAW_MIN_LEN, MAVLINK_MSG_ID_EVT_MAG_RAW_LEN, MAVLINK_MSG_ID_EVT_MAG_RAW_CRC);
 #else
@@ -188,13 +188,13 @@ static inline void mavlink_msg_evt_mag_raw_send_struct(mavlink_channel_t chan, c
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_evt_mag_raw_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  int16_t mag_x, int16_t mag_y, int16_t mag_z)
+static inline void mavlink_msg_evt_mag_raw_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  float mag_x, float mag_y, float mag_z)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
-    _mav_put_int16_t(buf, 0, mag_x);
-    _mav_put_int16_t(buf, 2, mag_y);
-    _mav_put_int16_t(buf, 4, mag_z);
+    _mav_put_float(buf, 0, mag_x);
+    _mav_put_float(buf, 4, mag_y);
+    _mav_put_float(buf, 8, mag_z);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_EVT_MAG_RAW, buf, MAVLINK_MSG_ID_EVT_MAG_RAW_MIN_LEN, MAVLINK_MSG_ID_EVT_MAG_RAW_LEN, MAVLINK_MSG_ID_EVT_MAG_RAW_CRC);
 #else
@@ -218,9 +218,9 @@ static inline void mavlink_msg_evt_mag_raw_send_buf(mavlink_message_t *msgbuf, m
  *
  * @return  Mag X
  */
-static inline int16_t mavlink_msg_evt_mag_raw_get_mag_x(const mavlink_message_t* msg)
+static inline float mavlink_msg_evt_mag_raw_get_mag_x(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_int16_t(msg,  0);
+    return _MAV_RETURN_float(msg,  0);
 }
 
 /**
@@ -228,9 +228,9 @@ static inline int16_t mavlink_msg_evt_mag_raw_get_mag_x(const mavlink_message_t*
  *
  * @return  Mag Y
  */
-static inline int16_t mavlink_msg_evt_mag_raw_get_mag_y(const mavlink_message_t* msg)
+static inline float mavlink_msg_evt_mag_raw_get_mag_y(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_int16_t(msg,  2);
+    return _MAV_RETURN_float(msg,  4);
 }
 
 /**
@@ -238,9 +238,9 @@ static inline int16_t mavlink_msg_evt_mag_raw_get_mag_y(const mavlink_message_t*
  *
  * @return  Mag Z
  */
-static inline int16_t mavlink_msg_evt_mag_raw_get_mag_z(const mavlink_message_t* msg)
+static inline float mavlink_msg_evt_mag_raw_get_mag_z(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_int16_t(msg,  4);
+    return _MAV_RETURN_float(msg,  8);
 }
 
 /**

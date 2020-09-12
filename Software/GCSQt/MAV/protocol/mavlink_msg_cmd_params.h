@@ -3,10 +3,10 @@
 
 #define MAVLINK_MSG_ID_CMD_PARAMS 2
 
-MAVPACKED(
+
 typedef struct __mavlink_cmd_params_t {
  int8_t cmd_params; /*<  save or load params*/
-}) mavlink_cmd_params_t;
+} mavlink_cmd_params_t;
 
 #define MAVLINK_MSG_ID_CMD_PARAMS_LEN 1
 #define MAVLINK_MSG_ID_CMD_PARAMS_MIN_LEN 1

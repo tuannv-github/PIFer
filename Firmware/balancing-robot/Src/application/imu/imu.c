@@ -13,50 +13,47 @@
 #include <application/user_define.h>
 #include <math.h>
 
-static connection_failed_cb_t gconnection_failed_cb = 0;
 static float roll;
 static float pitch;
-static timer_id_t gtimer_ID_imu_callback;
 static float motion_6[6];
 
+TID(gtid_imu_callback);
+
 static void imu_callback(uint8_t* ctx){
-	mpu9250_get_accel_gyro(&motion_6[0], &motion_6[1], &motion_6[2], &motion_6[3], &motion_6[4], &motion_6[5]);
-	float accel_roll  = atan2(motion_6[1], sqrt(motion_6[0]*motion_6[0] + motion_6[2]*motion_6[2]))*360/M_PI;
-	float accel_pitch = atan2(-motion_6[0], sqrt(motion_6[1]*motion_6[1] + motion_6[2]*motion_6[2]))*360/M_PI;
-	float roll_rate = ((motion_6[3]-params.gx_offset)*250.0/32768.0)/100.0;
-	float pitch_rate = ((motion_6[4]-params.gy_offset)*250.0/32768.0)/100.0;
-	roll = params.believe_in_gyro *(roll+roll_rate) + (1-params.believe_in_gyro)*accel_roll;
-	pitch = params.believe_in_gyro *(pitch+pitch_rate) + (1-params.believe_in_gyro)*accel_pitch;
+	if(mpu9250_get_accel_gyro(&motion_6[0], &motion_6[1], &motion_6[2], &motion_6[3], &motion_6[4], &motion_6[5]) < 0){
+		return;
+	}
+	float accel_roll  = atan2(motion_6[1], sqrt(motion_6[0]*motion_6[0] + motion_6[2]*motion_6[2]))*180.f/M_PI;
+	float accel_pitch = atan2(-motion_6[0], sqrt(motion_6[1]*motion_6[1] + motion_6[2]*motion_6[2]))*180.f/M_PI;
+	float roll_rate = (motion_6[3]-params.gx_offset)*0.001f*IMU_PERIOD;
+	float pitch_rate = (motion_6[4]-params.gy_offset)*0.001f*IMU_PERIOD;
+	roll = params.g_believe *(roll+roll_rate) + (1-params.g_believe)*accel_roll;
+	pitch = params.g_believe *(pitch+pitch_rate) + (1-params.g_believe)*accel_pitch;
 	if(isnan(roll)) roll = 0;
 	if(isnan(pitch)) pitch = 0;
 }
 
-bool imu_init(void){
-//	MPU6050_init();
-//	mpu6050_set_full_scale_gyro_range(MPU6050_FS_SEL_250);
-//	mpu6050_set_full_scale_accel_range(MPU6050_AFS_SEL_2G);
-//	if(!MPU6050_test_connection() && gconnection_failed_cb != 0) {
-//		gconnection_failed_cb();
-//		return false;
-//	}
-//	gtimer_ID_imu_callback = timer_register_callback(imu_callback, IMU_PERIOD, 0, TIMER_MODE_REPEAT);
-
-	gyro_params_t gyro_params;
-	accel_params_t accel_params;
+int imu_init(void){
+	gyro_params_t gyro_params = {
+			.gfsr = GFS_SEL_250DPS
+	};
+	accel_params_t accel_params = {
+			.afsr = AFS_SEL_2G
+	};
 	mag_params_t mag_params;
 
 	mpu9250_init(gyro_params, accel_params, mag_params);
-	gtimer_ID_imu_callback = timer_register_callback(imu_callback, IMU_PERIOD, 0, TIMER_MODE_REPEAT);
+	gtid_imu_callback = timer_register_callback(imu_callback, IMU_PERIOD, 0, TIMER_MODE_REPEAT);
 
 	return true;
 }
 
-bool  imu_deinit(void){
-	timer_unregister_callback(gtimer_ID_imu_callback);
+int imu_deinit(void){
+	timer_unregister_callback(gtid_imu_callback);
 	return true;
 }
 
-bool imu_test_connection(){
+int imu_test_connection(){
 	return MPU6050_test_connection();
 }
 
@@ -72,24 +69,25 @@ float imu_get_yaw(void){
 	return 0;
 }
 
-float imu_get_tilt(void){
-#if TILT == 0
-	return pitch;
-#elif TILT == 1
-	return roll;
-#endif
+int imu_get_accel_raw(float raw[3]){
+	raw[0] = motion_6[0];
+	raw[1] = motion_6[1];
+	raw[2] = motion_6[2];
+	return 0;
 }
 
-void imu_set_failed_cb(connection_failed_cb_t connection_failed_cb){
-	gconnection_failed_cb = connection_failed_cb;
-}
-
-void imu_get_gyro_raw(int16_t raw[3]){
+int imu_get_gyro_raw(float raw[3]){
 	raw[0] = motion_6[3];
 	raw[1] = motion_6[4];
 	raw[2] = motion_6[5];
+	return 0;
 }
 
-
+int imu_get_mag_raw(float raw[3]){
+	raw[0] = 0;
+	raw[1] = 0;
+	raw[2] = 0;
+	return -1;
+}
 
 #endif /* USERCODE_IMU_IMU_C_ */

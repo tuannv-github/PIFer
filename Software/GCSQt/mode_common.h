@@ -47,7 +47,8 @@ protected:
 
     void set_timeout(timeout_t timeout);
     void reset_timeout();
-    bool is_timing();
+    void succeed();
+    void failed();
 
     void truncate_vector(QVector<double> *v);
     void truncate_matrix(QVector<QVector<double>> &v);

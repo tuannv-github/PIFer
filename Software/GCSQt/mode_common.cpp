@@ -30,6 +30,9 @@ void Mode_common::load_timeout(){
         g_does_st_successfullly = true;
         show_status("Unable to load " + g_mode_name +" params",2000);
     }
+    else{
+        show_status("Succeed to load " + g_mode_name +" params",2000);
+    }
 }
 
 void Mode_common::write_timeout(){
@@ -37,12 +40,18 @@ void Mode_common::write_timeout(){
         g_does_st_successfullly = true;
         show_status("Unable to write " + g_mode_name + " params",2000);
     }
+    else{
+        show_status("Succeed to write " + g_mode_name +" params",2000);
+    }
 }
 
 void Mode_common::save_timeout(){
     if(!g_does_st_successfullly){
         g_does_st_successfullly = true;
         show_status("Unable to save " + g_mode_name + " params",2000);
+    }
+    else{
+        show_status("Succeed to save " + g_mode_name +" params",2000);
     }
 }
 
@@ -74,13 +83,13 @@ void Mode_common::set_timeout(timeout_t timeout){
     g_does_st_successfullly = false;
     switch(timeout){
     case SAVE_TIMEOUT:
-        QTimer::singleShot(1000, this, SLOT(save_timeout()));
+        QTimer::singleShot(500, this, SLOT(save_timeout()));
         break;
     case WRITE_TIMEOUT:
-        QTimer::singleShot(1000, this, SLOT(write_timeout()));
+        QTimer::singleShot(500, this, SLOT(write_timeout()));
         break;
     case LOAD_TIMEOUT:
-        QTimer::singleShot(1000, this, SLOT(load_timeout()));
+        QTimer::singleShot(500, this, SLOT(load_timeout()));
         break;
     }
 
@@ -90,9 +99,14 @@ void Mode_common::reset_timeout(){
     g_does_st_successfullly = true;
 }
 
-bool Mode_common::is_timing(){
-    return !g_does_st_successfullly;
+void Mode_common::succeed(){
+    g_does_st_successfullly = true;
 }
+
+void Mode_common::failed(){
+    g_does_st_successfullly = false;
+}
+
 
 void Mode_common::set_plotter(QVector<QCustomPlot*> q_custom_plot){
     g_q_custom_plot = q_custom_plot;

@@ -61,12 +61,13 @@ params_t params = {
 				.isFistCompute = true
 		},
 
-		.angle_adjusted = 0,
-		.believe_in_gyro = 0.99,
+		.tilt_type = ROLL,
+		.tilt_offset = 0,
+		.g_believe = 0.99,
 
 		.gx_offset = 1,
 		.gy_offset = 2,
-		.gz_offset = 3
+		.gz_offset = 3,
 };
 
 static uint32_t address = PARAMS_PAGE_ADDRESS;
@@ -112,8 +113,9 @@ void params_save(){
 	write((uint32_t*)(&params.pid[2].KD));
 
 	// IMU
-	write((uint32_t*)(&params.angle_adjusted));
-	write((uint32_t*)(&params.believe_in_gyro));
+	write((uint32_t*)(&params.tilt_type));
+	write((uint32_t*)(&params.tilt_offset));
+	write((uint32_t*)(&params.g_believe));
 
 	write((uint32_t*)(&params.gx_offset));
 	write((uint32_t*)(&params.gy_offset));
@@ -127,13 +129,18 @@ void params_save(){
 	write((uint32_t*)(&params.my_scale));
 	write((uint32_t*)(&params.mz_scale));
 
-
 	//HW
 	write((uint32_t*)(&params.motor0_invert));
 	write((uint32_t*)(&params.motor1_invert));
 	write((uint32_t*)(&params.encoder0_invert));
 	write((uint32_t*)(&params.encoder1_invert));
 	write((uint32_t*)(&params.encoder_exchange));
+
+	write((uint32_t*)(&params.motor0_pos_deadband));
+	write((uint32_t*)(&params.motor0_neg_deadband));
+	write((uint32_t*)(&params.motor1_pos_deadband));
+	write((uint32_t*)(&params.motor1_neg_deadband));
+
 	HAL_FLASH_Lock();
 }
 
@@ -157,10 +164,10 @@ bool params_load(){
 	read((uint32_t*)(&params.pid[2].KI));
 	read((uint32_t*)(&params.pid[2].KD));
 
-
 	// IMU
-	read((uint32_t*)(&params.angle_adjusted));
-	read((uint32_t*)(&params.believe_in_gyro));
+	read((uint32_t*)(&params.tilt_type));
+	read((uint32_t*)(&params.tilt_offset));
+	read((uint32_t*)(&params.g_believe));
 
 	read((uint32_t*)(&params.gx_offset));
 	read((uint32_t*)(&params.gy_offset));
@@ -180,6 +187,11 @@ bool params_load(){
 	read((uint32_t*)(&params.encoder0_invert));
 	read((uint32_t*)(&params.encoder1_invert));
 	read((uint32_t*)(&params.encoder_exchange));
+
+	read((uint32_t*)(&params.motor0_pos_deadband));
+	read((uint32_t*)(&params.motor0_neg_deadband));
+	read((uint32_t*)(&params.motor1_pos_deadband));
+	read((uint32_t*)(&params.motor1_neg_deadband));
 
 	return true;
 }

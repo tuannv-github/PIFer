@@ -25,10 +25,11 @@ MainWindow::MainWindow(QWidget *parent) :
     g_q_custom_plot.append(ui->plot_3);
     g_q_custom_plot.append(ui->plot_4);
     g_q_custom_plot.append(ui->plot_5);
-    for(int i=0;i < g_q_custom_plot.size();i++){
-        for(int j = 0 ; j < 6; j ++){
+
+    for(int i=0; i<g_q_custom_plot.size(); i++){
+        for(int j=0; j<5; j++){
             g_q_custom_plot[i]->addGraph();
-            g_q_custom_plot[i]->graph(j)->setPen(QPen(QColor(10*i%255,20*j%255,30*i*j%255)));
+            g_q_custom_plot[i]->graph(j)->setPen(QPen(QColor(qSin(j*1+1.2)*80+80, qSin(j*0.3+0)*80+80, qSin(j*0.3+1.5)*80+80), 2));
         }
     }
 

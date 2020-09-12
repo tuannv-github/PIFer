@@ -8,18 +8,20 @@
 #ifndef APPLICATION_PARAMS_PARAMS_H_
 #define APPLICATION_PARAMS_PARAMS_H_
 
-#include <application/pid/pid.h>
 #include <stdint.h>
+#include <application/pid/pid.h>
+#include <application/com/mavlink/protocol/mavlink.h>
 
 typedef struct{
 	pid_params_t pid[3];
 
-	float believe_in_gyro;
-	float angle_adjusted; // Calibrated vertical angle in earth frame
+	tilt_type_t tilt_type;
+	float tilt_offset;
+	float g_believe;
 
-	int32_t gx_offset;
-	int32_t gy_offset;
-	int32_t gz_offset;
+	float gx_offset;
+	float gy_offset;
+	float gz_offset;
 
 	int32_t mx_offset;
 	int32_t my_offset;
@@ -34,6 +36,11 @@ typedef struct{
 	bool encoder0_invert;
 	bool encoder1_invert;
 	bool encoder_exchange;
+	int16_t motor0_pos_deadband;
+	int16_t motor0_neg_deadband;
+	int16_t motor1_pos_deadband;
+	int16_t motor1_neg_deadband;
+
 }params_t;
 
 extern params_t params;

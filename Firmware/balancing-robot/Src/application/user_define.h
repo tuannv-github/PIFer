@@ -46,10 +46,11 @@
 #define MPU9250_I2C			hi2c1
 #define MPU6050_ADDRESS 	(MPU6050_DEFAULT_ADDRESS << 1)
 #define IMU_PERIOD			5
-//#define PITCH				0
-//#define ROLL				1
-#define TILT				0 // 0: pitch, 1: roll
-#define IMU_RAW_RP_PERIOD	50
+#define TILT_ROLL			0
+#define TILT_PITCH			1
+#define TILT				TILT_PITCH
+#define IMU_RAW_RP_PERIOD	45
+#define IMU_RES_RP_PERIOD	55
 
 // COM define
 #define COM_USART			huart3
@@ -59,7 +60,7 @@
 #define RX_CIR_BUF_SIZE 	512
 #define SERIAL_PERIOD		10	// UART transmission
 #define MAV_BUFF_SIZE 		512
-#define MAVLINK_CB_PERIOD	10	// Mavlink read message callback
+#define MAVLINK_CB_PERIOD	15	// Mavlink read message callback
 
 // Parameters define
 #define PARAMS_PAGE_ADDRESS 0x0800FC00
@@ -67,15 +68,14 @@
 
 // ROBOT_MODEL_TWO_WHEELS mode RUN
 #define TILT_CONTROLLER_PERIOD		10
-#define VEL_CONTROLLER_PERIOD		60
+#define VEL_CONTROLLER_PERIOD		50
 #define IMU_STATUS_REPORT_PERIOD	100
 #define RPY_REPORT_PERIOD			100
 #define TILT_REPORT_PERIOD			100
-#define PID_REPORT_PERIOD			100
 #define CONTROL_TIMEOUT_MS			1000
 #define VX_TO_TILT					0.04
-#define OMEGA_COEFF					3.0
-#define THROTTLE_COEFF				5
+#define OMEGA_COEFF					200.0
+#define VELOC_COEFF					75.0
 
 // ROBOT_MODEL_TANK general define
 #define WHEEL_PERIOD				50

@@ -28,7 +28,7 @@ static void enc_callback(uint8_t* ctx){
 	MOTOR1_ENCODER.Instance->CNT = 0;
 }
 
-void enc_init(){
+int enc_init(){
 	HAL_TIM_Encoder_Start(&MOTOR0_ENCODER,TIM_CHANNEL_ALL);
 	HAL_TIM_Encoder_Start(&MOTOR1_ENCODER,TIM_CHANNEL_ALL);
 	MOTOR0_ENCODER.Instance->CNT = 0;
@@ -37,8 +37,13 @@ void enc_init(){
 	if(params.encoder_exchange) genc_read = enc_read_0;
 	else genc_read = enc_read_1;
 
-	if(genc_id == 0)
-		genc_id = timer_register_callback(enc_callback, ENC_PERIOD, 0, TIMER_MODE_REPEAT);
+	if(genc_id == 0) genc_id = timer_register_callback(enc_callback, ENC_PERIOD, 0, TIMER_MODE_REPEAT);
+
+	return 0;
+}
+
+int enc_deinit(){
+	return 0;
 }
 
 int16_t enc_read(motors_t motor){

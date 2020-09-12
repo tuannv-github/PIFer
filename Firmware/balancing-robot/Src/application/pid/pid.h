@@ -37,8 +37,7 @@ typedef struct{
 	float U;
 }pid_params_t;
 
-float pid_compute(pid_params_t *pid_params, float sp, float fb);
-float pid_compute_angle(pid_params_t *pid_params, float sp, float fb);
-void pid_reset(pid_params_t *pid_params);
+float pid_compute(pid_params_t *pid_params, float sp, float fb, float dt);
+void  pid_reset(pid_params_t *pid_params);
 
 #endif /* APPLICATION_PID_PID_H_ */

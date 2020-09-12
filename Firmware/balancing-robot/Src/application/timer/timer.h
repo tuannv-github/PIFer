@@ -13,6 +13,9 @@
 typedef void (*timer_callback_func_t)(uint8_t *context);
 typedef int8_t timer_id_t;
 
+#define TID_INVALID		-1
+#define TID(x) 			static timer_id_t x=TID_INVALID;
+
 typedef enum{
 	TIMER_MODE_REPEAT,
 	TIMER_MODE_ONE_SHOT
@@ -27,6 +30,7 @@ typedef struct{
 	timer_mode_t mode;
 }callback_t;
 
+int timer_init();
 timer_id_t timer_register_callback(timer_callback_func_t timer_callback_func, uint16_t period_ms, uint8_t* context, timer_mode_t mode);
 void timer_unregister_callback(timer_id_t id);
 

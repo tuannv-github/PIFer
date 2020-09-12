@@ -10,7 +10,8 @@
 
 #include <application/motors/motors.h>
 
-void enc_init();
+int enc_init();
+int enc_deinit();
 int16_t enc_read(motors_t motor);
 
 #endif /* APPLICATION_ENCODER_ENCODER_H_ */

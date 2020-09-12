@@ -42,7 +42,7 @@
 			<entry name="PID_SYNC">Tank PID</entry>
 		</enum>
 
-		<enum name="tilt_t">
+		<enum name="tilt_type_t">
 			<entry name="ROLL">Tilt angle is roll angle</entry>
 			<entry name="PITCH">Pitch angle is roll angle</entry>
 		</enum>
@@ -66,8 +66,8 @@
 
 		<message id="3" name="CMD_VELOCITY">
 			<description>Velocity command. No need a respond message for confimation</description>
-			<field type="int16_t" name="v">Velocity</field>
-			<field type="int16_t" name="omega">Omega</field>
+			<field type="float" name="v">Velocity</field>
+			<field type="float" name="omega">Omega</field>
 		</message>
 
 		<message id="4" name="EVT_TILT">
@@ -100,48 +100,55 @@
 			<field type="int8_t" name="encoder0_invert" enum="bool_t">Encoder 0 Invert</field>
 			<field type="int8_t" name="encoder1_invert" enum="bool_t">Encoder 1 Invert</field>
 			<field type="int8_t" name="encoder_exchange" enum="bool_t">Switch to invert encoder from motor 0 to motor 1 and vice versa</field>
+			<field type="int16_t" name="motor0_pos_deadband">Motor 0 positive deadband</field>
+			<field type="int16_t" name="motor0_neg_deadband">Motor 0 negative deadband</field>
+			<field type="int16_t" name="motor1_pos_deadband">Motor 1 positive deadband</field>
+			<field type="int16_t" name="motor1_neg_deadband">Motor 1 negative deadband</field>
 		</message>
 
-		<message id="9" name="IMU_PARAMS">
-			<description>IMU calibration parameters. No need a respond message for confimation</description>
-			<field type="int16_t" name="gyro_offset_x">Gyro Offset X</field>
-			<field type="int16_t" name="gyro_offset_y">Gyro Offset Y</field>
-			<field type="int16_t" name="gyro_offset_z">Gyro Offset Z</field>
-
-			<field type="int16_t" name="mag_offset_x">Mag Offset X</field>
-			<field type="int16_t" name="mag_offset_y">Mag Offset Y</field>
-			<field type="int16_t" name="mag_offset_z">Mag Offset Z</field>
-			
-			<field type="int16_t" name="mag_scale_x">Mag Scale X</field>
-			<field type="int16_t" name="mag_scale_y">Mag Scale Y</field>
-			<field type="int16_t" name="mag_scale_z">Mag Scale Z</field>
-			
-			<field type="float"  name="angle_adjusted">Angle adjusted</field>
-			<field type="float"  name="believe_in_gyro">Believe in gyro</field>
+		<message id="9" name="GYRO_PARAMS">
+			<description>Gyro calibration parameters. No need a respond message for confimation</description>
+			<field type="float" name="gyro_offset_x">Gyro Offset X</field>
+			<field type="float" name="gyro_offset_y">Gyro Offset Y</field>
+			<field type="float" name="gyro_offset_z">Gyro Offset Z</field>
 		</message>
-		
-		<message id="10" name="EVT_GYRO_RAW">
+
+		<message id="10" name="COMP_FILTER_PARAMS">
+			<description>Complimentary filter parameters. No need a respond message for confimation</description>
+			<field type="uint8_t" name="tilt_type" enum="tilt_type_t">Tilt type</field>
+			<field type="float" name="tilt_offset">Tilt angle offset</field>
+			<field type="float" name="g_believe">Belive in gyroscope</field>
+		</message>
+
+		<message id="11" name="EVT_ACCEL_RAW">
 			<description>IMU raw value. No need a respond message for confimation</description>
-			<field type="int16_t" name="gyro_x">Gyro X</field>
-			<field type="int16_t" name="gyro_y">Gyro Y</field>
-			<field type="int16_t" name="gyro_z">Gyro Z</field>
+			<field type="float" name="acc_x">Accel X</field>
+			<field type="float" name="acc_y">Accel Y</field>
+			<field type="float" name="acc_z">Accel Z</field>
 		</message>
 
-		<message id="11" name="EVT_MAG_RAW">
+		<message id="12" name="EVT_GYRO_RAW">
 			<description>IMU raw value. No need a respond message for confimation</description>
-			<field type="int16_t" name="mag_x">Mag X</field>
-			<field type="int16_t" name="mag_y">Mag Y</field>
-			<field type="int16_t" name="mag_z">Mag Z</field>
+			<field type="float" name="gyro_x">Gyro X</field>
+			<field type="float" name="gyro_y">Gyro Y</field>
+			<field type="float" name="gyro_z">Gyro Z</field>
 		</message>
 
-		<message id="12" name="EVT_ACCEL_RAW">
+		<message id="13" name="EVT_CALIBRATED_GYRO_RAW">
 			<description>IMU raw value. No need a respond message for confimation</description>
-			<field type="int16_t" name="acc_x">Accel X</field>
-			<field type="int16_t" name="acc_y">Accel Y</field>
-			<field type="int16_t" name="acc_z">Accel Z</field>
+			<field type="float" name="gyro_x">Gyro X</field>
+			<field type="float" name="gyro_y">Gyro Y</field>
+			<field type="float" name="gyro_z">Gyro Z</field>
 		</message>
 
-		<message id="13" name="PID_PARAMS">
+		<message id="14" name="EVT_MAG_RAW">
+			<description>IMU raw value. No need a respond message for confimation</description>
+			<field type="float" name="mag_x">Mag X</field>
+			<field type="float" name="mag_y">Mag Y</field>
+			<field type="float" name="mag_z">Mag Z</field>
+		</message>
+
+		<message id="15" name="PID_PARAMS">
 			<description>PID Coefficent. No need a respond message for confimation</description>
 			<field type="uint8_t" name="pid_control" enum="pidc_t">Object that PID control</field>
 			<field type="float" name="KP">KP</field>
@@ -149,7 +156,7 @@
 			<field type="float" name="KD">KD</field>
 		</message>
 
-		<message id="14" name="PID_REPORT">
+		<message id="16" name="PID_REPORT">
 			<description>Report pid internal parameter</description>
 			<field type="uint8_t" name="pid_control" enum="pidc_t">Object that PID control</field>
 			<field type="float" name="sp">Set point</field>

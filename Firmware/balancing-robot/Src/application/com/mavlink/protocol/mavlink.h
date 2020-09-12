@@ -28,7 +28,7 @@
 #define MAVLINK_COMMAND_24BIT 0
 #endif
 
-#include <application/com/mavlink/protocol/version.h>
-#include <application/com/mavlink/protocol/protocol.h>
+#include "version.h"
+#include "protocol.h"
 
 #endif // MAVLINK_H

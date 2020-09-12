@@ -76,21 +76,21 @@ void app_main(){
 	HAL_Delay(250);
 	HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_RESET);
 
+	timer_init();
 	timer_register_callback(LED_Callback, 500, 0, TIMER_MODE_REPEAT);
 
 	// Load parameters from non-volatile memory
 	params_load();
 
-	// Initialize communication
-	com_init();
-	com_set_on_mav_recv(on_mavlink_recv);
-
 	// Run default mode
 	gmode_init = mode_run_init;
 	gmode_deinit = mode_run_deinit;
-
 	gon_mode_mav_recv = on_mode_run_mavlink_recv;
 	gmode_init();
+
+	// Initialize communication
+	com_init();
+	com_set_on_mav_recv(on_mavlink_recv);
 }
 
 #endif /* USERCODE_APP_MAIN_C_ */

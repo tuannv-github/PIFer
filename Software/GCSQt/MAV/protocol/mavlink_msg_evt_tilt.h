@@ -3,10 +3,10 @@
 
 #define MAVLINK_MSG_ID_EVT_TILT 4
 
-MAVPACKED(
+
 typedef struct __mavlink_evt_tilt_t {
  float tilt; /*<  Tilt*/
-}) mavlink_evt_tilt_t;
+} mavlink_evt_tilt_t;
 
 #define MAVLINK_MSG_ID_EVT_TILT_LEN 4
 #define MAVLINK_MSG_ID_EVT_TILT_MIN_LEN 4
