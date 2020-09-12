@@ -15,12 +15,12 @@ int timer_init(){
 	return 0;
 }
 
-timer_id_t timer_register_callback(timer_callback_func_t timer_callback_func, uint16_t period_ms, uint8_t* context, timer_mode_t mode){
+timer_id_t timer_register_callback(timer_callback_func_t timer_callback_func, uint16_t period_ms, void *cxt, timer_mode_t mode){
 	for(uint8_t i = 0; i < MAX_CALLBACK_FUNC; i++){
 		if(callbacks[i].timer_callback_func == 0){
 			callbacks[i].timer_callback_func = timer_callback_func;
 			callbacks[i].period_ms = period_ms;
-			callbacks[i].context = context;
+			callbacks[i].context = cxt;
 			callbacks[i].mode = mode;
 			callbacks[i].cnt = period_ms;
 			callbacks[i].id = i;

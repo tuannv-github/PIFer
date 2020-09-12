@@ -10,7 +10,7 @@
 
 #include <stdint.h>
 
-typedef void (*timer_callback_func_t)(uint8_t *context);
+typedef void (*timer_callback_func_t)(void *cxt);
 typedef int8_t timer_id_t;
 
 #define TID_INVALID		-1
@@ -25,13 +25,13 @@ typedef struct{
 	timer_callback_func_t timer_callback_func;
 	uint16_t period_ms;
 	uint16_t cnt;
-	uint8_t *context;
+	void *context;
 	uint8_t id;
 	timer_mode_t mode;
 }callback_t;
 
 int timer_init();
-timer_id_t timer_register_callback(timer_callback_func_t timer_callback_func, uint16_t period_ms, uint8_t* context, timer_mode_t mode);
+timer_id_t timer_register_callback(timer_callback_func_t timer_callback_func, uint16_t period_ms, void* cxt, timer_mode_t mode);
 void timer_unregister_callback(timer_id_t id);
 
 uint64_t milis();

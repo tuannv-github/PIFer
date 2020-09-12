@@ -5,4 +5,4 @@
  *      Author: tuannv
  */
 
-#include <application/com/nrf24/nrf24.h>
+#include "nrf24.h"

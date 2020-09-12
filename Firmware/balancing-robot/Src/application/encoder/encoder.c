@@ -20,7 +20,7 @@ static int16_t 	  m0_speed=0, m1_speed=0;
 static enc_read_t genc_read = 0;
 static timer_id_t genc_id;
 
-static void enc_callback(uint8_t* ctx){
+static void enc_callback(void *ctx){
 	m0_speed = MOTOR0_ENCODER.Instance->CNT;
 	MOTOR0_ENCODER.Instance->CNT = 0;
 

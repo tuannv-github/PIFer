@@ -11,13 +11,13 @@ float g_lsb_per_dpfs;
 float g_lsb_per_g;
 float g_microTesla_per_LSB;
 
-static int mpu6500_read(uint8_t addr, uint8_t* value){
+static int mpu6500_read(uint8_t addr, uint8_t *value){
 	if(HAL_I2C_Mem_Read(&MPU9250_I2C, MPU9250_I2C_ADDR, addr, 1, value, 1, I2C_TIMEOUT_MS) != HAL_OK)
 		return -1;
 	return 0;
 }
 
-static int mpu6500_write(uint8_t addr, uint8_t* value){
+static int mpu6500_write(uint8_t addr, uint8_t *value){
 	if(HAL_I2C_Mem_Write(&MPU9250_I2C, MPU9250_I2C_ADDR, addr, 1, value, 1, I2C_TIMEOUT_MS) != HAL_OK)
 		return -1;
 	uint8_t tmp;

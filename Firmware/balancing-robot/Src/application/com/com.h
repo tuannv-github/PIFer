@@ -9,7 +9,7 @@
 #define APPLICATION_COM_COM_H_
 
 #include <application/com/mavlink/protocol/mavlink.h>
-#include <application/com/serial/Serial.h>
+#include <application/serial/uart/uart.h>
 
 typedef void (*on_mav_recv_t)(mavlink_message_t*);
 
