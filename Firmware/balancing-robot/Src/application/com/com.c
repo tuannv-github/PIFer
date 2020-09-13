@@ -16,12 +16,13 @@ static mavlink_status_t  status;
 static on_mav_recv_t gon_mav_recv;
 
 static uart_drv_t uart_drv = {
-		.huart = &COM_USART
+		.huart = &COM_USART,
+		.cb_period = COM_PERIOD,
 };
 
-void mavlink_callback(uint8_t* cntx){
+void mavlink_callback(void* ctx){
 	uint16_t mavbuf_len = MAV_BUFF_SIZE;
-	uart_read(&uart_drv, mavbuf, &mavbuf_len);
+	uart_recv(&uart_drv, mavbuf, &mavbuf_len);
 	for(uint16_t i = 0; i < mavbuf_len; i++){
 		uint8_t msg_received = mavlink_parse_char(MAVLINK_COMM_0, mavbuf[i], &msg, &status);
 		if(msg_received == 1 && gon_mav_recv!=0){
