@@ -59,7 +59,7 @@
 #define RX_DMA_BUF_SIZE		512
 #define TX_CIR_BUF_SIZE 	512
 #define RX_CIR_BUF_SIZE 	512
-#define SERIAL_PERIOD		100	// UART transmission
+#define COM_PERIOD			100	// UART transmission
 #define MAV_BUFF_SIZE 		512
 #define MAVLINK_CB_PERIOD	15	// Mavlink read message callback
 

@@ -17,7 +17,7 @@ static on_mav_recv_t gon_mav_recv;
 
 static uart_drv_t uart_drv = {
 		.huart = &COM_USART,
-		.cb_period = SERIAL_PERIOD,
+		.cb_period = COM_PERIOD,
 };
 
 void mavlink_callback(void* ctx){
