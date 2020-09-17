@@ -10,7 +10,7 @@
 
 #include <stdint.h>
 
-typedef void (*timer_callback_func_t)(void *cxt);
+typedef void (*timer_callback_func_t)(void *cxt); // void (*)(void *)
 typedef int8_t timer_id_t;
 
 #define TID_INVALID		-1

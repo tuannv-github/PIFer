@@ -16,8 +16,8 @@ typedef struct{
 void cbuf_init(circular_buf_t *cbuf, uint8_t *buf, size_t size);
 void cbuf_reset(circular_buf_t  *cbuf);
 
-int cbuf_put(circular_buf_t* cbuf, uint8_t data);
-int cbuf_get(circular_buf_t* cbuf, uint8_t *data);
+int cbuf_put(circular_buf_t* cbuf, char data);
+int cbuf_get(circular_buf_t* cbuf, char *data);
 
 bool cbuf_empty(circular_buf_t *cbuf);
 bool cbuf_full(circular_buf_t *cbuf);

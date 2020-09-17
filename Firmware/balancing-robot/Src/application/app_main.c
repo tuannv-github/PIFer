@@ -17,7 +17,7 @@ static func_t 		 	gmode_init;			// Save mode init function pointer
 static func_t 		 	gmode_deinit;		// Save mode de-init function pointer
 static on_mav_recv_t 	gon_mode_mav_recv;	// Save mode msg receive function pointer
 
-void LED_Callback(uint8_t *context)
+void LED_Callback(void *context)
 {
 	HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
 }
@@ -68,14 +68,8 @@ static void on_mavlink_recv(mavlink_message_t *msg){
 }
 
 void app_main(){
-	// Delay for other module to start
-	HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_SET);
-	HAL_Delay(250);
-	HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_RESET);
-	HAL_Delay(250);
-	HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_SET);
-	HAL_Delay(250);
-	HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_RESET);
+
+	buzzer_sys_start();
 
 	timer_init();
 	timer_register_callback(LED_Callback, 500, 0, TIMER_MODE_REPEAT);

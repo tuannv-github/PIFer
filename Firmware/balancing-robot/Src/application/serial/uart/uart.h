@@ -39,10 +39,15 @@ typedef struct{
 
 int uart_init(uart_drv_t* uart_drv);
 
-int uart_send_chr(uart_drv_t* uart_drv, uint8_t chr);
-int uart_recv_chr(uart_drv_t* uart_drv, uint8_t *chr);
+int uart_send_chr(uart_drv_t* uart_drv, char chr);
+int uart_recv_chr(uart_drv_t* uart_drv, char *chr);
 
-int uart_send(uart_drv_t *uart_drv, uint8_t* data, uint16_t len);
-int uart_recv(uart_drv_t *uart_drv, uint8_t* data, uint16_t *len);
+int uart_send(uart_drv_t *uart_drv, char *data, uint16_t len);
+int uart_recv(uart_drv_t *uart_drv, char *data, uint16_t *len);
+int uart_readline(uart_drv_t* uart_drv, char *data, int timeout);
+
+void uart_tx_reset(uart_drv_t* uart_drv);
+void uart_rx_reset(uart_drv_t* uart_drv);
+void uart_reset(uart_drv_t* uart_drv);
 
 #endif /* USERCODE_SERIAL_SERIAL_H_ */

@@ -15,6 +15,7 @@
 #include <application/mode/mode_run/mode_run.h>
 #include <application/timer/timer.h>
 #include <application/params/params.h>
+#include <application/buzzer/buzzer.h>
 
 void app_main(void);
 

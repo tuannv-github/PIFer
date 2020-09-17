@@ -89,15 +89,15 @@ int uart_init(uart_drv_t* uart_drv){
 	return 0;
 }
 
-int uart_send_chr(uart_drv_t *uart_drv, uint8_t chr){
+int uart_send_chr(uart_drv_t *uart_drv, char chr){
 	return cbuf_put(&uart_drv->tx_cbuf_handle, chr);
 }
 
-int uart_recv_chr(uart_drv_t *uart_drv, uint8_t *chr){
+int uart_recv_chr(uart_drv_t *uart_drv, char *chr){
 	return cbuf_get(&uart_drv->rx_cbuf_handle, chr);
 }
 
-int uart_send(uart_drv_t *uart_drv, uint8_t *data, uint16_t len){
+int uart_send(uart_drv_t *uart_drv, char *data, uint16_t len){
 	for(uint16_t i=0; i<len; i++){
 		int drv_stt = uart_send_chr(uart_drv, data[i]);
 		if(drv_stt != 0) return drv_stt;
@@ -105,7 +105,7 @@ int uart_send(uart_drv_t *uart_drv, uint8_t *data, uint16_t len){
 	return 0;
 }
 
-int uart_recv(uart_drv_t *uart_drv, uint8_t *data, uint16_t *len){
+int uart_recv(uart_drv_t *uart_drv, char *data, uint16_t *len){
 	for(uint16_t i=0; i<*len; i++){
 		int drv_stt = uart_recv_chr(uart_drv, data + i);
 		if(drv_stt != 0){
@@ -116,39 +116,38 @@ int uart_recv(uart_drv_t *uart_drv, uint8_t *data, uint16_t *len){
 	return true;
 }
 
-//bool uart_tx_reset(uart_drv_t* uart_drv){
-//	cbuf_reset(&uart_drv->tx_cbuf_handle);
-//	return true;
-//}
-//bool uart_rx_reset(uart_drv_t* uart_drv){
-//	cbuf_reset(&uart_drv->rx_cbuf_handle);
-//	return true;
-//}
+int uart_readline(uart_drv_t* uart_drv, char *data, int timeout){
+	char chr;
+	int i=0, t=0;
+	while(1){
+		while(uart_recv_chr(uart_drv, &chr) != 0){
+			t++;
+			if(t>timeout) return -1;
+		}
+		if(chr != '\r' && chr != '\n'){
+			data[i] = chr;
+			 i++;
+		}
+		else if(chr == '\n' && i==0) continue;
+		else{
+			data[i] = '\r';
+			data[i+1] = '\n';
+			data[i+2] = 0;
+			return 0;
+		}
+	}
+	return -1;
+}
 
-//int uart_readline(uart_drv_t* uart_drv, uint8_t* data, uint16_t* len){
-//	uint16_t i = 0;
-//	uint8_t chr;
-//	uint8_t cnt = 0;
-//	while(true){
-//		if(uart_read_chr(uart_drv, &chr) == true){
-//			if(chr != '\r' && chr != '\n'){
-//				data[i] = chr;
-//				i++;
-//			}
-//			else if(chr == '\n' && i==0) continue;
-//			else{
-//				data[i] = '\r';
-//				data[i+1] = '\n';
-//				data[i+2] = 0;
-//				*len = i + 2;
-//				return true;
-//			}
-//		}
-//		else{
-//			if(cnt == 100) break;
-//			cnt++;
-//			HAL_Delay(10);
-//		}
-//	}
-//	return true;
-//}
+void uart_tx_reset(uart_drv_t* uart_drv){
+	cbuf_reset(&uart_drv->tx_cbuf_handle);
+}
+
+void uart_rx_reset(uart_drv_t* uart_drv){
+	cbuf_reset(&uart_drv->rx_cbuf_handle);
+}
+
+void uart_reset(uart_drv_t* uart_drv){
+	uart_tx_reset(uart_drv);
+	uart_rx_reset(uart_drv);
+}

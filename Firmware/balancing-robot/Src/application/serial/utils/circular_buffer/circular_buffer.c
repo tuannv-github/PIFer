@@ -19,7 +19,7 @@ void cbuf_reset(circular_buf_t  *cbuf)
     cbuf->full = false;
 }
 
-int cbuf_put(circular_buf_t* cbuf, uint8_t data)
+int cbuf_put(circular_buf_t* cbuf, char data)
 {
     if(!cbuf_full(cbuf))
     {
@@ -31,7 +31,7 @@ int cbuf_put(circular_buf_t* cbuf, uint8_t data)
     return -1;
 }
 
-int cbuf_get(circular_buf_t *cbuf, uint8_t *data)
+int cbuf_get(circular_buf_t *cbuf, char *data)
 {
     if(!cbuf_empty(cbuf))
     {
