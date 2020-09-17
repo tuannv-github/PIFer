@@ -28,7 +28,9 @@ static uart_drv_t uart_drv[] = {
 };
 
 void mavlink_callback(void* ctx){
-	uint16_t mavbuf_len = MAV_BUFF_SIZE;
+	uint16_t mavbuf_len;
+
+	mavbuf_len = MAV_BUFF_SIZE;
 	uart_recv(&uart_drv[0], mavbuf, &mavbuf_len);
 	for(uint16_t i = 0; i < mavbuf_len; i++){
 		uint8_t msg_received = mavlink_parse_char(MAVLINK_COMM_0, mavbuf[i], &msg, &status);
@@ -36,6 +38,8 @@ void mavlink_callback(void* ctx){
 			gon_mav_recv(&msg);
 		}
 	}
+
+	mavbuf_len = MAV_BUFF_SIZE;
 	uart_recv(&uart_drv[1], mavbuf, &mavbuf_len);
 	for(uint16_t i = 0; i < mavbuf_len; i++){
 		uint8_t msg_received = mavlink_parse_char(MAVLINK_COMM_1, mavbuf[i], &msg, &status);

@@ -63,9 +63,7 @@ private slots:
     void serial_data_ready();
 
     // Socker slot
-    void new_connection();
     void socket_data_ready();
-    void socket_state_changed(QAbstractSocket::SocketState socketState);
 
     // Led indicator
     void led_indicator_off();
@@ -76,10 +74,11 @@ private slots:
     void on_btn_open_com_clicked();
     void on_btn_open_server_clicked();
 
+    void on_btn_open_socket_clicked();
+
 private:
     Ui::Com *ui;
     QSerialPort *g_serial;
-    QTcpServer *g_tcp_server;
     QTcpSocket *g_socket;
     Com_gui *g_com_gui;
     Led_indicator *g_led_indicator;
