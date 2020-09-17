@@ -102,7 +102,7 @@
      <string>Open</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="btn_open_server">
+   <widget class="QPushButton" name="btn_open_socket">
     <property name="geometry">
      <rect>
       <x>580</x>
@@ -112,7 +112,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Open</string>
+     <string>Connect</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="tb_server_ip">
@@ -123,6 +123,9 @@
       <width>121</width>
       <height>20</height>
      </rect>
+    </property>
+    <property name="text">
+     <string>192.168.4.1</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_4">
@@ -148,7 +151,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>9000</string>
+     <string>8888</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_5">

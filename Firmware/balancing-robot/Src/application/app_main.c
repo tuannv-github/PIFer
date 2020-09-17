@@ -9,7 +9,6 @@
 #define USERCODE_APP_MAIN_C_
 
 #include <application/app_main.h>
-#include <application/serial/esp8266/esp8266.h>
 
 typedef void (*func_t)(void);
 
@@ -17,7 +16,7 @@ static func_t 		 	gmode_init;			// Save mode init function pointer
 static func_t 		 	gmode_deinit;		// Save mode de-init function pointer
 static on_mav_recv_t 	gon_mode_mav_recv;	// Save mode msg receive function pointer
 
-void LED_Callback(uint8_t *context)
+void LED_Callback(void *context)
 {
 	HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
 }
@@ -68,14 +67,8 @@ static void on_mavlink_recv(mavlink_message_t *msg){
 }
 
 void app_main(){
-	// Delay for other module to start
-	HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_SET);
-	HAL_Delay(250);
-	HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_RESET);
-	HAL_Delay(250);
-	HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_SET);
-	HAL_Delay(250);
-	HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_RESET);
+
+	buzzer_sys_start();
 
 	timer_init();
 	timer_register_callback(LED_Callback, 500, 0, TIMER_MODE_REPEAT);
@@ -83,16 +76,15 @@ void app_main(){
 	// Load parameters from non-volatile memory
 	params_load();
 
-	esp8266_init();
 	// Run default mode
-//	gmode_init = mode_run_init;
-//	gmode_deinit = mode_run_deinit;
-//	gon_mode_mav_recv = on_mode_run_mavlink_recv;
-//	gmode_init();
+	gmode_init = mode_run_init;
+	gmode_deinit = mode_run_deinit;
+	gon_mode_mav_recv = on_mode_run_mavlink_recv;
+	gmode_init();
 
-//	// Initialize communication
-//	com_init();
-//	com_set_on_mav_recv(on_mavlink_recv);
+	// Initialize communication
+	mav_init();
+	mav_set_on_mav_recv(on_mavlink_recv);
 }
 
 #endif /* USERCODE_APP_MAIN_C_ */

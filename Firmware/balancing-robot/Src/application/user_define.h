@@ -49,17 +49,22 @@
 #define IMU_RAW_RP_PERIOD	45
 #define IMU_RES_RP_PERIOD	55
 
-#define ESP8266_USART		huart2
-#define ESP8266_PERIOD		100
-
-// COM define
+// UART
 #define MAX_UART_INSTANT	3
-#define COM_USART			huart3
 #define TX_DMA_BUF_SIZE 	512
 #define RX_DMA_BUF_SIZE		512
 #define TX_CIR_BUF_SIZE 	512
 #define RX_CIR_BUF_SIZE 	512
-#define COM_PERIOD			100	// UART transmission
+
+// Serial over UART define
+#define SOU_USART			huart3
+#define SOU_PERIOD			100
+
+// Serial over ESP8266
+#define SOE_USART			huart2
+#define SOE_PERIOD			100
+
+// Mavlink
 #define MAV_BUFF_SIZE 		512
 #define MAVLINK_CB_PERIOD	15	// Mavlink read message callback
 
@@ -90,8 +95,5 @@
 #define HAVE_SAVED_DATA		0x01
 
 #define CONST_G 					9.807f
-
-// ESP8266
-#define ESP8266_UART
 
 #endif /* USERCODE_USER_DEFINE_H_ */

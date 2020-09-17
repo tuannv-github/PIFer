@@ -18,7 +18,7 @@ static void speed_report_callback(uint8_t* ctx){
 
 	mavlink_msg_motor_speed_pack(0,0,&speed_msg,motor0_enc,motor1_enc);
 	uint16_t len = mavlink_msg_to_send_buffer(gmav_send_buf, &speed_msg);
-	com_send(gmav_send_buf, len);
+	mav_send(gmav_send_buf, len);
 }
 
 static int motor_speed(mavlink_message_t *msg){
@@ -78,7 +78,7 @@ static int load_params(){
 	mavlink_msg_hw_params_pack(0,0,&hw_msg,motor0_invert,motor1_invert,encoder0_invert,encoder1_invert,encoder_ex,
 			params.motor0_pos_deadband, params.motor0_neg_deadband, params.motor1_pos_deadband, params.motor1_neg_deadband);
 	uint16_t len = mavlink_msg_to_send_buffer(gmav_send_buf, &hw_msg);
-	com_send(gmav_send_buf, len);
+	mav_send(gmav_send_buf, len);
 
 	return 0;
 }

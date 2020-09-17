@@ -11,7 +11,7 @@
 #include <application/user_define.h>
 #include "tim.h"
 
-typedef int16_t (*enc_read_t)(motors_t motor);
+typedef int16_t (*enc_read_t)(motors_t motor); // int16_t (*)(motors_t)
 
 static int16_t enc_read_0(motors_t motor);
 static int16_t enc_read_1(motors_t motor);
@@ -43,6 +43,7 @@ int enc_init(){
 }
 
 int enc_deinit(){
+	timer_unregister_callback(genc_id);
 	return 0;
 }
 

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'com.ui'
 **
-** Created by: Qt User Interface Compiler version 5.12.6
+** Created by: Qt User Interface Compiler version 5.15.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -29,7 +29,7 @@ public:
     QLabel *label_3;
     QComboBox *cb_baud;
     QPushButton *btn_open_com;
-    QPushButton *btn_open_server;
+    QPushButton *btn_open_socket;
     QLineEdit *tb_server_ip;
     QLabel *label_4;
     QLineEdit *tb_server_port;
@@ -63,9 +63,9 @@ public:
         btn_open_com = new QPushButton(groupBox);
         btn_open_com->setObjectName(QString::fromUtf8("btn_open_com"));
         btn_open_com->setGeometry(QRect(230, 20, 61, 51));
-        btn_open_server = new QPushButton(groupBox);
-        btn_open_server->setObjectName(QString::fromUtf8("btn_open_server"));
-        btn_open_server->setGeometry(QRect(580, 20, 61, 51));
+        btn_open_socket = new QPushButton(groupBox);
+        btn_open_socket->setObjectName(QString::fromUtf8("btn_open_socket"));
+        btn_open_socket->setGeometry(QRect(580, 20, 61, 51));
         tb_server_ip = new QLineEdit(groupBox);
         tb_server_ip->setObjectName(QString::fromUtf8("tb_server_ip"));
         tb_server_ip->setGeometry(QRect(400, 20, 121, 20));
@@ -89,19 +89,20 @@ public:
 
     void retranslateUi(QWidget *Com)
     {
-        Com->setWindowTitle(QApplication::translate("Com", "Form", nullptr));
-        groupBox->setTitle(QApplication::translate("Com", "Connection", nullptr));
-        label->setText(QApplication::translate("Com", "COM:", nullptr));
-        label_3->setText(QApplication::translate("Com", "Baud:", nullptr));
-        cb_baud->setItemText(0, QApplication::translate("Com", "57600", nullptr));
-        cb_baud->setItemText(1, QApplication::translate("Com", "115200", nullptr));
-        cb_baud->setItemText(2, QApplication::translate("Com", "9600", nullptr));
+        Com->setWindowTitle(QCoreApplication::translate("Com", "Form", nullptr));
+        groupBox->setTitle(QCoreApplication::translate("Com", "Connection", nullptr));
+        label->setText(QCoreApplication::translate("Com", "COM:", nullptr));
+        label_3->setText(QCoreApplication::translate("Com", "Baud:", nullptr));
+        cb_baud->setItemText(0, QCoreApplication::translate("Com", "57600", nullptr));
+        cb_baud->setItemText(1, QCoreApplication::translate("Com", "115200", nullptr));
+        cb_baud->setItemText(2, QCoreApplication::translate("Com", "9600", nullptr));
 
-        btn_open_com->setText(QApplication::translate("Com", "Open", nullptr));
-        btn_open_server->setText(QApplication::translate("Com", "Open", nullptr));
-        label_4->setText(QApplication::translate("Com", "Sever address:", nullptr));
-        tb_server_port->setText(QApplication::translate("Com", "9000", nullptr));
-        label_5->setText(QApplication::translate("Com", "Connected from:", nullptr));
+        btn_open_com->setText(QCoreApplication::translate("Com", "Open", nullptr));
+        btn_open_socket->setText(QCoreApplication::translate("Com", "Connect", nullptr));
+        tb_server_ip->setText(QCoreApplication::translate("Com", "192.168.4.1", nullptr));
+        label_4->setText(QCoreApplication::translate("Com", "Sever address:", nullptr));
+        tb_server_port->setText(QCoreApplication::translate("Com", "8888", nullptr));
+        label_5->setText(QCoreApplication::translate("Com", "Connected from:", nullptr));
     } // retranslateUi
 
 };
