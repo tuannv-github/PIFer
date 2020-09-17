@@ -9,7 +9,6 @@
 #define USERCODE_APP_MAIN_C_
 
 #include <application/app_main.h>
-#include <application/serial/esp8266/esp8266.h>
 
 typedef void (*func_t)(void);
 
@@ -77,16 +76,15 @@ void app_main(){
 	// Load parameters from non-volatile memory
 	params_load();
 
-	esp8266_init();
 	// Run default mode
-//	gmode_init = mode_run_init;
-//	gmode_deinit = mode_run_deinit;
-//	gon_mode_mav_recv = on_mode_run_mavlink_recv;
-//	gmode_init();
+	gmode_init = mode_run_init;
+	gmode_deinit = mode_run_deinit;
+	gon_mode_mav_recv = on_mode_run_mavlink_recv;
+	gmode_init();
 
-//	// Initialize communication
-//	com_init();
-//	com_set_on_mav_recv(on_mavlink_recv);
+	// Initialize communication
+	mav_init();
+	mav_set_on_mav_recv(on_mavlink_recv);
 }
 
 #endif /* USERCODE_APP_MAIN_C_ */

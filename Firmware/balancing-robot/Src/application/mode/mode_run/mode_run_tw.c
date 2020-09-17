@@ -83,7 +83,7 @@ static void tilt_report_callback(uint8_t *ctx){
 
 	mavlink_msg_evt_tilt_pack(0,0,&msg,tilt);
 	uint16_t len = mavlink_msg_to_send_buffer(mav_send_buf, &msg);
-	com_send(mav_send_buf, len);
+	mav_send(mav_send_buf, len);
 }
 
 void mode_run_init(){

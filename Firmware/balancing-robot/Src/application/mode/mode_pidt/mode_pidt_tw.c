@@ -77,15 +77,15 @@ static int load_params(){
 
 	mavlink_msg_pid_params_pack(0,0,&msg,PID_TILT,params.pid[0].KP,params.pid[0].KI,params.pid[0].KD);
 	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
-	com_send(gmav_send_buf, len);
+	mav_send(gmav_send_buf, len);
 
 	mavlink_msg_pid_params_pack(0,0,&msg,PID_VEL,params.pid[1].KP,params.pid[1].KI,params.pid[1].KD);
 	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
-	com_send(gmav_send_buf, len);
+	mav_send(gmav_send_buf, len);
 
 	mavlink_msg_pid_params_pack(0,0,&msg,PID_POS,params.pid[2].KP,params.pid[2].KI,params.pid[2].KD);
 	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
-	com_send(gmav_send_buf, len);
+	mav_send(gmav_send_buf, len);
 
 	pid_reset(&params.pid[0]);
 	pid_reset(&params.pid[1]);
@@ -128,7 +128,7 @@ static void tilt_report_callback(uint8_t *ctx){
 	float tilt=0;// = imu_get_tilt() - params.angle_adjusted;
 	mavlink_msg_evt_tilt_pack(0,0,&msg,tilt);
 	uint16_t len = mavlink_msg_to_send_buffer(mav_send_buf, &msg);
-	com_send(mav_send_buf, len);
+	mav_send(mav_send_buf, len);
 }
 
 static void pid_report_callback(uint8_t *ctx){
@@ -143,7 +143,7 @@ static void pid_report_callback(uint8_t *ctx){
 			params.pid[0].D_Part,
 			params.pid[0].U);
 	uint16_t len = mavlink_msg_to_send_buffer(gmav_send_buf, &pid_report_msg);
-	com_send(gmav_send_buf, len);
+	mav_send(gmav_send_buf, len);
 
 	mavlink_msg_pid_report_pack(0,0,&pid_report_msg,PID_VEL,
 			params.pid[1].sp,
@@ -153,7 +153,7 @@ static void pid_report_callback(uint8_t *ctx){
 			params.pid[1].D_Part,
 			params.pid[1].U);
 	len = mavlink_msg_to_send_buffer(gmav_send_buf, &pid_report_msg);
-	com_send(gmav_send_buf, len);
+	mav_send(gmav_send_buf, len);
 
 	mavlink_msg_pid_report_pack(0,0,&pid_report_msg,PID_POS,
 			params.pid[2].sp,
@@ -163,7 +163,7 @@ static void pid_report_callback(uint8_t *ctx){
 			params.pid[2].D_Part,
 			params.pid[2].U);
 	len = mavlink_msg_to_send_buffer(gmav_send_buf, &pid_report_msg);
-	com_send(gmav_send_buf, len);
+	mav_send(gmav_send_buf, len);
 }
 
 

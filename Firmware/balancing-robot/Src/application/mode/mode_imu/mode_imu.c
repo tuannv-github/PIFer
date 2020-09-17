@@ -10,7 +10,7 @@
 TID(gtid_imu_raw);
 TID(gtid_imu_result);
 
-static void imu_raw_callback(uint8_t* ctx){
+static void imu_raw_callback(void* ctx){
 	mavlink_message_t msg;
 	uint8_t gmav_send_buf[256];
 	uint16_t len;
@@ -19,27 +19,27 @@ static void imu_raw_callback(uint8_t* ctx){
 	imu_get_accel_raw(raw);
 	mavlink_msg_evt_accel_raw_pack(0,0,&msg,raw[0],raw[1],raw[2]);
 	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
-	com_send(gmav_send_buf, len);
+	mav_send((char*)gmav_send_buf, len);
 
 	imu_get_gyro_raw(raw);
 	mavlink_msg_evt_gyro_raw_pack(0,0,&msg,raw[0],raw[1],raw[2]);
 	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
-	com_send(gmav_send_buf, len);
+	mav_send((char*)gmav_send_buf, len);
 
 	imu_get_mag_raw(raw);
 	mavlink_msg_evt_mag_raw_pack(0,0,&msg,raw[0],raw[1],raw[2]);
 	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
-	com_send(gmav_send_buf, len);
+	mav_send((char*)gmav_send_buf, len);
 
 	float r = imu_get_roll();
 	float p = imu_get_pitch();
 	float y = imu_get_yaw();
 	mavlink_msg_evt_rpy_pack(0,0,&msg,r,p,y);
 	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
-	com_send(gmav_send_buf, len);
+	mav_send((char*)gmav_send_buf, len);
 }
 
-static void imu_result_callback(uint8_t* ctx){
+static void imu_result_callback(void* ctx){
 	mavlink_message_t msg;
 	uint8_t gmav_send_buf[256];
 	uint16_t len;
@@ -51,7 +51,7 @@ static void imu_result_callback(uint8_t* ctx){
 	raw[2] -= params.gz_offset;
 	mavlink_msg_evt_calibrated_gyro_raw_pack(0,0,&msg,raw[0],raw[1],raw[2]);
 	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
-	com_send(gmav_send_buf, len);
+	mav_send((char*)gmav_send_buf, len);
 
 	float tilt;
 	switch(params.tilt_type){
@@ -67,7 +67,7 @@ static void imu_result_callback(uint8_t* ctx){
 	tilt -= params.tilt_offset;
 	mavlink_msg_evt_tilt_pack(0,0,&msg,tilt);
 	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
-	com_send(gmav_send_buf, len);
+	mav_send((char*)gmav_send_buf, len);
 }
 
 static int load_imu_params(){
@@ -81,11 +81,11 @@ static int load_imu_params(){
 
 	mavlink_msg_gyro_params_pack(0,0,&msg, params.gx_offset, params.gy_offset, params.gz_offset);
 	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
-	com_send(gmav_send_buf, len);
+	mav_send((char*)gmav_send_buf, len);
 
 	mavlink_msg_comp_filter_params_pack(0,0,&msg, params.tilt_type, params.tilt_offset, params.g_believe);
 	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
-	com_send(gmav_send_buf, len);
+	mav_send((char*)gmav_send_buf, len);
 
 	return 0;
 }

@@ -8,7 +8,6 @@
 #ifndef APPLICATION_APP_MAIN_H_
 #define APPLICATION_APP_MAIN_H_
 
-#include <application/com/com.h>
 #include <application/mode/mode_hw/mode_hw.h>
 #include <application/mode/mode_imu/mode_imu.h>
 #include <application/mode/mode_pidt/mode_pidt.h>
@@ -16,6 +15,7 @@
 #include <application/timer/timer.h>
 #include <application/params/params.h>
 #include <application/buzzer/buzzer.h>
+#include <application/mav/mav.h>
 
 void app_main(void);
 
