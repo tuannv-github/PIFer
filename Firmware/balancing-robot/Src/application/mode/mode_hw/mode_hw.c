@@ -9,7 +9,7 @@
 
 timer_id_t gtimerid_speed_report;
 
-static void speed_report_callback(uint8_t* ctx){
+static void speed_report_callback(void* ctx){
 	mavlink_message_t speed_msg;
 	uint8_t gmav_send_buf[256];
 
@@ -18,7 +18,7 @@ static void speed_report_callback(uint8_t* ctx){
 
 	mavlink_msg_motor_speed_pack(0,0,&speed_msg,motor0_enc,motor1_enc);
 	uint16_t len = mavlink_msg_to_send_buffer(gmav_send_buf, &speed_msg);
-	mav_send(gmav_send_buf, len);
+	mav_send((char*)gmav_send_buf, len);
 }
 
 static int motor_speed(mavlink_message_t *msg){
@@ -39,6 +39,8 @@ static int hw_params(mavlink_message_t *msg){
 	if(hw_params_msg.motor1_invert == MAV_TRUE){
 		params.motor1_invert = true;
 	}else params.motor1_invert = false;
+
+	motors_deinit();
 	motors_init();
 
 	if(hw_params_msg.encoder0_invert == MAV_TRUE){
@@ -57,10 +59,10 @@ static int hw_params(mavlink_message_t *msg){
 	params.motor1_pos_deadband = hw_params_msg.motor1_pos_deadband;
 	params.motor1_neg_deadband = hw_params_msg.motor1_neg_deadband;
 
+	enc_deinit();
 	enc_init();
 
 	return 0;
-	respond_ok();
 }
 
 static int load_params(){
@@ -78,7 +80,7 @@ static int load_params(){
 	mavlink_msg_hw_params_pack(0,0,&hw_msg,motor0_invert,motor1_invert,encoder0_invert,encoder1_invert,encoder_ex,
 			params.motor0_pos_deadband, params.motor0_neg_deadband, params.motor1_pos_deadband, params.motor1_neg_deadband);
 	uint16_t len = mavlink_msg_to_send_buffer(gmav_send_buf, &hw_msg);
-	mav_send(gmav_send_buf, len);
+	mav_send((char*)gmav_send_buf, len);
 
 	return 0;
 }

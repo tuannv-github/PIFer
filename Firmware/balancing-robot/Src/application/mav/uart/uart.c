@@ -59,7 +59,7 @@ void uart_cb(void *cxt)
 		if(size > sizeof(uart_drv->tx_dma_buffer)) size = sizeof(uart_drv->tx_dma_buffer);
 		if(size != 0){
 			for(size_t i = 0; i < size; i++){
-				cbuf_get(&uart_drv->tx_cbuf_handle, &uart_drv->tx_dma_buffer[i]);
+				cbuf_get(&uart_drv->tx_cbuf_handle, (char*)&uart_drv->tx_dma_buffer[i]);
 			}
 			uart_drv->tx_completed = false;
 			HAL_UART_Transmit_DMA(uart_drv->huart, uart_drv->tx_dma_buffer, size);
