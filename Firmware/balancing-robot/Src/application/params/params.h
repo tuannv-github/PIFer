@@ -8,9 +8,9 @@
 #ifndef APPLICATION_PARAMS_PARAMS_H_
 #define APPLICATION_PARAMS_PARAMS_H_
 
+#include <application/mav/mavlink/protocol/mavlink.h>
 #include <stdint.h>
 #include <application/pid/pid.h>
-#include <application/com/mavlink/protocol/mavlink.h>
 
 typedef struct{
 	pid_params_t pid[3];

@@ -15,15 +15,8 @@ Com::Com(QWidget *parent) :
     g_serial = new QSerialPort();
     connect(g_serial,  SIGNAL(readyRead()), this, SLOT(serial_data_ready()));
 
-    const QHostAddress &localhost = QHostAddress(QHostAddress::LocalHost);
-    for (const QHostAddress &address: QNetworkInterface::allAddresses()) {
-        if (address.protocol() == QAbstractSocket::IPv4Protocol && address != localhost)
-             ui->tb_server_ip->setText(address.toString());
-    }
-
-    g_tcp_server = new QTcpServer();
-    connect(g_tcp_server, SIGNAL(newConnection()), this, SLOT(new_connection()));
     g_socket = new QTcpSocket();
+    connect(g_socket, SIGNAL(readyRead()), this, SLOT(socket_data_ready()));
 }
 
 Com::~Com()
@@ -31,28 +24,21 @@ Com::~Com()
     delete ui;
 }
 
-void Com::on_btn_open_server_clicked()
+void Com::on_btn_open_socket_clicked()
 {
-    if(g_tcp_server->isListening()){
+    if(g_socket->isOpen()){
+        ui->btn_open_socket->setText("Open");
         ui->tb_server_ip->setEnabled(true);
         ui->tb_server_port->setEnabled(true);
-        ui->btn_open_server->setText("Open");
-        if(g_socket->isOpen()) g_socket->close();
-        ui->tb_connected_ip->setText("");
-        g_tcp_server->close();
-        emit connection_evt(TCP_SERVER_CLOSED);
+        g_socket->close();
     }
     else{
-        if(g_tcp_server->listen(QHostAddress::Any, static_cast<quint16>(ui->tb_server_port->text().toInt()))){
-            ui->tb_server_ip->setEnabled(false);
-            ui->tb_server_port->setEnabled(false);
-            ui->btn_open_server->setText("Close");
-            emit connection_evt(TCP_SERVER_OPEN_SUCCESS);
-        }
-        else{
-            emit connection_evt(TCP_SERVER_OPEN_FAIL);
-        }
+        g_socket->connectToHost(QHostAddress(ui->tb_server_ip->text()), static_cast<quint16>(ui->tb_server_port->text().toInt()));
+        ui->btn_open_socket->setText("Close");
+        ui->tb_server_ip->setEnabled(false);
+        ui->tb_server_port->setEnabled(false);
     }
+
 }
 
 void Com::on_btn_open_com_clicked()
@@ -98,17 +84,6 @@ void Com::serial_data_ready()
     emit ba_recv(ba);
 }
 
-void Com::new_connection(){
-    if(!g_socket->isOpen()){
-        g_socket = g_tcp_server->nextPendingConnection();
-        connect(g_socket, SIGNAL(readyRead()), this, SLOT(socket_data_ready()));
-        connect(g_socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(socket_state_changed(QAbstractSocket::SocketState)));
-        g_tcp_server->pauseAccepting();
-        ui->tb_connected_ip->setText(g_socket->peerAddress().toString());
-        emit connection_evt(SOCKET_CONNECTION_OPEN);
-    }
-}
-
 void Com::socket_data_ready(){
     const QByteArray ba = g_socket->readAll();
 
@@ -122,15 +97,6 @@ void Com::socket_data_ready(){
     }
 
     emit ba_recv(ba);
-}
-
-void Com::socket_state_changed(QAbstractSocket::SocketState socketState){
-    if(g_socket->isOpen() && socketState==QAbstractSocket::SocketState::ClosingState){
-        g_socket->close();
-        g_tcp_server->resumeAccepting();
-        ui->tb_connected_ip->setText("");
-        emit connection_evt(SOCKET_CONNECTION_CLOSE);
-    }
 }
 
 Com::com_send_t Com::send(QByteArray bytes){
@@ -196,4 +162,3 @@ void Com::led_indicator_off(){
 void Com::gui_send(QByteArray ba){
     send(ba);
 }
-

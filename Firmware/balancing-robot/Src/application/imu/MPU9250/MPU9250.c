@@ -11,13 +11,13 @@ float g_lsb_per_dpfs;
 float g_lsb_per_g;
 float g_microTesla_per_LSB;
 
-static int mpu6500_read(uint8_t addr, uint8_t* value){
+static int mpu6500_read(uint8_t addr, uint8_t *value){
 	if(HAL_I2C_Mem_Read(&MPU9250_I2C, MPU9250_I2C_ADDR, addr, 1, value, 1, I2C_TIMEOUT_MS) != HAL_OK)
 		return -1;
 	return 0;
 }
 
-static int mpu6500_write(uint8_t addr, uint8_t* value){
+static int mpu6500_write(uint8_t addr, uint8_t *value){
 	if(HAL_I2C_Mem_Write(&MPU9250_I2C, MPU9250_I2C_ADDR, addr, 1, value, 1, I2C_TIMEOUT_MS) != HAL_OK)
 		return -1;
 	uint8_t tmp;
@@ -34,20 +34,20 @@ static int mpu6500_read_bytes(uint8_t addr, uint8_t* value, uint8_t len){
 	return 0;
 }
 
-static int mpu6500_write_bytes(uint8_t addr, uint8_t* value, uint8_t len){
-	if(HAL_I2C_Mem_Write(&MPU9250_I2C, MPU9250_I2C_ADDR, addr, 1, value, len, I2C_TIMEOUT_MS) != HAL_OK)
-		return -1;
-	return 0;
-}
+//static int mpu6500_write_bytes(uint8_t addr, uint8_t* value, uint8_t len){
+//	if(HAL_I2C_Mem_Write(&MPU9250_I2C, MPU9250_I2C_ADDR, addr, 1, value, len, I2C_TIMEOUT_MS) != HAL_OK)
+//		return -1;
+//	return 0;
+//}
 
-static int mpu6500_read_mask(uint8_t addr, uint8_t* value, uint8_t mask){
-	if(HAL_I2C_Mem_Read(&MPU9250_I2C, MPU9250_I2C_ADDR, addr, 1, value, 1, I2C_TIMEOUT_MS) != HAL_OK){
-		*value = 0;
-		return -1;
-	}
-	*value &= mask;
-	return 0;
-}
+//static int mpu6500_read_mask(uint8_t addr, uint8_t* value, uint8_t mask){
+//	if(HAL_I2C_Mem_Read(&MPU9250_I2C, MPU9250_I2C_ADDR, addr, 1, value, 1, I2C_TIMEOUT_MS) != HAL_OK){
+//		*value = 0;
+//		return -1;
+//	}
+//	*value &= mask;
+//	return 0;
+//}
 
 static int mpu6500_write_mask(uint8_t addr, uint8_t* value, uint8_t mask){
 	uint8_t tmp;
@@ -55,15 +55,16 @@ static int mpu6500_write_mask(uint8_t addr, uint8_t* value, uint8_t mask){
 	tmp &= ~mask;
 	tmp += (*value & mask);
 	if(mpu6500_write(addr, &tmp) < 0) return -1;
+	return 0;
 }
 
 static void ak8963_read(uint8_t addr, uint8_t* value){
 	HAL_I2C_Mem_Read(&MPU9250_I2C, AK8963_I2C_ADDR, addr, 1, value, 1, I2C_TIMEOUT_MS);
 }
 
-static void ak8963_write(uint8_t addr, uint8_t* value){
-	HAL_I2C_Mem_Write(&MPU9250_I2C, AK8963_I2C_ADDR, addr, 1, value, 1, I2C_TIMEOUT_MS);
-}
+//static void ak8963_write(uint8_t addr, uint8_t* value){
+//	HAL_I2C_Mem_Write(&MPU9250_I2C, AK8963_I2C_ADDR, addr, 1, value, 1, I2C_TIMEOUT_MS);
+//}
 
 int mpu9250_init(gyro_params_t gyro_params, accel_params_t accel_params, mag_params_t mag_params){
 	uint8_t tmp;

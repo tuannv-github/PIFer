@@ -13,9 +13,9 @@
 #include <application/params/params.h>
 #include <application/user_define.h>
 
-#include <application/com/com.h>
 #include <application/imu/imu.h>
 #include <application/encoder/encoder.h>
+#include <application/mav/mav.h>
 #include <application/motors/motors.h>
 
 #endif /* APPLICATION_MODE_MODE_COMMON_H_ */

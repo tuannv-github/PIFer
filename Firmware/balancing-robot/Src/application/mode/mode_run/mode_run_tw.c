@@ -24,7 +24,7 @@ TID(gtid_imu_tilt);
 
 static float tilt_setpoint;
 
-static void tilt_controller_callback(uint8_t* ctx){
+static void tilt_controller_callback(void* ctx){
 	float tilt;
 	switch(params.tilt_type){
 	case ROLL:
@@ -48,7 +48,7 @@ static void tilt_controller_callback(uint8_t* ctx){
 	motors_setspeed(MOTOR_1, speed + (float)gcmd_velocity.omega*OMEGA_COEFF);
 }
 
-static void vel_controller_callback(uint8_t* ctx){
+static void vel_controller_callback(void *ctx){
 	if(gcmd_velocity.cnt == 0){
 		gcmd_velocity.vx = 0;
 		gcmd_velocity.omega = 0;
@@ -64,7 +64,7 @@ static void vel_controller_callback(uint8_t* ctx){
 	tilt_setpoint = pid_compute(&params.pid[1], gcmd_velocity.vx*VELOC_COEFF, direction, 0.001f*VEL_CONTROLLER_PERIOD);
 }
 
-static void tilt_report_callback(uint8_t *ctx){
+static void tilt_report_callback(void *ctx){
 	mavlink_message_t msg;
 	uint8_t mav_send_buf[256];
 
@@ -83,7 +83,7 @@ static void tilt_report_callback(uint8_t *ctx){
 
 	mavlink_msg_evt_tilt_pack(0,0,&msg,tilt);
 	uint16_t len = mavlink_msg_to_send_buffer(mav_send_buf, &msg);
-	com_send(mav_send_buf, len);
+	mav_send((char*)mav_send_buf, len);
 }
 
 void mode_run_init(){
@@ -94,6 +94,12 @@ void mode_run_init(){
 
 	params.pid[1].maxIPart = 5;
 	params.pid[1].minIpart = -5;
+
+	params.pid[1].maxDPart = 5;
+	params.pid[1].minDpart = -5;
+
+	params.pid[1].maxOut = 5;
+	params.pid[1].minOut = -5;
 
 	pid_reset(&params.pid[0]);
 	pid_reset(&params.pid[1]);
