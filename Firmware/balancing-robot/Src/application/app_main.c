@@ -58,7 +58,7 @@ static void on_mavlink_recv(mavlink_message_t *msg){
 		// Initialize new mode
 		gmode_init();
 
-		// Response ok
+		// Response OK
 		respond_ok();
 	}
 	else{

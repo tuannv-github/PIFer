@@ -187,6 +187,12 @@ void mode_pidt_init(){
 	params.pid[1].maxIPart = 5;
 	params.pid[1].minIpart = -5;
 
+	params.pid[1].maxDPart = 5;
+	params.pid[1].minDpart = -5;
+
+	params.pid[1].maxOut = 5;
+	params.pid[1].minOut = -5;
+
 	pid_reset(&params.pid[0]);
 	pid_reset(&params.pid[1]);
 	pid_reset(&params.pid[2]);
