@@ -79,9 +79,9 @@
 #define RPY_REPORT_PERIOD			100
 #define TILT_REPORT_PERIOD			100
 #define CONTROL_TIMEOUT_MS			1000
-#define VX_TO_TILT					0.04
-#define OMEGA_COEFF					200.0
-#define VELOC_COEFF					200.0
+#define VX_TO_TILT					0.04f
+#define OMEGA_COEFF					200.0f
+#define VELOC_COEFF					150.0f
 
 // ROBOT_MODEL_TANK general define
 #define WHEEL_PERIOD				50

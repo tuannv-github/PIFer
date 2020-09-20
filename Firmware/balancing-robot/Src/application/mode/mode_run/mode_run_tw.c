@@ -14,6 +14,7 @@ typedef struct{
 	float vy;
 	float omega;
 	uint8_t cnt;
+	bool is_dir_change;
 }cmd_velocity_t;
 
 static cmd_velocity_t gcmd_velocity;
@@ -39,13 +40,15 @@ static void tilt_controller_callback(void* ctx){
 	tilt -= params.tilt_offset;
 
 	float speed = pid_compute(&params.pid[0], tilt_setpoint, tilt, 0.001f*TILT_CONTROLLER_PERIOD);
+
 	if(tilt > 70 || tilt < -70) {
 		speed = 0;
 		pid_reset(&params.pid[0]);
 		pid_reset(&params.pid[1]);
 	}
-	motors_setspeed(MOTOR_0, speed - (float)gcmd_velocity.omega*OMEGA_COEFF);
-	motors_setspeed(MOTOR_1, speed + (float)gcmd_velocity.omega*OMEGA_COEFF);
+
+	motors_setspeed(MOTOR_0, speed + (float)gcmd_velocity.omega*OMEGA_COEFF);
+	motors_setspeed(MOTOR_1, speed - (float)gcmd_velocity.omega*OMEGA_COEFF);
 }
 
 static void vel_controller_callback(void *ctx){
@@ -67,7 +70,6 @@ static void vel_controller_callback(void *ctx){
 static void tilt_report_callback(void *ctx){
 	mavlink_message_t msg;
 	uint8_t mav_send_buf[256];
-
 	float tilt;
 	switch(params.tilt_type){
 	case ROLL:
@@ -80,14 +82,12 @@ static void tilt_report_callback(void *ctx){
 		tilt = 0;
 	}
 	tilt -= params.tilt_offset;
-
 	mavlink_msg_evt_tilt_pack(0,0,&msg,tilt);
 	uint16_t len = mavlink_msg_to_send_buffer(mav_send_buf, &msg);
 	mav_send((char*)mav_send_buf, len);
 }
 
 void mode_run_init(){
-	// Hardware initialization
 	motors_init();
 	enc_init();
 	imu_init();
@@ -130,10 +130,13 @@ void on_mode_run_mavlink_recv(mavlink_message_t *msg){
 			mavlink_cmd_velocity_t cmd_velocity;
 			mavlink_msg_cmd_velocity_decode(msg, &cmd_velocity);
 
-			gcmd_velocity.vx = cmd_velocity.v;
+			if(cmd_velocity.v > -0.15 && cmd_velocity.v < 0.15) cmd_velocity.v = 0;
+			if(cmd_velocity.v*gcmd_velocity.vx <= 0) gcmd_velocity.is_dir_change = true;
+			gcmd_velocity.vx += 0.5*(cmd_velocity.v-gcmd_velocity.vx);
 			if(gcmd_velocity.vx > 1) gcmd_velocity.vx=1;
 			if(gcmd_velocity.vx < -1) gcmd_velocity.vx=-1;
 
+			if(cmd_velocity.omega > -0.15 && cmd_velocity.omega < 0.15) cmd_velocity.omega=0;
 			gcmd_velocity.omega = cmd_velocity.omega;
 			if(gcmd_velocity.omega > 1) gcmd_velocity.omega=1;
 			if(gcmd_velocity.omega < -1) gcmd_velocity.omega=-1;
