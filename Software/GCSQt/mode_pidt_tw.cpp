@@ -80,7 +80,7 @@ void Mode_pidt_tw::pid_plot(uint32_t len, QVector<QVector<double>> q, QCustomPlo
     }
 
     q_custom_plot->xAxis->setRange(len-PID_VECTOR_LEN, len);
-    q_custom_plot->yAxis->setRange(min_y-5,max_y+5);
+    q_custom_plot->yAxis->setRange(min_y-2,max_y+2);
 
     for (int i=1; i < q.size(); i++) {
         q_custom_plot->graph(i)->setData(q[0],q[i]);
