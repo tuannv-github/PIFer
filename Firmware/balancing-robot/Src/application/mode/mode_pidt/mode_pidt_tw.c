@@ -182,19 +182,18 @@ static void pid_report_callback(void *ctx){
 
 
 void mode_pidt_init(){
-	// Hardware initialization
 	motors_init();
 	enc_init();
 	imu_init();
 
-	params.pid[1].maxIPart = 1;
-	params.pid[1].minIpart = -1;
+	params.pid[1].maxIPart = 5;
+	params.pid[1].minIpart = -5;
 
-	params.pid[1].maxDPart = 1;
-	params.pid[1].minDpart = -1;
+	params.pid[1].maxDPart = 5;
+	params.pid[1].minDpart = -5;
 
-	params.pid[1].maxOut = 2;
-	params.pid[1].minOut = -2;
+	params.pid[1].maxOut = 5;
+	params.pid[1].minOut = -5;
 
 	pid_reset(&params.pid[0]);
 	pid_reset(&params.pid[1]);

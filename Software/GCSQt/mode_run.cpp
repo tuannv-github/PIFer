@@ -46,10 +46,8 @@ void Mode_run::remote_controll_cmd(){
     uint8_t mav_send_buf[255];
     float VX = ui->txtb_pidt_vx->text().toFloat();
     float OMEGA = ui->txtb_pidt_w->text().toFloat();
-
     mavlink_msg_cmd_velocity_pack(0,0,&msg,VX,OMEGA);
     uint16_t len = mavlink_msg_to_send_buffer(mav_send_buf, &msg);
-
     emit mav_send(QByteArray::fromRawData(reinterpret_cast<char*>(mav_send_buf),len));
 }
 
@@ -75,7 +73,7 @@ void Mode_run::on_btn_change_mode_run_clicked()
 void Mode_run::update_joystick(axis_t axis, double value){
     switch (axis){
     case AXIS_0:
-        ui->txtb_pidt_w->setText(QString::number(-value));
+        ui->txtb_pidt_w->setText(QString::number(value));
         break;
     case AXIS_1:
         ui->txtb_pidt_vx->setText(QString::number(value));
