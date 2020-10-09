@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import com.MAVLink.MAVLinkPacket;
+import com.MAVLink.protocol.msg_cmd_velocity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +17,8 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -37,6 +41,7 @@ import java.net.UnknownHostException;
 import io.github.controlwear.virtual.joystick.android.JoystickView;
 
 import static android.app.PendingIntent.getActivity;
+import static android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -63,10 +68,23 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar pgbConnecting;
     TextView tvConnecting;
 
+    TextView tvX;
+    TextView tvY;
+
+    msg_cmd_velocity msg_cmd_velocity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        final int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+
+        this.getWindow().setFlags(flags,flags);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
@@ -77,6 +95,9 @@ public class MainActivity extends AppCompatActivity {
 
         pgbConnecting = findViewById(R.id.pgbConnecting);
         tvConnecting = findViewById(R.id.tvConnecting);
+
+        tvX = findViewById(R.id.tvX);
+        tvY = findViewById(R.id.tvY);
 
         serverIP = sharedPreferences.getString("serverIP", "10.0.2.2");
         serverPort = sharedPreferences.getInt("serverPort", 9999);
@@ -93,9 +114,36 @@ public class MainActivity extends AppCompatActivity {
         socketClientThread.start();
 
         joystickLeft = findViewById(R.id.joystickView_left);
+        joystickLeft.setOnMoveListener(new JoystickView.OnMoveListener() {
+            @Override
+            public void onMove(int angle, int strength) {
+                int yi = joystickLeft.getNormalizedY();
+                yi = Math.min(yi, 100);
+                yi = Math.max(yi, 0);
+                yi -= 50;
+                float yf = (float)yi /50.0f;
+                tvY.setText(String.valueOf(yf));
+            }
+        });
+        joystickLeft.setFixedCenter(false);
+
         joystickRight = findViewById(R.id.joystickView_right);
+        joystickRight.setOnMoveListener(new JoystickView.OnMoveListener() {
+            @Override
+            public void onMove(int angle, int strength) {
+                int xi = joystickRight.getNormalizedX();
+                xi = Math.min(xi, 100);
+                xi = Math.max(xi, 0);
+                xi -= 50;
+                float xf = (float)xi /50.0f;
+                tvX.setText(String.valueOf(xf));
+            }
+        });
+        joystickRight.setFixedCenter(false);
 
         dialogInit();
+
+        msg_cmd_velocity = new msg_cmd_velocity();
     }
 
     public void dialogInit(){
@@ -210,10 +258,26 @@ public class MainActivity extends AppCompatActivity {
                 while (true) {
                     try {
                         Thread.sleep(100);
-                        @SuppressLint("DefaultLocale") String str = String.format("%03d:%03d\n",
-                                joystickRight.getNormalizedX(),
-                                joystickLeft.getNormalizedY());
-                        out.print(str);
+
+                        int xi = joystickRight.getNormalizedX();
+                        int yi = joystickLeft.getNormalizedY();
+                        xi = Math.min(xi, 100);
+                        xi = Math.max(xi, 0);
+                        yi = Math.min(yi, 100);
+                        yi = Math.max(yi, 0);
+                        xi -= 50;
+                        yi -= 50;
+                        float xf = (float)xi /50.0f;
+                        float yf = (float)yi /50.0f;
+
+                        msg_cmd_velocity.v = yf;
+                        msg_cmd_velocity.omega = xf;
+                        MAVLinkPacket mavLinkPacket = msg_cmd_velocity.pack();
+
+                        @SuppressLint("DefaultLocale") String str = String.format("%03d:%03d\n", xi, yi);
+                        String s = new String(mavLinkPacket.encodePacket());
+                        char[] chars = s.toCharArray();
+                        out.write(chars);
                         out.flush();
                         if(out.checkError()){
                             Log.d("SocketClientThread", "run: Socket closed");
