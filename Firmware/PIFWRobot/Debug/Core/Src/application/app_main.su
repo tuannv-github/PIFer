@@ -1,0 +1,8 @@
+mavlink_msg_cmd_change_mode.h:204:20:mavlink_msg_cmd_change_mode_decode	24	static
+app_main.c:20:6:app_reset	24	static
+app_main.c:25:6:app_run_init	16	static
+app_main.c:28:6:app_run_deinit	16	static
+app_main.c:31:6:app_run_on_msg_recv	16	static
+app_main.c:35:6:LED_Callback	16	static
+app_main.c:42:13:on_mavlink_recv	24	static
+app_main.c:79:6:app_main	8	static

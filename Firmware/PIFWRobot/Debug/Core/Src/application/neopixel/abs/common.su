@@ -1,0 +1,5 @@
+common.c:16:6:neopixel_set_brightness	16	static
+common.c:20:6:neopixel_set_color	24	static
+common.c:24:6:neopixel_set_color32	16	static
+common.c:28:10:neopixel_get_color32	16	static
+common.c:32:6:neopixel_show	8	static

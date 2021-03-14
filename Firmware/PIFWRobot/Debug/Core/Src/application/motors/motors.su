@@ -1,0 +1,7 @@
+motors.c:26:6:motors_init	8	static
+motors.c:46:6:motors_deinit	8	static
+motors.c:54:13:motor0_setspeed	16	static
+motors.c:64:13:motor0_setspeed_invert	16	static
+motors.c:74:13:motor1_setspeed	16	static
+motors.c:84:13:motor1_setspeed_invert	16	static
+motors.c:94:6:motors_setspeed	16	static
