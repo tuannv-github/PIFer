@@ -1,4 +1,0 @@
-params.c:75:13:write	24	static
-params.c:80:13:read	16	static
-params.c:85:6:params_save	32	static
-params.c:147:6:params_load	8	static

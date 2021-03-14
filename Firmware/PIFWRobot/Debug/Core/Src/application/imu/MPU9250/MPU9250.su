@@ -1,9 +1,0 @@
-MPU9250.c:14:12:mpu6500_read	32	static
-MPU9250.c:20:12:mpu6500_write	40	static
-MPU9250.c:29:12:mpu6500_read_bytes	32	static
-MPU9250.c:52:12:mpu6500_write_mask	24	static
-MPU9250.c:61:13:ak8963_read	32	static
-MPU9250.c:69:5:mpu9250_init	24	static
-MPU9250.c:151:5:mpu9250_test	16	static
-MPU9250.c:163:5:mpu9250_get_accel_gyro	40	static
-MPU9250.c:179:5:mpu9250_get_mag	24	static

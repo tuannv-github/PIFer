@@ -1,7 +1,0 @@
-circular_buffer.c:8:6:cbuf_init	24	static
-circular_buffer.c:15:6:cbuf_reset	16	static
-circular_buffer.c:22:5:cbuf_put	16	static
-circular_buffer.c:34:5:cbuf_get	16	static
-circular_buffer.c:46:6:cbuf_empty	16	static
-circular_buffer.c:51:6:cbuf_full	16	static
-circular_buffer.c:56:8:cbuf_size	24	static

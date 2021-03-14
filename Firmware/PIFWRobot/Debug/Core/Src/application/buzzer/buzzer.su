@@ -1,4 +1,0 @@
-buzzer.c:20:6:buzzer_cb	16	static
-buzzer.c:34:6:buzzer_sys_start	8	static
-buzzer.c:44:6:buzzer_sys_error	8	static
-buzzer.c:49:6:buzzer_sys_ok	4	static

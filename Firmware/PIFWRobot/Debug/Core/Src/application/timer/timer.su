@@ -1,6 +1,0 @@
-timer.c:13:5:timer_init	8	static
-timer.c:18:12:timer_register_callback	32	static
-timer.c:33:6:timer_unregister_callback	16	static
-timer.c:38:10:milis	16	static
-timer.c:42:6:user_systick	16	static
-timer.c:56:6:HAL_TIM_PeriodElapsedCallback	16	static
