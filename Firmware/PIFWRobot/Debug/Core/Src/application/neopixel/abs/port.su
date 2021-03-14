@@ -1,0 +1,7 @@
+port.c:20:23:scale8	16	static
+port.c:25:6:led_set_RGB	24	static
+port.c:38:10:led_get_RGB	24	static
+port.c:54:6:led_set_RGBW	24	static
+port.c:62:6:led_render	16	static
+port.c:97:6:HAL_TIM_PWM_PulseFinishedHalfCpltCallback	24	static
+port.c:125:6:HAL_TIM_PWM_PulseFinishedCallback	24	static
