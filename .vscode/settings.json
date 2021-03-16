@@ -1,3 +1,20 @@
 {
-    "python.pythonPath": "E:\\Python\\3.8.5\\python.exe"
+    "python.pythonPath": "/usr/bin/python",
+    "files.associations": {
+        "random": "c",
+        "cmath": "c",
+        "complex": "c"
+    },
+    "cSpell.words": [
+        "covc",
+        "dcontrol",
+        "gsgt",
+        "vsvt"
+    ],
+    "python.autoComplete.extraPaths": [
+        "/opt/ros/foxy/lib/python3.8/site-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/opt/ros/foxy/lib/python3.8/site-packages"
+    ]
 }

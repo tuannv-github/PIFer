@@ -1,0 +1,503 @@
+\documentclass[oneside, 12pt, a4paper]{book}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+\usepackage{amsmath}
+
+\providecommand{\main}{.}
+
+\begin{document}
+\chapter{EKF}
+
+\section{Prediction}
+\begin{equation}
+    \begin{split}
+        \bar{\mu}_t &= g(\mu_{t-1}, u_t) \\
+        \bar{\Sigma}_t &= G_t \Sigma_{t-1} G_t^T + R_t = G_t \Sigma_{t-1} G_t^T + V_t \Sigma_{control} V_t^T 
+    \end{split}
+\end{equation}
+
+\begin{equation}
+    \begin{split}
+    \mu_t &= \begin{bmatrix} x & y & \theta \end{bmatrix}^T\\
+    u_t &= \begin{bmatrix}l & r \end{bmatrix}^T\\
+    \end{split}
+\end{equation}
+
+\begin{equation}
+    \begin{split}
+        \alpha &= \frac{r-l}{w} \\
+        R &= \frac{l}{\alpha} = \frac{lw}{r-l}\\
+    \end{split}
+\end{equation}
+
+$r \neq l$:
+\begin{equation}
+    g(\mu, u) = 
+    \begin{bmatrix}
+        x \\ y \\ \theta
+    \end{bmatrix}
+    +
+    \begin{bmatrix}
+        (R+w/2)(\sin{(\theta + \alpha)} - \sin{\theta}) \\
+        (R+w/2)(-\cos{(\theta + \alpha)} + \cos{\theta}) \\
+        \alpha \\
+    \end{bmatrix}\\
+\end{equation}
+
+$r = l$:
+\begin{equation}
+    g(\mu, u) = 
+    \begin{bmatrix}
+        x \\ y \\ \theta
+    \end{bmatrix}
+    +
+    \begin{bmatrix}
+        l \cos(\theta) \\
+        l \sin(\theta) \\
+        0 \\
+    \end{bmatrix}\\
+\end{equation}
+
+\begin{equation}
+    \begin{split}
+        G &= \frac{\partial g}{\partial state} \\
+    \end{split}
+\end{equation}
+
+\begin{equation}
+    \frac{\partial g_1}{\partial x} = 1 \qquad
+    \frac{\partial g_1}{\partial y} = 0 \qquad
+    \frac{\partial g_1}{\partial \theta} = (R+w/2)(\cos{(\theta + \alpha)} - \cos{\theta}) = M
+\end{equation}
+
+\begin{equation}
+    \frac{\partial g_2}{\partial x} = 0 \qquad
+    \frac{\partial g_2}{\partial y} = 1 \qquad
+    \frac{\partial g_2}{\partial \theta} = (R+w/2)(\sin{(\theta + \alpha)} - \sin{\theta}) = N
+\end{equation}
+
+\begin{equation}
+    \frac{\partial g_3}{\partial x} = 0 \qquad
+    \frac{\partial g_3}{\partial y} = 0 \qquad
+    \frac{\partial g_3}{\partial \theta} = 1
+\end{equation}
+
+$l = r$:
+\begin{equation}
+    \begin{split}
+        M &= -l\sin{\theta}\\
+        N &= l\cos{\theta}  
+    \end{split}
+\end{equation}
+
+\begin{equation}
+    \frac{\partial g}{\partial state} = \begin{bmatrix}
+        1 & 0 & M \\
+        0 & 1 & N \\
+        0 & 0 & 1 \\ 
+    \end{bmatrix}\\
+\end{equation}
+
+
+r != l:
+
+\begin{equation}
+    \begin{split}
+        A &= \frac{\partial g_1}{\partial l} = \frac{wr}{(r-l)^2}(\sin(\theta + \alpha) - \sin{\theta}) - \frac{r+l}{2(r-l)}\cos(\theta + \alpha)\\
+        B &= \frac{\partial g_2}{\partial l} = \frac{wr}{(r-l)^2}(-\cos(\theta + \alpha) + \cos{\theta}) - \frac{r+l}{2(r-l)}\sin(\theta + \alpha)\\
+        C &= \frac{\partial g_3}{\partial l} = \frac{-1}{w}
+    \end{split}
+\end{equation}
+
+\begin{equation}
+    \begin{split}
+        D &= \frac{\partial g_1}{\partial r} = \frac{-wl}{(r-l)^2}(\sin(\theta + \alpha) - \sin{\theta}) + \frac{r+l}{2(r-l)}\cos(\theta + \alpha)\\
+        E &= \frac{\partial g_2}{\partial r} = \frac{-wl}{(r-l)^2}(-\cos(\theta + \alpha) + \cos{\theta}) + \frac{r+l}{2(r-l)}\sin(\theta + \alpha)\\
+        F &= \frac{\partial g_3}{\partial r} = \frac{1}{w}
+    \end{split}
+\end{equation}
+
+r = l:
+
+\begin{equation}
+    \begin{split}
+        A &= \frac{1}{2}(\cos\theta+\frac{l}{w}\sin\theta)\\
+        B &= \frac{1}{2}(\sin\theta-\frac{l}{w}\cos\theta)\\
+        C &= \frac{-1}{w}
+    \end{split}
+\end{equation}
+
+\begin{equation}
+    \begin{split}
+        D &= \frac{1}{2}(\cos\theta - \frac{l}{w}\sin\theta)\\
+        E &= \frac{1}{2}(\sin\theta + \frac{l}{w}\cos\theta)\\
+        F &= \frac{\partial g_3}{\partial r} = \frac{1}{w}
+    \end{split}
+\end{equation}
+
+\begin{equation}
+    \begin{split}
+        V^T = \begin{bmatrix}
+            A & B & C \\
+            D & E & F
+        \end{bmatrix}
+    \end{split}
+\end{equation}
+
+\begin{equation}
+    \begin{split}
+        &G_t \Sigma_{t-1} G_t^T \\
+        &= \begin{bmatrix}
+            1 & 0 & g_{02} \\
+            0 & 1 & g_{12} \\
+            0 & 0 & 1 \\ 
+        \end{bmatrix}
+        \begin{bmatrix}
+            s_{00} & s_{01} & s_{02}\\
+            s_{10} & s_{11} & s_{12}\\
+            s_{20} & s_{21} & s_{22}\\ 
+        \end{bmatrix}
+        \begin{bmatrix}
+            1 & 0 & 0\\
+            0 & 1 & 0\\
+            g_{02} & g_{12} & 1\\ 
+        \end{bmatrix}\\
+        &= 
+        \begin{bmatrix}
+            s_{00}+g_{02}s_{20} & s_{01} + g_{02}s_{21} & s_{02} + g_{02}s_{22}\\
+            s_{10} + g_{12}s_{20} & s_{11} + g_{12}s_{21} & s_{12} + g_{12}s_{22}\\
+            s_{20} & s_{21} & s_{22}\\
+        \end{bmatrix}
+        \begin{bmatrix}
+            1 & 0 & 0\\
+            0 & 1 & 0\\
+            g_{02} & g_{12} & 1\\ 
+        \end{bmatrix}\\
+        &= \begin{bmatrix}
+            s_{00}+ g_{02}s_{20} + g_{02}s_{02} + g_{02}^2s_{22}& s_{01} + g_{02}s_{21} + g_{12}s_{02} + g_{02}g_{12}s_{22}& s_{02} + g_{02}s_{22}\\
+            s_{10} + g_{12}s_{20} + g_{02}s_{12} + g_{02}g_{12}s_{22} & s_{11} + g_{12}s_{21} + g_{12}s_{12} + g_{12}^2s_{22}& s_{12} + g_{12}s_{22}\\
+            s_{20} + g_{02}s_{22} & s_{21} + g_{12}s_{22} & s_{22}\\
+        \end{bmatrix}\\
+        &= \begin{bmatrix}
+            s_{00}+ 2g_{02}s_{02} + g_{02}^2s_{22} & s_{01} + g_{02}s_{12} + g_{12}s_{02} + g_{02}g_{12}s_{22} & s_{02} + g_{02}s_{22}\\
+            s_{01} + g_{02}s_{12} + g_{12}s_{02} + g_{02}g_{12}s_{22} & s_{11} + 2g_{12}s_{12} + g_{12}^2s_{22}& s_{12} + g_{12}s_{22}\\
+            s_{02} + g_{02}s_{22} & s_{12} + g_{12}s_{22} & s_{22}\\
+        \end{bmatrix}
+    \end{split}
+\end{equation}
+
+\begin{equation}
+    \begin{split}
+        R^T &= V \Sigma_{control} V^T \\
+        &=\begin{bmatrix}
+            V_{00} & V_{01}\\
+            V_{10} & V_{11}\\
+            V_{20} & V_{21}\\
+        \end{bmatrix}
+        \begin{bmatrix}
+            A & 0\\
+            0 & B
+        \end{bmatrix}
+        \begin{bmatrix}
+            V_{00} & V_{10} & V_{20} \\
+            V_{01} & V_{11} & V_{21}
+        \end{bmatrix}\\
+        &=\begin{bmatrix}
+            V_{00}A^2 & V_{01}B^2\\
+            V_{10}A^2 & V_{11}B^2\\
+            V_{20}A^2 & V_{21}B^2\\
+        \end{bmatrix}
+        \begin{bmatrix}
+            V_{00} & V_{10} & V_{20}\\
+            V_{01} & V_{11} & V_{21}
+        \end{bmatrix}\\
+        &= \begin{bmatrix}
+            V_{00}^2A^2 + V_{01}^2B^2 & V_{00}V_{10}A^2 + V_{01}V_{11}B^2 & V_{00}V_{20}A^2 + V_{01}V_{21}B^2 \\
+            V_{10}V_{00}A^2 + V_{11}V_{01}B^2 & V_{10}^2A^2 + V_{11}^2B^2 &V_{10}V_{20}A^2 + V_{11}V_{21}B^2 \\
+            V_{20}V_{00}A^2 + V_{21}V_{01}B^2 & V_{20}V_{10}A^2 + V_{21}V_{11}B^2 & V_{20}^2A^2 + V_{21}^2B^2 \\
+        \end{bmatrix}
+    \end{split}
+\end{equation}
+
+\section{Correction}
+
+\begin{equation}
+    h(x,y,\theta, x_1, y_1) = 
+    \begin{cases}
+        r = \sqrt{(x_1 - x_l)^2 + (y_1-y_l)^2} = \sqrt{\Delta x_1^2 + \Delta y_1^2}\\
+        \theta' = \theta
+      \end{cases}
+\end{equation}
+
+\begin{equation}
+    \begin{split}
+        H &= \frac{\partial h}{\partial state}\\
+        &= 
+        \begin{bmatrix}
+            \frac{\partial r}{\partial x} & \frac{\partial r}{\partial y} & \frac{\partial r}{\partial \theta}\\
+            \frac{\partial \theta'}{\partial x} & \frac{\partial \theta'}{\partial y} & \frac{\partial \theta'}{\partial \theta}
+        \end{bmatrix}\\
+        &=
+        \begin{bmatrix}
+            \frac{-\Delta x}{r} & \frac{-\Delta y}{r} & \frac{d}{r} (\Delta x\sin\theta - \Delta y\cos\theta) \\
+            0 & 0 & 1
+        \end{bmatrix}\\
+        &=
+        \begin{bmatrix}
+            H_{00} & H_{01} & H_{02} \\
+            0 & 0 & 1
+        \end{bmatrix}
+    \end{split}
+\end{equation}
+
+\begin{equation}
+    \begin{split}
+        K_t &= \bar{\Sigma}_t H_t^T(H_t \bar{\Sigma}_t H_t^T + Q)^{-1} \\ 
+    \end{split}
+\end{equation}
+
+\begin{equation}
+    \begin{split}
+        \bar{\Sigma}_t H_t^T &= 
+        \begin{bmatrix}
+            s_{00} & s_{01} & s_{02}\\
+            s_{10} & s_{11} & s_{12}\\
+            s_{20} & s_{21} & s_{22}\\ 
+        \end{bmatrix}
+        \begin{bmatrix}
+            H_{00} & H_{10}\\
+            H_{01} & H_{11}\\ 
+            H_{02} & H_{12}\\
+        \end{bmatrix}\\
+        &= 
+        \begin{bmatrix}
+            M_{00} & M_{01}\\
+            M_{10} & M_{11}\\ 
+            M_{20} & M_{21}\\
+        \end{bmatrix}
+    \end{split}
+\end{equation}
+
+\begin{equation}
+    \begin{split}
+        M_{00} &= s_{00}H_{00} + s_{01}H_{01} + s_{02}H_{02} \\
+        M_{01} &= s_{00}H_{10} + s_{01}H_{11} + s_{02}H_{22} \\
+        M_{10} &= s_{10}H_{00} + s_{11}H_{01} + s_{12}H_{02} \\
+        M_{11} &= s_{10}H_{10} + s_{11}H_{11} + s_{12}H_{22} \\
+        M_{20} &= s_{20}H_{00} + s_{21}H_{01} + s_{22}H_{02} \\
+        M_{21} &= s_{20}H_{10} + s_{21}H_{11} + s_{22}H_{22} \\
+    \end{split}
+\end{equation}
+
+\begin{equation}
+    \begin{split}
+        H_t \bar{\Sigma}_t H_t^T &=
+        \begin{bmatrix}
+            H_{00} & H_{01} & H_{02} \\
+            H_{10} & H_{11} & H_{12}
+        \end{bmatrix}
+        \begin{bmatrix}
+            M_{00} & M_{01}\\
+            M_{10} & M_{11}\\ 
+            M_{20} & M_{21}\\
+        \end{bmatrix}\\
+        &= 
+        \begin{bmatrix}
+            T_{00} & T_{01}\\
+            T_{10} & T_{11}\\ 
+        \end{bmatrix}
+    \end{split}
+\end{equation}
+
+\begin{equation}
+    \begin{split}
+        T_{00} &= H_{00}M_{00} + H_{01}M_{10} + H_{02}M_{20} \\
+        T_{11} &= H_{10}M_{01} + H_{11}M_{11} + H_{12}M_{21} \\
+        T_{01} &= H_{00}M_{01} + H_{01}M_{11} + H_{02}M_{21} \\
+        T_{10} &= H_{10}M_{00} + H_{11}M_{10} + H_{12}M_{20}
+    \end{split}
+\end{equation}
+
+\begin{equation}
+    \begin{split}
+        A = H_t \bar{\Sigma}_t H_t^T + Q
+        &= 
+        \begin{bmatrix}
+            T_{00} & T_{01}\\
+            T_{10} & T_{11}\\ 
+        \end{bmatrix}
+        +
+        \begin{bmatrix}
+            Q_{00} & Q_{01}\\
+            Q_{10} & Q_{11}\\ 
+        \end{bmatrix}\\
+        &=
+        \begin{bmatrix}
+            A_{00} & A_{01}\\
+            A_{10} & A_{11}\\ 
+        \end{bmatrix}
+    \end{split}
+\end{equation}
+
+\begin{equation}
+    {det}(A) = A_{00}A_{11} - A_{10}A_{01}
+\end{equation}
+
+\begin{equation}
+    \begin{split}
+    A^{-1} &= \frac{1}{det(A)} 
+    \begin{bmatrix}
+        A_{11} & -A_{01}\\
+        -A_{10} & A_{00}\\ 
+    \end{bmatrix}\\
+    &=
+    \begin{bmatrix}
+        B_{00} & B_{01}\\
+        B_{10} & B_{11}\\ 
+    \end{bmatrix}
+    \end{split}
+\end{equation}
+
+
+\begin{equation}
+    \begin{split}
+        K_t &= \bar{\Sigma}_t H_t^T(H_t \bar{\Sigma}_t H_t^T + Q)^{-1} \\ 
+        &=
+        \begin{bmatrix}
+            M_{00} & M_{01}\\
+            M_{10} & M_{11}\\ 
+            M_{20} & M_{21}\\
+        \end{bmatrix} 
+        \begin{bmatrix}
+            B_{00} & B_{01}\\
+            B_{10} & B_{11}\\ 
+        \end{bmatrix}\\
+        &=
+        \begin{bmatrix}
+            K_{00} & K_{01}\\
+            K_{10} & K_{11}\\ 
+            K_{20} & K_{21}\\
+        \end{bmatrix} 
+    \end{split}
+\end{equation}
+
+\begin{equation}
+    \begin{split}
+        K_{00} &= M_{00}B_{00} + M_{01}B_{10} \\
+        K_{01} &= M_{00}B_{01} + M_{01}B_{11} \\
+        K_{10} &= M_{10}B_{00} + M_{11}B_{10} \\
+        K_{11} &= M_{10}B_{01} + M_{11}B_{11} \\
+        K_{20} &= M_{20}B_{00} + M_{21}B_{10} \\
+        K_{21} &= M_{20}B_{01} + M_{21}B_{11}
+    \end{split}
+\end{equation}
+
+\begin{equation}
+    \begin{split}
+        \mu_t &= \bar{\mu}_t + K_t(Z_t - h(\bar{\mu}_t))\\
+        \Sigma_t&= (I-K_tH_t)\bar{\Sigma}_t\\
+    \end{split}
+\end{equation}
+
+\begin{equation}
+    \begin{split}
+        \mu_t &= \bar{\mu}_t + K_t(Z_t - h(\bar{\mu}_t))\\
+        &= 
+        \begin{bmatrix}
+            x\\
+            y\\ 
+            \theta\\
+        \end{bmatrix} 
+        +
+        \begin{bmatrix}
+            K_{00} & K_{01}\\
+            K_{10} & K_{11}\\ 
+            K_{20} & K_{21}\\
+        \end{bmatrix} 
+        \left(
+            \begin{bmatrix}
+                Z_{0}\\
+                Z_{1}\\ 
+            \end{bmatrix}
+            -
+            \begin{bmatrix}
+                h_{0}\\
+                h_{1}\\ 
+            \end{bmatrix} 
+        \right)\\
+        &=
+        \begin{bmatrix}
+            x\\
+            y\\ 
+            \theta\\
+        \end{bmatrix} 
+        +
+        \begin{bmatrix}
+            K_{00} & K_{01}\\
+            K_{10} & K_{11}\\ 
+            K_{20} & K_{21}\\
+        \end{bmatrix} 
+        \begin{bmatrix}
+            D_{0}\\
+            D_{1}\\ 
+        \end{bmatrix}\\
+        &=
+        \begin{bmatrix}
+            x + K_{00}D_0 + K_{01}D_1\\
+            y + K_{10}D_0 + K_{11}D_1\\ 
+            \theta + K_{20}D_0 + K_{21}D_1\\
+        \end{bmatrix} 
+    \end{split}
+\end{equation}
+
+\begin{equation}
+    \begin{split}
+        K_tH_t &=
+        \begin{bmatrix}
+            K_{00} & K_{01}\\
+            K_{10} & K_{11}\\ 
+            K_{20} & K_{21}\\
+        \end{bmatrix}
+        \begin{bmatrix}
+            H_{00} & H_{01} & H_{02} \\
+            H_{10} & H_{11} & H_{12}
+        \end{bmatrix}\\
+        &=
+        \begin{bmatrix}
+            A_{00} & A_{01} & A_{02}\\
+            A_{10} & A_{11} & A_{12}\\ 
+            A_{20} & A_{21} & A_{22}\\
+        \end{bmatrix}
+    \end{split}
+\end{equation}
+
+\begin{equation}
+    \begin{split}
+        I - K_tH_t &=
+        \begin{bmatrix}
+            B_{00} & B_{01} & B_{02}\\
+            B_{10} & B_{11} & B_{12}\\ 
+            B_{20} & B_{21} & B_{22}\\
+        \end{bmatrix}
+    \end{split}
+\end{equation}
+
+\begin{equation}
+    \begin{split}
+        (I - K_tH_t)\bar{\Sigma}_t &=
+        \begin{bmatrix}
+            B_{00} & B_{01} & B_{02}\\
+            B_{10} & B_{11} & B_{12}\\ 
+            B_{20} & B_{21} & B_{22}\\
+        \end{bmatrix}
+        \begin{bmatrix}
+            c_{00} & c_{01} & c_{02}\\
+            c_{10} & c_{11} & c_{12}\\ 
+            c_{20} & c_{21} & c_{22}\\
+        \end{bmatrix}
+    \end{split}
+\end{equation}
+
+\end{document}
