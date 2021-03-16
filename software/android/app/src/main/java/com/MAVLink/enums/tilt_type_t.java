@@ -7,8 +7,8 @@
 package com.MAVLink.enums;
 
 /** 
-* 
-*/
+ * 
+ */
 public class tilt_type_t {
    public static final int ROLL = 1; /*  | */
    public static final int PITCH = 2; /*  | */

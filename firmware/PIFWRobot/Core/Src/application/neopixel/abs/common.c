@@ -17,7 +17,7 @@ void neopixel_set_brightness(uint8_t brightness) {
 	g_brightness = brightness;
 }
 
-void neopixel_set_color(uint8_t index, uint8_t r, uint8_t g, uint8_t b){
+void neopixel_set_color(uint8_t index, float r, float g, float b){
 	led_set_RGB(index, r*g_brightness/MAX_BRIGHTNESS, g*g_brightness/MAX_BRIGHTNESS, b*g_brightness/MAX_BRIGHTNESS);
 }
 
@@ -29,6 +29,6 @@ uint32_t neopixel_get_color32(uint8_t index){
 	return led_get_RGB(index);
 }
 
-void neopixel_show(){
-	led_render();
+int neopixel_show(){
+	return led_render();
 }

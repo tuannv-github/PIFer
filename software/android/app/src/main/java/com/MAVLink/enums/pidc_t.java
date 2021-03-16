@@ -7,8 +7,8 @@
 package com.MAVLink.enums;
 
 /** 
-* 
-*/
+ * 
+ */
 public class pidc_t {
    public static final int PID_TILT = 1; /*  | */
    public static final int PID_VEL = 2; /*  | */

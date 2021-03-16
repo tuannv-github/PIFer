@@ -17,7 +17,7 @@
 #include "gpio.h"
 
 // Timer callback define
-#define MAX_CALLBACK_FUNC	15
+#define MAX_CALLBACK_FUNC	20
 
 #define IMU_MPU6050
 

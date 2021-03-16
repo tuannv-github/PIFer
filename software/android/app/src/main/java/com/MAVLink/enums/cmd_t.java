@@ -7,8 +7,8 @@
 package com.MAVLink.enums;
 
 /** 
-* 
-*/
+ * 
+ */
 public class cmd_t {
    public static final int CMD_SAVE = 1; /*  | */
    public static final int CMD_LOAD = 2; /*  | */

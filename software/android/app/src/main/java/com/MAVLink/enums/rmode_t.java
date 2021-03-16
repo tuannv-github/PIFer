@@ -7,8 +7,8 @@
 package com.MAVLink.enums;
 
 /** 
-* 
-*/
+ * 
+ */
 public class rmode_t {
    public static final int MODE_RUN = 1; /*  | */
    public static final int MODE_HW = 2; /*  | */

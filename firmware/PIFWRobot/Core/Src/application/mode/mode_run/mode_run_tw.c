@@ -5,6 +5,8 @@
  *      Author: 16138
  */
 
+#include <math.h>
+
 #include "mode_run.h"
 
 #ifdef ROBOT_MODEL_TWO_WHEELS
@@ -123,6 +125,12 @@ void mode_run_deinit(){
 	timer_unregister_callback(gtid_imu_tilt);
 }
 
+static timer_id_t g_neopixel_timeout_timer_id = TID_INVALID;
+
+static void neopixel_change_app_idle(void *context){
+	neopixel_set_app(NEOPIXEL_APP_RAINBOW);
+}
+
 void on_mode_run_mavlink_recv(mavlink_message_t *msg){
 	switch(msg->msgid){
 	case MAVLINK_MSG_ID_CMD_VELOCITY:
@@ -142,6 +150,19 @@ void on_mode_run_mavlink_recv(mavlink_message_t *msg){
 			if(gcmd_velocity.omega < -1) gcmd_velocity.omega=-1;
 
 			gcmd_velocity.cnt = (CONTROL_TIMEOUT_MS/VEL_CONTROLLER_PERIOD);
+
+			float a = gcmd_velocity.vx > 0 ? gcmd_velocity.vx : -gcmd_velocity.vx;
+			float b = gcmd_velocity.omega > 0 ? gcmd_velocity.omega : -gcmd_velocity.omega;
+			if(a < 0.1f && b < 0.1f){
+				if(g_neopixel_timeout_timer_id == TID_INVALID)
+					g_neopixel_timeout_timer_id = timer_register_callback(neopixel_change_app_idle, 2000, NULL, TIMER_MODE_ONE_SHOT);
+			}
+			else if(g_neopixel_timeout_timer_id != TID_INVALID){
+				timer_unregister_callback(g_neopixel_timeout_timer_id);
+				neopixel_set_app(NEOPIXEL_APP_SELFBALACING);
+				g_neopixel_timeout_timer_id = TID_INVALID;
+			}
+			neopixel_app_self_balancing_set(gcmd_velocity.vx*4.0f, gcmd_velocity.omega*4.0f);
 		}
 		break;
 	default:

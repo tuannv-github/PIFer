@@ -11,92 +11,133 @@ import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPayload;
         
 /**
-* IMU raw value. No need a respond message for confimation
-*/
-public class msg_evt_calibrated_gyro_raw extends MAVLinkMessage{
+ * IMU raw value. No need a respond message for confimation
+ */
+public class msg_evt_calibrated_gyro_raw extends MAVLinkMessage {
 
     public static final int MAVLINK_MSG_ID_EVT_CALIBRATED_GYRO_RAW = 13;
     public static final int MAVLINK_MSG_LENGTH = 12;
     private static final long serialVersionUID = MAVLINK_MSG_ID_EVT_CALIBRATED_GYRO_RAW;
 
-
       
     /**
-    * Gyro X
-    */
+     * Gyro X
+     */
     public float gyro_x;
       
     /**
-    * Gyro Y
-    */
+     * Gyro Y
+     */
     public float gyro_y;
       
     /**
-    * Gyro Z
-    */
+     * Gyro Z
+     */
     public float gyro_z;
     
 
     /**
-    * Generates the payload for a mavlink message for a message of this type
-    * @return
-    */
-    public MAVLinkPacket pack(){
-        MAVLinkPacket packet = new MAVLinkPacket(MAVLINK_MSG_LENGTH);
+     * Generates the payload for a mavlink message for a message of this type
+     * @return
+     */
+    @Override
+    public MAVLinkPacket pack() {
+        MAVLinkPacket packet = new MAVLinkPacket(MAVLINK_MSG_LENGTH,isMavlink2);
         packet.sysid = 255;
         packet.compid = 190;
         packet.msgid = MAVLINK_MSG_ID_EVT_CALIBRATED_GYRO_RAW;
-              
+        
         packet.payload.putFloat(gyro_x);
-              
         packet.payload.putFloat(gyro_y);
-              
         packet.payload.putFloat(gyro_z);
         
+        if (isMavlink2) {
+            
+        }
         return packet;
     }
 
     /**
-    * Decode a evt_calibrated_gyro_raw message into this class fields
-    *
-    * @param payload The message to decode
-    */
+     * Decode a evt_calibrated_gyro_raw message into this class fields
+     *
+     * @param payload The message to decode
+     */
+    @Override
     public void unpack(MAVLinkPayload payload) {
         payload.resetIndex();
-              
+        
         this.gyro_x = payload.getFloat();
-              
         this.gyro_y = payload.getFloat();
-              
         this.gyro_z = payload.getFloat();
+        
+        if (isMavlink2) {
+            
+        }
+    }
+
+    /**
+     * Constructor for a new message, just initializes the msgid
+     */
+    public msg_evt_calibrated_gyro_raw() {
+        this.msgid = MAVLINK_MSG_ID_EVT_CALIBRATED_GYRO_RAW;
+    }
+    
+    /**
+     * Constructor for a new message, initializes msgid and all payload variables
+     */
+    public msg_evt_calibrated_gyro_raw( float gyro_x, float gyro_y, float gyro_z) {
+        this.msgid = MAVLINK_MSG_ID_EVT_CALIBRATED_GYRO_RAW;
+
+        this.gyro_x = gyro_x;
+        this.gyro_y = gyro_y;
+        this.gyro_z = gyro_z;
+        
+    }
+    
+    /**
+     * Constructor for a new message, initializes everything
+     */
+    public msg_evt_calibrated_gyro_raw( float gyro_x, float gyro_y, float gyro_z, int sysid, int compid, boolean isMavlink2) {
+        this.msgid = MAVLINK_MSG_ID_EVT_CALIBRATED_GYRO_RAW;
+        this.sysid = sysid;
+        this.compid = compid;
+        this.isMavlink2 = isMavlink2;
+
+        this.gyro_x = gyro_x;
+        this.gyro_y = gyro_y;
+        this.gyro_z = gyro_z;
         
     }
 
     /**
-    * Constructor for a new message, just initializes the msgid
-    */
-    public msg_evt_calibrated_gyro_raw(){
-        msgid = MAVLINK_MSG_ID_EVT_CALIBRATED_GYRO_RAW;
-    }
-
-    /**
-    * Constructor for a new message, initializes the message with the payload
-    * from a mavlink packet
-    *
-    */
-    public msg_evt_calibrated_gyro_raw(MAVLinkPacket mavLinkPacket){
+     * Constructor for a new message, initializes the message with the payload
+     * from a mavlink packet
+     *
+     */
+    public msg_evt_calibrated_gyro_raw(MAVLinkPacket mavLinkPacket) {
+        this.msgid = MAVLINK_MSG_ID_EVT_CALIBRATED_GYRO_RAW;
+        
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = MAVLINK_MSG_ID_EVT_CALIBRATED_GYRO_RAW;
-        unpack(mavLinkPacket.payload);        
+        this.isMavlink2 = mavLinkPacket.isMavlink2;
+        unpack(mavLinkPacket.payload);
     }
 
           
     /**
-    * Returns a string with the MSG name and data
-    */
-    public String toString(){
+     * Returns a string with the MSG name and data
+     */
+    @Override
+    public String toString() {
         return "MAVLINK_MSG_ID_EVT_CALIBRATED_GYRO_RAW - sysid:"+sysid+" compid:"+compid+" gyro_x:"+gyro_x+" gyro_y:"+gyro_y+" gyro_z:"+gyro_z+"";
+    }
+    
+    /**
+     * Returns a human-readable string of the name of the message
+     */
+    @Override
+    public String name() {
+        return "MAVLINK_MSG_ID_EVT_CALIBRATED_GYRO_RAW";
     }
 }
         

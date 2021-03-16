@@ -1,10 +1,10 @@
 #ifndef  _MAVLINK_HELPERS_H_
 #define  _MAVLINK_HELPERS_H_
 
-#include <application/mav/mavlink/checksum.h>
-#include <application/mav/mavlink/mavlink_conversions.h>
-#include <application/mav/mavlink/mavlink_types.h>
 #include "string.h"
+#include "checksum.h"
+#include "mavlink_types.h"
+#include "mavlink_conversions.h"
 
 #ifndef MAVLINK_HELPER
 #define MAVLINK_HELPER

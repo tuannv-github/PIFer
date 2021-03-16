@@ -11,92 +11,133 @@ import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPayload;
         
 /**
-* IMU raw value. No need a respond message for confimation
-*/
-public class msg_evt_mag_raw extends MAVLinkMessage{
+ * IMU raw value. No need a respond message for confimation
+ */
+public class msg_evt_mag_raw extends MAVLinkMessage {
 
     public static final int MAVLINK_MSG_ID_EVT_MAG_RAW = 14;
     public static final int MAVLINK_MSG_LENGTH = 12;
     private static final long serialVersionUID = MAVLINK_MSG_ID_EVT_MAG_RAW;
 
-
       
     /**
-    * Mag X
-    */
+     * Mag X
+     */
     public float mag_x;
       
     /**
-    * Mag Y
-    */
+     * Mag Y
+     */
     public float mag_y;
       
     /**
-    * Mag Z
-    */
+     * Mag Z
+     */
     public float mag_z;
     
 
     /**
-    * Generates the payload for a mavlink message for a message of this type
-    * @return
-    */
-    public MAVLinkPacket pack(){
-        MAVLinkPacket packet = new MAVLinkPacket(MAVLINK_MSG_LENGTH);
+     * Generates the payload for a mavlink message for a message of this type
+     * @return
+     */
+    @Override
+    public MAVLinkPacket pack() {
+        MAVLinkPacket packet = new MAVLinkPacket(MAVLINK_MSG_LENGTH,isMavlink2);
         packet.sysid = 255;
         packet.compid = 190;
         packet.msgid = MAVLINK_MSG_ID_EVT_MAG_RAW;
-              
+        
         packet.payload.putFloat(mag_x);
-              
         packet.payload.putFloat(mag_y);
-              
         packet.payload.putFloat(mag_z);
         
+        if (isMavlink2) {
+            
+        }
         return packet;
     }
 
     /**
-    * Decode a evt_mag_raw message into this class fields
-    *
-    * @param payload The message to decode
-    */
+     * Decode a evt_mag_raw message into this class fields
+     *
+     * @param payload The message to decode
+     */
+    @Override
     public void unpack(MAVLinkPayload payload) {
         payload.resetIndex();
-              
+        
         this.mag_x = payload.getFloat();
-              
         this.mag_y = payload.getFloat();
-              
         this.mag_z = payload.getFloat();
+        
+        if (isMavlink2) {
+            
+        }
+    }
+
+    /**
+     * Constructor for a new message, just initializes the msgid
+     */
+    public msg_evt_mag_raw() {
+        this.msgid = MAVLINK_MSG_ID_EVT_MAG_RAW;
+    }
+    
+    /**
+     * Constructor for a new message, initializes msgid and all payload variables
+     */
+    public msg_evt_mag_raw( float mag_x, float mag_y, float mag_z) {
+        this.msgid = MAVLINK_MSG_ID_EVT_MAG_RAW;
+
+        this.mag_x = mag_x;
+        this.mag_y = mag_y;
+        this.mag_z = mag_z;
+        
+    }
+    
+    /**
+     * Constructor for a new message, initializes everything
+     */
+    public msg_evt_mag_raw( float mag_x, float mag_y, float mag_z, int sysid, int compid, boolean isMavlink2) {
+        this.msgid = MAVLINK_MSG_ID_EVT_MAG_RAW;
+        this.sysid = sysid;
+        this.compid = compid;
+        this.isMavlink2 = isMavlink2;
+
+        this.mag_x = mag_x;
+        this.mag_y = mag_y;
+        this.mag_z = mag_z;
         
     }
 
     /**
-    * Constructor for a new message, just initializes the msgid
-    */
-    public msg_evt_mag_raw(){
-        msgid = MAVLINK_MSG_ID_EVT_MAG_RAW;
-    }
-
-    /**
-    * Constructor for a new message, initializes the message with the payload
-    * from a mavlink packet
-    *
-    */
-    public msg_evt_mag_raw(MAVLinkPacket mavLinkPacket){
+     * Constructor for a new message, initializes the message with the payload
+     * from a mavlink packet
+     *
+     */
+    public msg_evt_mag_raw(MAVLinkPacket mavLinkPacket) {
+        this.msgid = MAVLINK_MSG_ID_EVT_MAG_RAW;
+        
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = MAVLINK_MSG_ID_EVT_MAG_RAW;
-        unpack(mavLinkPacket.payload);        
+        this.isMavlink2 = mavLinkPacket.isMavlink2;
+        unpack(mavLinkPacket.payload);
     }
 
           
     /**
-    * Returns a string with the MSG name and data
-    */
-    public String toString(){
+     * Returns a string with the MSG name and data
+     */
+    @Override
+    public String toString() {
         return "MAVLINK_MSG_ID_EVT_MAG_RAW - sysid:"+sysid+" compid:"+compid+" mag_x:"+mag_x+" mag_y:"+mag_y+" mag_z:"+mag_z+"";
+    }
+    
+    /**
+     * Returns a human-readable string of the name of the message
+     */
+    @Override
+    public String name() {
+        return "MAVLINK_MSG_ID_EVT_MAG_RAW";
     }
 }
         

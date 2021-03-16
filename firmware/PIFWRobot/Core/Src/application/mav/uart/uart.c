@@ -81,7 +81,9 @@ int uart_init(uart_drv_t* uart_drv){
 	cbuf_init(&uart_drv->tx_cbuf_handle, uart_drv->tx_buf, sizeof(uart_drv->tx_buf));
 	cbuf_init(&uart_drv->rx_cbuf_handle, uart_drv->rx_buf, sizeof(uart_drv->rx_buf));
 
-	HAL_UART_Receive_DMA(uart_drv->huart, (uint8_t*)uart_drv->rx_dma_buffer, sizeof(uart_drv->rx_dma_buffer));
+	if(uart_drv->huart->hdmarx != 0){
+		HAL_UART_Receive_DMA(uart_drv->huart, (uint8_t*)uart_drv->rx_dma_buffer, sizeof(uart_drv->rx_dma_buffer));
+	}
 
 	uart_drv->tx_completed = true;
 	uart_drv->cbid = timer_register_callback(uart_cb, uart_drv->cb_period, uart_drv, TIMER_MODE_REPEAT);

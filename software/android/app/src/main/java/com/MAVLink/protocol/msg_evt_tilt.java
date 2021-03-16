@@ -11,74 +11,115 @@ import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPayload;
         
 /**
-* Tilt angle of robot in the calibrated vertical axis. No need a respond message for confimation
-*/
-public class msg_evt_tilt extends MAVLinkMessage{
+ * Tilt angle of robot in the calibrated vertical axis. No need a respond message for confimation
+ */
+public class msg_evt_tilt extends MAVLinkMessage {
 
     public static final int MAVLINK_MSG_ID_EVT_TILT = 4;
     public static final int MAVLINK_MSG_LENGTH = 4;
     private static final long serialVersionUID = MAVLINK_MSG_ID_EVT_TILT;
 
-
       
     /**
-    * Tilt
-    */
+     * Tilt
+     */
     public float tilt;
     
 
     /**
-    * Generates the payload for a mavlink message for a message of this type
-    * @return
-    */
-    public MAVLinkPacket pack(){
-        MAVLinkPacket packet = new MAVLinkPacket(MAVLINK_MSG_LENGTH);
+     * Generates the payload for a mavlink message for a message of this type
+     * @return
+     */
+    @Override
+    public MAVLinkPacket pack() {
+        MAVLinkPacket packet = new MAVLinkPacket(MAVLINK_MSG_LENGTH,isMavlink2);
         packet.sysid = 255;
         packet.compid = 190;
         packet.msgid = MAVLINK_MSG_ID_EVT_TILT;
-              
+        
         packet.payload.putFloat(tilt);
         
+        if (isMavlink2) {
+            
+        }
         return packet;
     }
 
     /**
-    * Decode a evt_tilt message into this class fields
-    *
-    * @param payload The message to decode
-    */
+     * Decode a evt_tilt message into this class fields
+     *
+     * @param payload The message to decode
+     */
+    @Override
     public void unpack(MAVLinkPayload payload) {
         payload.resetIndex();
-              
+        
         this.tilt = payload.getFloat();
+        
+        if (isMavlink2) {
+            
+        }
+    }
+
+    /**
+     * Constructor for a new message, just initializes the msgid
+     */
+    public msg_evt_tilt() {
+        this.msgid = MAVLINK_MSG_ID_EVT_TILT;
+    }
+    
+    /**
+     * Constructor for a new message, initializes msgid and all payload variables
+     */
+    public msg_evt_tilt( float tilt) {
+        this.msgid = MAVLINK_MSG_ID_EVT_TILT;
+
+        this.tilt = tilt;
+        
+    }
+    
+    /**
+     * Constructor for a new message, initializes everything
+     */
+    public msg_evt_tilt( float tilt, int sysid, int compid, boolean isMavlink2) {
+        this.msgid = MAVLINK_MSG_ID_EVT_TILT;
+        this.sysid = sysid;
+        this.compid = compid;
+        this.isMavlink2 = isMavlink2;
+
+        this.tilt = tilt;
         
     }
 
     /**
-    * Constructor for a new message, just initializes the msgid
-    */
-    public msg_evt_tilt(){
-        msgid = MAVLINK_MSG_ID_EVT_TILT;
-    }
-
-    /**
-    * Constructor for a new message, initializes the message with the payload
-    * from a mavlink packet
-    *
-    */
-    public msg_evt_tilt(MAVLinkPacket mavLinkPacket){
+     * Constructor for a new message, initializes the message with the payload
+     * from a mavlink packet
+     *
+     */
+    public msg_evt_tilt(MAVLinkPacket mavLinkPacket) {
+        this.msgid = MAVLINK_MSG_ID_EVT_TILT;
+        
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = MAVLINK_MSG_ID_EVT_TILT;
-        unpack(mavLinkPacket.payload);        
+        this.isMavlink2 = mavLinkPacket.isMavlink2;
+        unpack(mavLinkPacket.payload);
     }
 
       
     /**
-    * Returns a string with the MSG name and data
-    */
-    public String toString(){
+     * Returns a string with the MSG name and data
+     */
+    @Override
+    public String toString() {
         return "MAVLINK_MSG_ID_EVT_TILT - sysid:"+sysid+" compid:"+compid+" tilt:"+tilt+"";
+    }
+    
+    /**
+     * Returns a human-readable string of the name of the message
+     */
+    @Override
+    public String name() {
+        return "MAVLINK_MSG_ID_EVT_TILT";
     }
 }
         

@@ -11,74 +11,115 @@ import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPayload;
         
 /**
-* Respond for a reliable communication
-*/
-public class msg_respond extends MAVLinkMessage{
+ * Respond for a reliable communication
+ */
+public class msg_respond extends MAVLinkMessage {
 
     public static final int MAVLINK_MSG_ID_RESPOND = 0;
     public static final int MAVLINK_MSG_LENGTH = 1;
     private static final long serialVersionUID = MAVLINK_MSG_ID_RESPOND;
 
-
       
     /**
-    * Respond
-    */
+     * Respond
+     */
     public short respond;
     
 
     /**
-    * Generates the payload for a mavlink message for a message of this type
-    * @return
-    */
-    public MAVLinkPacket pack(){
-        MAVLinkPacket packet = new MAVLinkPacket(MAVLINK_MSG_LENGTH);
+     * Generates the payload for a mavlink message for a message of this type
+     * @return
+     */
+    @Override
+    public MAVLinkPacket pack() {
+        MAVLinkPacket packet = new MAVLinkPacket(MAVLINK_MSG_LENGTH,isMavlink2);
         packet.sysid = 255;
         packet.compid = 190;
         packet.msgid = MAVLINK_MSG_ID_RESPOND;
-              
+        
         packet.payload.putUnsignedByte(respond);
         
+        if (isMavlink2) {
+            
+        }
         return packet;
     }
 
     /**
-    * Decode a respond message into this class fields
-    *
-    * @param payload The message to decode
-    */
+     * Decode a respond message into this class fields
+     *
+     * @param payload The message to decode
+     */
+    @Override
     public void unpack(MAVLinkPayload payload) {
         payload.resetIndex();
-              
+        
         this.respond = payload.getUnsignedByte();
+        
+        if (isMavlink2) {
+            
+        }
+    }
+
+    /**
+     * Constructor for a new message, just initializes the msgid
+     */
+    public msg_respond() {
+        this.msgid = MAVLINK_MSG_ID_RESPOND;
+    }
+    
+    /**
+     * Constructor for a new message, initializes msgid and all payload variables
+     */
+    public msg_respond( short respond) {
+        this.msgid = MAVLINK_MSG_ID_RESPOND;
+
+        this.respond = respond;
+        
+    }
+    
+    /**
+     * Constructor for a new message, initializes everything
+     */
+    public msg_respond( short respond, int sysid, int compid, boolean isMavlink2) {
+        this.msgid = MAVLINK_MSG_ID_RESPOND;
+        this.sysid = sysid;
+        this.compid = compid;
+        this.isMavlink2 = isMavlink2;
+
+        this.respond = respond;
         
     }
 
     /**
-    * Constructor for a new message, just initializes the msgid
-    */
-    public msg_respond(){
-        msgid = MAVLINK_MSG_ID_RESPOND;
-    }
-
-    /**
-    * Constructor for a new message, initializes the message with the payload
-    * from a mavlink packet
-    *
-    */
-    public msg_respond(MAVLinkPacket mavLinkPacket){
+     * Constructor for a new message, initializes the message with the payload
+     * from a mavlink packet
+     *
+     */
+    public msg_respond(MAVLinkPacket mavLinkPacket) {
+        this.msgid = MAVLINK_MSG_ID_RESPOND;
+        
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = MAVLINK_MSG_ID_RESPOND;
-        unpack(mavLinkPacket.payload);        
+        this.isMavlink2 = mavLinkPacket.isMavlink2;
+        unpack(mavLinkPacket.payload);
     }
 
       
     /**
-    * Returns a string with the MSG name and data
-    */
-    public String toString(){
+     * Returns a string with the MSG name and data
+     */
+    @Override
+    public String toString() {
         return "MAVLINK_MSG_ID_RESPOND - sysid:"+sysid+" compid:"+compid+" respond:"+respond+"";
+    }
+    
+    /**
+     * Returns a human-readable string of the name of the message
+     */
+    @Override
+    public String name() {
+        return "MAVLINK_MSG_ID_RESPOND";
     }
 }
         

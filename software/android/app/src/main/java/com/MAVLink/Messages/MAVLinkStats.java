@@ -10,7 +10,6 @@ import com.MAVLink.MAVLinkPacket;
 
 /**
  * Storage for MAVLink Packet and Error statistics
- * 
  */
 public class MAVLinkStats /* implements Serializable */{
 
@@ -38,8 +37,7 @@ public class MAVLinkStats /* implements Serializable */{
      * Check the new received packet to see if has lost someone between this and
      * the last packet
      * 
-     * @param packet
-     *            Packet that should be checked
+     * @param packet Packet that should be checked
      */
     public void newPacket(MAVLinkPacket packet) {
 
@@ -65,7 +63,9 @@ public class MAVLinkStats /* implements Serializable */{
         systemStats = new SystemStat[256];
     }
 
-    // stat structure for every system id
+    /**
+     * Stat structure for every system id
+     */
     public static class SystemStat {
         public int lostPacketCount; // the lost count for this source
         public int receivedPacketCount;
@@ -96,7 +96,9 @@ public class MAVLinkStats /* implements Serializable */{
         }
     }
 
-    // stat structure for every system id
+    /**
+     * stat structure for every system id
+     */
     public static class ComponentStat {
         public int lastPacketSeq;
         public int lostPacketCount; // the lost count for this source

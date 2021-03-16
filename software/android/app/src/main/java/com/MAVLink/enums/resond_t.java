@@ -7,8 +7,8 @@
 package com.MAVLink.enums;
 
 /** 
-* 
-*/
+ * 
+ */
 public class resond_t {
    public static final int RESPOND_OK = 1; /*  | */
    public static final int RESPOND_ERROR = 2; /*  | */

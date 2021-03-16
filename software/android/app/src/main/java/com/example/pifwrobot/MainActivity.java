@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -99,8 +100,8 @@ public class MainActivity extends AppCompatActivity {
         tvX = findViewById(R.id.tvX);
         tvY = findViewById(R.id.tvY);
 
-        serverIP = sharedPreferences.getString("serverIP", "10.0.2.2");
-        serverPort = sharedPreferences.getInt("serverPort", 9999);
+        serverIP = sharedPreferences.getString("serverIP", "192.168.4.1");
+        serverPort = sharedPreferences.getInt("serverPort", 8888);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -247,11 +248,9 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
             while (true) {
                 connect();
-                PrintWriter out = null;
+                DataOutputStream dOut = null;
                 try {
-                    out = new PrintWriter(new BufferedWriter(
-                            new OutputStreamWriter(socket.getOutputStream())),
-                            true);
+                    dOut = new DataOutputStream(socket.getOutputStream());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -267,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
                         yi = Math.max(yi, 0);
                         xi -= 50;
                         yi -= 50;
-                        float xf = (float)xi /50.0f;
+                        float xf = -(float)xi /50.0f;
                         float yf = (float)yi /50.0f;
 
                         msg_cmd_velocity.v = yf;
@@ -275,15 +274,9 @@ public class MainActivity extends AppCompatActivity {
                         MAVLinkPacket mavLinkPacket = msg_cmd_velocity.pack();
 
                         @SuppressLint("DefaultLocale") String str = String.format("%03d:%03d\n", xi, yi);
-                        String s = new String(mavLinkPacket.encodePacket());
-                        char[] chars = s.toCharArray();
-                        out.write(chars);
-                        out.flush();
-                        if(out.checkError()){
-                            Log.d("SocketClientThread", "run: Socket closed");
-                            break;
-                        }
-                    } catch (InterruptedException e) {
+                        dOut.write(mavLinkPacket.encodePacket());
+                    } catch (InterruptedException | IOException e) {
+                        Log.d("SocketClientThread", "run: Socket closed");
                         e.printStackTrace();
                         break;
                     }

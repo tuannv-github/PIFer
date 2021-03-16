@@ -73,7 +73,7 @@ void Mode_run::on_btn_change_mode_run_clicked()
 void Mode_run::update_joystick(axis_t axis, double value){
     switch (axis){
     case AXIS_0:
-        ui->txtb_pidt_w->setText(QString::number(value));
+        ui->txtb_pidt_w->setText(QString::number(-value));
         break;
     case AXIS_1:
         ui->txtb_pidt_vx->setText(QString::number(value));

@@ -7,8 +7,8 @@
 package com.MAVLink.enums;
 
 /** 
-* 
-*/
+ * 
+ */
 public class bool_t {
    public static final int MAV_FALSE = 1; /*  | */
    public static final int MAV_TRUE = 2; /*  | */

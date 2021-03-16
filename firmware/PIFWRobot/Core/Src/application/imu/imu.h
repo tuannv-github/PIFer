@@ -8,7 +8,6 @@
 #ifndef APPLICATION_IMU_IMU_H_
 #define APPLICATION_IMU_IMU_H_
 
-#include <application/imu/mpu6050/MPU6050.h>
 #include <application/imu/mpu9250/MPU9250.h>
 #include <application/timer/timer.h>
 #include <stdbool.h>

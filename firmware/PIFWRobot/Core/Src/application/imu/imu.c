@@ -54,7 +54,7 @@ int imu_deinit(void){
 }
 
 int imu_test_connection(){
-	return MPU6050_test_connection();
+	return mpu9250_test();
 }
 
 float imu_get_roll(void){

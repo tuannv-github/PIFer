@@ -32,7 +32,7 @@ typedef struct{
 
 int timer_init();
 timer_id_t timer_register_callback(timer_callback_func_t timer_callback_func, uint16_t period_ms, void* cxt, timer_mode_t mode);
-void timer_unregister_callback(timer_id_t id);
+timer_id_t timer_unregister_callback(timer_id_t id);
 
 uint64_t milis();
 void user_systick();

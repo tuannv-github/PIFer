@@ -11,7 +11,7 @@
 static callback_t callbacks[MAX_CALLBACK_FUNC];
 
 int timer_init(){
-	HAL_TIM_Base_Start_IT(&htim1);
+//	HAL_TIM_Base_Start_IT(&htim1);
 	return 0;
 }
 
@@ -30,9 +30,10 @@ timer_id_t timer_register_callback(timer_callback_func_t timer_callback_func, ui
 	return -1;
 }
 
-void timer_unregister_callback(timer_id_t id){
-	if(id==TID_INVALID) return;
+timer_id_t timer_unregister_callback(timer_id_t id){
+	if(id==TID_INVALID) return TID_INVALID;
 	callbacks[id].timer_callback_func = 0;
+	return id;
 }
 
 uint64_t milis(){
@@ -53,7 +54,7 @@ void user_systick()
 	}
 }
 
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
-	if(htim->Instance != htim1.Instance) return;
-	user_systick();
-}
+//void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
+//	if(htim->Instance != htim1.Instance) return;
+//	user_systick();
+//}

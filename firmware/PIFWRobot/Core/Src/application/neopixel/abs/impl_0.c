@@ -6,16 +6,20 @@
 #include "../config.h"
 #include "port.h"
 
+#if (NEO_PIXEL_USE_IMPL == 0)
+
+#define RGB_BUF_LEN 	(NUM_BPP * NUM_PIXELS)
+#define WR_BUF_LEN 		(NUM_BPP * 8 * 2)
+
 extern TIM_HandleTypeDef TIMER;
 extern DMA_HandleTypeDef TIMER_DMA;
 
 // LED color buffer
-uint8_t rgb_arr[NUM_BYTES] = {0};
+static uint8_t rgb_arr[RGB_BUF_LEN] = {0};
 
 // LED write buffer
-#define WR_BUF_LEN (NUM_BPP * 8 * 2)
-uint8_t wr_buf[WR_BUF_LEN] = {0};
-uint_fast8_t wr_buf_p = 0;
+static uint8_t 		wr_buf[WR_BUF_LEN] = {0};
+static uint_fast8_t wr_buf_p = 0;
 
 static inline uint8_t scale8(uint8_t x, uint8_t scale) {
   return ((uint16_t)x * scale) >> 8;
@@ -58,14 +62,9 @@ void led_set_RGBW(uint8_t index, uint8_t r, uint8_t g, uint8_t b, uint8_t w) {
 #endif // End SK6812 WS2812B case differentiation
 }
 
-// Shuttle the data to the LEDs!
-void led_render() {
+int led_render() {
   if(wr_buf_p != 0 || TIMER_DMA.State != HAL_DMA_STATE_READY) {
-    // Ongoing transfer, cancel!
-    for(uint8_t i = 0; i < WR_BUF_LEN; ++i) wr_buf[i] = 0;
-    wr_buf_p = 0;
-    HAL_TIM_PWM_Stop_DMA(&TIMER, TIMER_CHANNEL);
-    return;
+    return -1;
   }
   // Ooh boi the first data buffer half (and the second!)
 #if (NUM_BPP == 4) // SK6812
@@ -92,6 +91,7 @@ void led_render() {
 
   HAL_TIM_PWM_Start_DMA(&TIMER, TIMER_CHANNEL, (uint32_t *)wr_buf, WR_BUF_LEN);
   wr_buf_p = 2; // Since we're ready for the next buffer
+  return 0;
 }
 
 void HAL_TIM_PWM_PulseFinishedHalfCpltCallback(TIM_HandleTypeDef *htim) {
@@ -151,3 +151,5 @@ void HAL_TIM_PWM_PulseFinishedCallback(TIM_HandleTypeDef *htim) {
     HAL_TIM_PWM_Stop_DMA(&TIMER, TIMER_CHANNEL);
   }
 }
+
+#endif

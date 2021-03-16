@@ -14,195 +14,301 @@ import com.MAVLink.protocol.CRC;
 import com.MAVLink.protocol.*;
 
 /**
-* Common interface for all MAVLink Messages
-* Packet Anatomy
-* This is the anatomy of one packet. It is inspired by the CAN and SAE AS-4 standards.
-
-* Byte Index  Content              Value       Explanation
-* 0            Packet start sign  v1.0: 0xFE   Indicates the start of a new packet.  (v0.9: 0x55)
-* 1            Payload length      0 - 255     Indicates length of the following payload.
-* 2            Packet sequence     0 - 255     Each component counts up his send sequence. Allows to detect packet loss
-* 3            System ID           1 - 255     ID of the SENDING system. Allows to differentiate different MAVs on the same network.
-* 4            Component ID        0 - 255     ID of the SENDING component. Allows to differentiate different components of the same system, e.g. the IMU and the autopilot.
-* 5            Message ID          0 - 255     ID of the message - the id defines what the payload means and how it should be correctly decoded.
-* 6 to (n+6)   Payload             0 - 255     Data of the message, depends on the message id.
-* (n+7)to(n+8) Checksum (low byte, high byte)  ITU X.25/SAE AS-4 hash, excluding packet start sign, so bytes 1..(n+6) Note: The checksum also includes MAVLINK_CRC_EXTRA (Number computed from message fields. Protects the packet from decoding a different version of the same packet but with different variables).
-
-* The checksum is the same as used in ITU X.25 and SAE AS-4 standards (CRC-16-CCITT), documented in SAE AS5669A. Please see the MAVLink source code for a documented C-implementation of it. LINK TO CHECKSUM
-* The minimum packet length is 8 bytes for acknowledgement packets without payload
-* The maximum packet length is 263 bytes for full payload
-*
-*/
+ * Common interface for all MAVLink Messages
+ * Packet Anatomy
+ * This is the anatomy of one packet. It is inspired by the CAN and SAE AS-4 standards.
+ *
+ * MAVLink 1 Packet Format
+ *
+ * Byte Index  Content              Value       Explanation
+ * 0            Packet start sign  v1.0: 0xFE   Indicates the start of a new packet.  (v0.9: 0x55; v1.0: 0xFE; v2.0 0xFD)
+ * 1            Payload length      0 - 255     Indicates length of the following payload.
+ * 2            Packet sequence     0 - 255     Each component counts up its send sequence. Allows to detect packet loss
+ * 3            System ID           1 - 255     ID of the SENDING system. Allows to differentiate different MAVs on the same network.
+ * 4            Component ID        0 - 255     ID of the SENDING component. Allows to differentiate different components of the same system, e.g. the IMU and the autopilot.
+ * 5            Message ID          0 - 255     ID of the message - the id defines what the payload means and how it should be correctly decoded.
+ * 6 to (n+6)   Payload             0 - 255     Data of the message, depends on the message id.
+ * (n+7)to(n+8) Checksum (low byte, high byte)  CRC16/MCRF4XX hash, excluding packet start sign, so bytes 1..(n+6) Note: The checksum also includes MAVLINK_CRC_EXTRA (Number computed from message fields. Protects the packet from decoding a different version of the same packet but with different variables).
+ *
+ * The checksum is the CRC16/MCRF4XX. Please see the MAVLink source code for a documented C-implementation of it. LINK TO CHECKSUM
+ * The minimum packet length is 8 bytes for acknowledgement packets without payload
+ * The maximum packet length is 263 bytes for full payload
+ *
+ *
+ * MAVLink 2 Packet Format
+ *
+ * Byte Index     Content             Value              Explanation
+ * 0              Packet start sign  v2.0: 0xFD          Indicates the start of a new packet.  (v0.9: 0x55; v1.0: 0xFE; v2.0 0xFD)
+ * 1              Payload length      0 - 255            Indicates length of the following payload.
+ * 2              Incompatible Flags  0 - 255            Flags that must be understood
+ * 3              Compatible Flags    0 - 255            Flags that can be ignored if not understood
+ * 4              Packet sequence     0 - 255            Each component counts up its send sequence. Allows to detect packet loss
+ * 5              System ID           1 - 255            ID of the SENDING system. Allows to differentiate different MAVs on the same network.
+ * 6              Component ID        0 - 255            ID of the SENDING component. Allows to differentiate different components of the same system, e.g. the IMU and the autopilot.
+ * 7 to 9         Message ID          0 - 16777216       ID of the message - the id defines what the payload means and how it should be correctly decoded.
+ * 10             Target System ID    1 - 255            (OPTIONAL) ID of the TARGET system. Only used for point-to-point mode
+ * 11             Target Component ID 0 - 255            (OPTIONAL) ID of the TARGET component. Only used for point-to-point mode
+ * 12 to (n+12)   Payload             0 - 255            Data of the message, depends on the message id.
+ * (n+13)to(n+14) Checksum (low byte, high byte)         CRC16/MCRF4XX hash, excluding packet start sign, so bytes 1..(n+6) Note: The checksum also includes MAVLINK_CRC_EXTRA (Number computed from message fields. Protects the packet from decoding a different version of the same packet but with different variables).
+ * (n+15)to(n+27) Signature (typeid, timestamp, sha256)  (OPTIONAL) Signature which allows ensuring that the link is tamper-proof; 13 bytes containing typeid (1 byte), timestamp (6 bytes), and last 6 bytes of SHA256 hash
+ *
+ * The signature is a combination of a typeid, timestamp, and SHA256 hash.
+ * OPTIONAL fields mean that, if they are not used, they do not exist in the MAVLink frame at all. Typically target sysid and target compid are not used, and signature is only used if signing is set up between both ends.
+ * 
+ * @see <a href="https://mavlink.io">mavlink.io</a> for more documentation on the MAVLink protocol
+ */
 public class MAVLinkPacket implements Serializable {
     private static final long serialVersionUID = 2095947771227815314L;
 
-    public static final int MAVLINK_STX = 254;
+    public static final int MAVLINK_STX_MAVLINK1 = 0xFE; // 254
+    public static final int MAVLINK_STX_MAVLINK2 = 0xFD; // 253
+    public static final int MAVLINK1_HEADER_LEN = 6;
+    public static final int MAVLINK2_HEADER_LEN = 10;
+    public static final int MAVLINK1_NONPAYLOAD_LEN = MAVLINK1_HEADER_LEN + 2;
+    public static final int MAVLINK2_NONPAYLOAD_LEN = MAVLINK2_HEADER_LEN + 2;
+
+    static final boolean V = false;
+    static void logv(String str) {
+        if(V) System.out.println(String.format("MAVLinkPacket: %s", str));
+    }
 
     /**
-    * Message length. NOT counting STX, LENGTH, SEQ, SYSID, COMPID, MSGID, CRC1 and CRC2
-    */
+     * Payload length
+     */
     public final int len;
 
     /**
-    * Message sequence
-    */
+     * Message sequence
+     */
     public int seq;
 
     /**
-    * ID of the SENDING system. Allows to differentiate different MAVs on the
-    * same network.
-    */
+     * ID of the SENDING system. Allows to differentiate different MAVs on the
+     * same network.
+     */
     public int sysid;
 
     /**
-    * ID of the SENDING component. Allows to differentiate different components
-    * of the same system, e.g. the IMU and the autopilot.
-    */
+     * ID of the SENDING component. Allows to differentiate different components
+     * of the same system, e.g. the IMU and the autopilot.
+     */
     public int compid;
 
     /**
-    * ID of the message - the id defines what the payload means and how it
-    * should be correctly decoded.
-    */
+     * ID of the message - the id defines what the payload means and how it
+     * should be correctly decoded.
+     */
     public int msgid;
 
     /**
-    * Data of the message, depends on the message id.
-    */
+     * Data of the message, depends on the message id.
+     */
     public MAVLinkPayload payload;
 
     /**
-    * ITU X.25/SAE AS-4 hash, excluding packet start sign, so bytes 1..(n+6)
+    * CRC-16/MCRF4XX hash, excluding packet start sign, so bytes 1..(n+HEADER-LENGTH)
     * Note: The checksum also includes MAVLINK_CRC_EXTRA (Number computed from
     * message fields. Protects the packet from decoding a different version of
     * the same packet but with different variables).
     */
     public CRC crc;
 
-    public MAVLinkPacket(int payloadLength){
+    // MAVLink 2.0 fields
+
+    /**
+     * Flag to indicate which MAVLink version this packet is
+     */
+    public boolean isMavlink2;
+
+    /**
+     * Flags that must be understood
+     */
+    public int incompatFlags;
+
+    /**
+     * Flags that can be ignored if not understood
+     */
+    public int compatFlags;
+
+    public MAVLinkPacket(int payloadLength) {
+        this(payloadLength, false);
+    }
+
+    public MAVLinkPacket(final int payloadLength, final boolean isMavlink2) {
         len = payloadLength;
-        payload = new MAVLinkPayload(payloadLength);
+        payload = new MAVLinkPayload();
+        this.isMavlink2 = isMavlink2;
     }
 
     /**
-    * Check if the size of the Payload is equal to the "len" byte
-    */
+     * Check if the size of the Payload is equal to the "len" byte
+     */
     public boolean payloadIsFilled() {
         return payload.size() >= len;
     }
 
     /**
-    * Update CRC for this packet.
-    */
-    public void generateCRC(){
-        if(crc == null){
+     * Update CRC for this packet.
+     * @return boolean True if the CRC was successfully updated. Otherwise false
+     */
+    public boolean generateCRC(final int payloadSize) {
+        if (crc == null) {
             crc = new CRC();
-        }
-        else{
+        } else {
             crc.start_checksum();
         }
-        
-        crc.update_checksum(len);
-        crc.update_checksum(seq);
-        crc.update_checksum(sysid);
-        crc.update_checksum(compid);
-        crc.update_checksum(msgid);
+
+        if (isMavlink2) {
+            crc.update_checksum(payloadSize);
+            crc.update_checksum(incompatFlags);
+            crc.update_checksum(compatFlags);
+            crc.update_checksum(seq);
+            crc.update_checksum(sysid);
+            crc.update_checksum(compid);
+            crc.update_checksum(msgid);
+            crc.update_checksum(msgid >>> 8);
+            crc.update_checksum(msgid >>> 16);
+        } else {
+            crc.update_checksum(payloadSize);
+            crc.update_checksum(seq);
+            crc.update_checksum(sysid);
+            crc.update_checksum(compid);
+            crc.update_checksum(msgid);
+        }
 
         payload.resetIndex();
 
-        final int payloadSize = payload.size();
         for (int i = 0; i < payloadSize; i++) {
             crc.update_checksum(payload.getByte());
         }
-        crc.finish_checksum(msgid);
+        return crc.finish_checksum(msgid);
     }
 
     /**
-    * Encode this packet for transmission.
-    *
-    * @return Array with bytes to be transmitted
-    */
+     * Return length of actual data after triming zeros at the end.
+     * @param payload
+     * @return minimum length of valid data
+     */
+    private int mavTrimPayload(final byte[] payload)
+    {
+        int length = payload.length;
+        while (length > 1 && payload[length-1] == 0) {
+            length--;
+        }
+        return length;
+    }
+    
+    /**
+     * Encode this packet for transmission.
+     *
+     * @return Array with bytes to be transmitted
+     */
     public byte[] encodePacket() {
-        byte[] buffer = new byte[6 + len + 2];
+        final int bufLen;
+        final int payloadSize;
+        
+        if (isMavlink2) {
+            payloadSize = mavTrimPayload(payload.payload.array());
+            bufLen = MAVLINK2_HEADER_LEN + payloadSize + 2;
+        } else {
+            payloadSize = payload.size();
+            bufLen = MAVLINK1_HEADER_LEN + payloadSize + 2;
+
+        }
+        byte[] buffer = new byte[bufLen];
         
         int i = 0;
-        buffer[i++] = (byte) MAVLINK_STX;
-        buffer[i++] = (byte) len;
-        buffer[i++] = (byte) seq;
-        buffer[i++] = (byte) sysid;
-        buffer[i++] = (byte) compid;
-        buffer[i++] = (byte) msgid;
+        if (isMavlink2) {
+            buffer[i++] = (byte) MAVLINK_STX_MAVLINK2;
+            buffer[i++] = (byte) payloadSize;
+            buffer[i++] = (byte) incompatFlags;
+            buffer[i++] = (byte) compatFlags;
+            buffer[i++] = (byte) seq;
+            buffer[i++] = (byte) sysid;
+            buffer[i++] = (byte) compid;
+            buffer[i++] = (byte) (msgid & 0XFF);
+            buffer[i++] = (byte) ((msgid >>> 8) & 0XFF);
+            buffer[i++] = (byte) ((msgid >>> 16) & 0XFF);
+        } else {
+            buffer[i++] = (byte) MAVLINK_STX_MAVLINK1;
+            buffer[i++] = (byte) payloadSize;
+            buffer[i++] = (byte) seq;
+            buffer[i++] = (byte) sysid;
+            buffer[i++] = (byte) compid;
+            buffer[i++] = (byte) msgid;
+        }
 
-        final int payloadSize = payload.size();
-        for (int j = 0; j < payloadSize; j++) {
+        for (int j = 0; j < payloadSize; ++j) {
             buffer[i++] = payload.payload.get(j);
         }
 
-        generateCRC();
+        generateCRC(payloadSize);
         buffer[i++] = (byte) (crc.getLSB());
         buffer[i++] = (byte) (crc.getMSB());
+
+        logv(String.format("encode: isMavlink2=%s msgid=%d", isMavlink2, msgid));
+
         return buffer;
     }
-
+        
     /**
-    * Unpack the data in this packet and return a MAVLink message
-    *
-    * @return MAVLink message decoded from this packet
-    */
+     * Unpack the data in this packet and return a MAVLink message
+     *
+     * @return MAVLink message decoded from this packet
+     */
     public MAVLinkMessage unpack() {
         switch (msgid) {
-                         
+         
             case msg_respond.MAVLINK_MSG_ID_RESPOND:
                 return  new msg_respond(this);
-                 
+             
             case msg_cmd_change_mode.MAVLINK_MSG_ID_CMD_CHANGE_MODE:
                 return  new msg_cmd_change_mode(this);
-                 
+             
             case msg_cmd_params.MAVLINK_MSG_ID_CMD_PARAMS:
                 return  new msg_cmd_params(this);
-                 
+             
             case msg_cmd_velocity.MAVLINK_MSG_ID_CMD_VELOCITY:
                 return  new msg_cmd_velocity(this);
-                 
+             
             case msg_evt_tilt.MAVLINK_MSG_ID_EVT_TILT:
                 return  new msg_evt_tilt(this);
-                 
+             
             case msg_evt_rpy.MAVLINK_MSG_ID_EVT_RPY:
                 return  new msg_evt_rpy(this);
-                 
+             
             case msg_evt_sensor.MAVLINK_MSG_ID_EVT_SENSOR:
                 return  new msg_evt_sensor(this);
-                 
+             
             case msg_motor_speed.MAVLINK_MSG_ID_MOTOR_SPEED:
                 return  new msg_motor_speed(this);
-                 
+             
             case msg_hw_params.MAVLINK_MSG_ID_HW_PARAMS:
                 return  new msg_hw_params(this);
-                 
+             
             case msg_gyro_params.MAVLINK_MSG_ID_GYRO_PARAMS:
                 return  new msg_gyro_params(this);
-                 
+             
             case msg_comp_filter_params.MAVLINK_MSG_ID_COMP_FILTER_PARAMS:
                 return  new msg_comp_filter_params(this);
-                 
+             
             case msg_evt_accel_raw.MAVLINK_MSG_ID_EVT_ACCEL_RAW:
                 return  new msg_evt_accel_raw(this);
-                 
+             
             case msg_evt_gyro_raw.MAVLINK_MSG_ID_EVT_GYRO_RAW:
                 return  new msg_evt_gyro_raw(this);
-                 
+             
             case msg_evt_calibrated_gyro_raw.MAVLINK_MSG_ID_EVT_CALIBRATED_GYRO_RAW:
                 return  new msg_evt_calibrated_gyro_raw(this);
-                 
+             
             case msg_evt_mag_raw.MAVLINK_MSG_ID_EVT_MAG_RAW:
                 return  new msg_evt_mag_raw(this);
-                 
+             
             case msg_pid_params.MAVLINK_MSG_ID_PID_PARAMS:
                 return  new msg_pid_params(this);
-                 
+             
             case msg_pid_report.MAVLINK_MSG_ID_PID_REPORT:
                 return  new msg_pid_report(this);
-            
             
             default:
                 return null;
@@ -210,5 +316,3 @@ public class MAVLinkPacket implements Serializable {
     }
 
 }
-        
-        

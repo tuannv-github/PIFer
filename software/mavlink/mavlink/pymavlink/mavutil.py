@@ -10,6 +10,8 @@ from builtins import object
 
 import socket, math, struct, time, os, fnmatch, array, sys, errno
 import select
+import copy
+import re
 from pymavlink import mavexpression
 
 # adding these extra imports allows pymavlink to be used directly with pyinstaller
@@ -76,6 +78,25 @@ class location(object):
 
     def __str__(self):
         return "lat=%.6f,lon=%.6f,alt=%.1f" % (self.lat, self.lng, self.alt)
+
+def add_message(messages, mtype, msg):
+    '''add a msg to array of messages, taking account of instance messages'''
+    if msg._instance_field is None or getattr(msg, msg._instance_field, None) is None:
+        # simple case, no instance field
+        messages[mtype] = msg
+        return
+    instance_value = getattr(msg, msg._instance_field)
+    if not mtype in messages:
+        messages[mtype] = copy.copy(msg)
+        messages[mtype]._instances = {}
+        messages[mtype]._instances[instance_value] = msg
+        messages["%s[%s]" % (mtype, str(instance_value))] = copy.copy(msg)
+        return
+    messages[mtype]._instances[instance_value] = msg
+    prev_instances = messages[mtype]._instances
+    messages[mtype] = copy.copy(msg)
+    messages[mtype]._instances = prev_instances
+    messages["%s[%s]" % (mtype, str(instance_value))] = copy.copy(msg)
 
 def set_dialect(dialect):
     '''set the MAVLink dialect to work with.
@@ -349,7 +370,7 @@ class mavfile(object):
             # we've seen a new system
             self.sysid_state[src_system] = mavfile_state()
 
-        self.sysid_state[src_system].messages[type] = msg
+        add_message(self.sysid_state[src_system].messages, type, msg)
 
         if src_tuple == radio_tuple:
             # as a special case radio msgs are added for all sysids
@@ -617,6 +638,7 @@ class mavfile(object):
                         mavlink.MAV_TYPE_OCTOROTOR,
                         mavlink.MAV_TYPE_DODECAROTOR,
                         mavlink.MAV_TYPE_COAXIAL,
+                        mavlink.MAV_TYPE_DECAROTOR,
                         mavlink.MAV_TYPE_TRICOPTER]:
             map = mode_mapping_acm
         if mav_type == mavlink.MAV_TYPE_FIXED_WING:
@@ -1448,6 +1470,8 @@ class mavmmaplog(mavlogfile):
         # mapping from msg id to name
         self.id_to_name = {}
 
+        self.instance_offsets = {}
+
         self.type_nums = None
 
         ofs = 0
@@ -1462,11 +1486,13 @@ class mavmmaplog(mavlogfile):
             if marker == MARKER_V1:
                 mtype = u_ord(self.data_map[ofs+13])
                 mlen += 8
+                data_ofs = 14
             elif marker == MARKER_V2:
                 if ofs+8+10 > self.data_len:
                     break
                 mtype = u_ord(self.data_map[ofs+15]) | (u_ord(self.data_map[ofs+16])<<8) | (u_ord(self.data_map[ofs+17])<<16)
                 mlen += 12
+                data_ofs = 18
                 incompat_flags = u_ord(self.data_map[ofs+10])
                 if incompat_flags & mavlink.MAVLINK_IFLAG_SIGNED:
                     mlen += mavlink.MAVLINK_SIGNATURE_BLOCK_LEN
@@ -1486,7 +1512,18 @@ class mavmmaplog(mavlogfile):
                 self.id_to_name[mtype] = msg.name
                 self.f.seek(ofs)
                 m = self.recv_msg()
-                self.messages[msg.name] = m
+                add_message(self.messages, msg.name, m)
+                if m._instance_field is not None:
+                    self.instance_offsets[mtype] = m._instance_offset
+
+            if mtype in self.instance_offsets:
+                # populate the messages array with a new instance. This assumes we can get the instance
+                # as a single byte integer
+                self.f.seek(ofs + data_ofs + self.instance_offsets[mtype])
+                b = self.f.read(1)
+                instance, = struct.unpack('b', b)
+                mname = self.id_to_name[mtype]
+                self.messages["%s[%s]" % (mname, str(instance))] = self.messages[mname]
 
             self.offsets[mtype].append(ofs)
             self.counts[mtype] += 1
@@ -1622,7 +1659,7 @@ def mavlink_connection(device, baud=115200, source_system=255, source_component=
                        robust_parsing=True, notimestamps=False, input=True,
                        dialect=None, autoreconnect=False, zero_time_base=False,
                        retries=3, use_native=default_native,
-                       force_connected=False, progress_callback=None):
+                       force_connected=False, progress_callback=None, **opts):
     '''open a serial, UDP, TCP or file mavlink connection'''
     global mavfile_global
 
@@ -1657,6 +1694,26 @@ def mavlink_connection(device, baud=115200, source_system=255, source_component=
         # support dataflash logs
         from pymavlink import DFReader
         m = DFReader.DFReader_binary(device, zero_time_base=zero_time_base, progress_callback=progress_callback)
+        mavfile_global = m
+        return m
+
+    if device.lower().startswith('csv:'):
+        # support CSV logs
+        from pymavlink import CSVReader
+        # special-case for users wanting a : separator:
+        colon_separator_re = ""
+        if re.match(".*separator=::?.*", device):
+            opts["separator"] = ":"
+            device = re.sub(":separator=:", "", device)
+        components = device.split(":")
+        filename = components[1]
+        for nv in components[2:]:
+            (name, value) = nv.split('=')
+            opts[name] = value
+        m = CSVReader.CSVReader(filename,
+                                zero_time_base=zero_time_base,
+                                progress_callback=progress_callback,
+                                **opts)
         mavfile_global = m
         return m
 
@@ -1883,6 +1940,7 @@ mode_mapping_apm = {
     21 : 'QRTL',
     22 : 'QAUTOTUNE',
     23 : 'QACRO',
+    24 : 'THERMAL',
     }
 mode_mapping_acm = {
     0 : 'STABILIZE',
@@ -2056,6 +2114,7 @@ def mode_mapping_byname(mav_type):
                     mavlink.MAV_TYPE_HELICOPTER,
                     mavlink.MAV_TYPE_HEXAROTOR,
                     mavlink.MAV_TYPE_OCTOROTOR,
+                    mavlink.MAV_TYPE_DECAROTOR,
                     mavlink.MAV_TYPE_COAXIAL,
                     mavlink.MAV_TYPE_TRICOPTER]:
         map = mode_mapping_acm
@@ -2080,6 +2139,7 @@ def mode_mapping_bynumber(mav_type):
     if mav_type in [mavlink.MAV_TYPE_QUADROTOR,
                     mavlink.MAV_TYPE_HELICOPTER,
                     mavlink.MAV_TYPE_HEXAROTOR,
+                    mavlink.MAV_TYPE_DECAROTOR,
                     mavlink.MAV_TYPE_OCTOROTOR,
                     mavlink.MAV_TYPE_DODECAROTOR,
                     mavlink.MAV_TYPE_COAXIAL,
@@ -2106,10 +2166,15 @@ def mode_string_v10(msg):
         return interpret_px4_mode(msg.base_mode, msg.custom_mode)
     if not msg.base_mode & mavlink.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED:
         return "Mode(0x%08x)" % msg.base_mode
-    if msg.type in [ mavlink.MAV_TYPE_QUADROTOR, mavlink.MAV_TYPE_HEXAROTOR,
-                     mavlink.MAV_TYPE_OCTOROTOR, mavlink.MAV_TYPE_TRICOPTER,
-                     mavlink.MAV_TYPE_COAXIAL,
-                     mavlink.MAV_TYPE_HELICOPTER ]:
+    if msg.type in [
+            mavlink.MAV_TYPE_HELICOPTER,
+            mavlink.MAV_TYPE_COAXIAL,
+            mavlink.MAV_TYPE_TRICOPTER,
+            mavlink.MAV_TYPE_QUADROTOR,
+            mavlink.MAV_TYPE_HEXAROTOR,
+            mavlink.MAV_TYPE_OCTOROTOR,
+            mavlink.MAV_TYPE_DECAROTOR,
+    ]:
         if msg.custom_mode in mode_mapping_acm:
             return mode_mapping_acm[msg.custom_mode]
     if msg.type == mavlink.MAV_TYPE_FIXED_WING:
@@ -2142,7 +2207,7 @@ def mode_string_acm(mode_number):
     return "Mode(%u)" % mode_number
 
 class x25crc(object):
-    '''x25 CRC - based on checksum.h from mavlink library'''
+    '''CRC-16/MCRF4XX - based on checksum.h from mavlink library'''
     def __init__(self, buf=''):
         self.crc = 0xffff
         self.accumulate(buf)
@@ -2327,7 +2392,7 @@ def dump_message_verbose(f, m):
         timestamp = "%s.%02u: " % (
             time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(timestamp)),
             int(timestamp*100.0)%100)
-    f.write("%s%s (link=%s) (signed=%s) (seq=%u) (src=%u/%u)\n" % (timestamp, m.get_type(), str(m.get_link_id()), str(m.get_signed()), m.get_seq(), m.get_srcSystem(), m.get_srcComponent()))
+    f.write("%s%s (id=%u) (link=%s) (signed=%s) (seq=%u) (src=%u/%u)\n" % (timestamp, m.get_type(), m.get_msgId(), str(m.get_link_id()), str(m.get_signed()), m.get_seq(), m.get_srcSystem(), m.get_srcComponent()))
     for fieldname in m.get_fieldnames():
 
         # format in those most boring way possible:

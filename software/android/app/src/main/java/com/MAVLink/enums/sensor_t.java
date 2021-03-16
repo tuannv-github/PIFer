@@ -7,8 +7,8 @@
 package com.MAVLink.enums;
 
 /** 
-* 
-*/
+ * 
+ */
 public class sensor_t {
    public static final int SENSOR_IMU_OK = 1; /*  | */
    public static final int SENSOR_IMU_ERROR = 2; /*  | */

@@ -27,7 +27,7 @@ extern "C" {
 #define MAVLINK_MESSAGE_CRCS {164, 44, 245, 202, 83, 93, 54, 183, 55, 249, 157, 117, 142, 57, 76, 2, 198, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 #endif
 
-#include <application/mav/mavlink/protocol.h>
+#include "../protocol.h"
 
 #define MAVLINK_ENABLED_PROTOCOL
 
@@ -132,23 +132,23 @@ typedef enum tilt_type_t
 #endif
 
 // MESSAGE DEFINITIONS
-#include <application/mav/mavlink/protocol/mavlink_msg_respond.h>
-#include <application/mav/mavlink/protocol/mavlink_msg_cmd_change_mode.h>
-#include <application/mav/mavlink/protocol/mavlink_msg_cmd_params.h>
-#include <application/mav/mavlink/protocol/mavlink_msg_cmd_velocity.h>
-#include <application/mav/mavlink/protocol/mavlink_msg_evt_tilt.h>
-#include <application/mav/mavlink/protocol/mavlink_msg_evt_rpy.h>
-#include <application/mav/mavlink/protocol/mavlink_msg_evt_sensor.h>
-#include <application/mav/mavlink/protocol/mavlink_msg_motor_speed.h>
-#include <application/mav/mavlink/protocol/mavlink_msg_hw_params.h>
-#include <application/mav/mavlink/protocol/mavlink_msg_gyro_params.h>
-#include <application/mav/mavlink/protocol/mavlink_msg_comp_filter_params.h>
-#include <application/mav/mavlink/protocol/mavlink_msg_evt_accel_raw.h>
-#include <application/mav/mavlink/protocol/mavlink_msg_evt_gyro_raw.h>
-#include <application/mav/mavlink/protocol/mavlink_msg_evt_calibrated_gyro_raw.h>
-#include <application/mav/mavlink/protocol/mavlink_msg_evt_mag_raw.h>
-#include <application/mav/mavlink/protocol/mavlink_msg_pid_params.h>
-#include <application/mav/mavlink/protocol/mavlink_msg_pid_report.h>
+#include "./mavlink_msg_respond.h"
+#include "./mavlink_msg_cmd_change_mode.h"
+#include "./mavlink_msg_cmd_params.h"
+#include "./mavlink_msg_cmd_velocity.h"
+#include "./mavlink_msg_evt_tilt.h"
+#include "./mavlink_msg_evt_rpy.h"
+#include "./mavlink_msg_evt_sensor.h"
+#include "./mavlink_msg_motor_speed.h"
+#include "./mavlink_msg_hw_params.h"
+#include "./mavlink_msg_gyro_params.h"
+#include "./mavlink_msg_comp_filter_params.h"
+#include "./mavlink_msg_evt_accel_raw.h"
+#include "./mavlink_msg_evt_gyro_raw.h"
+#include "./mavlink_msg_evt_calibrated_gyro_raw.h"
+#include "./mavlink_msg_evt_mag_raw.h"
+#include "./mavlink_msg_pid_params.h"
+#include "./mavlink_msg_pid_report.h"
 
 // base include
 
