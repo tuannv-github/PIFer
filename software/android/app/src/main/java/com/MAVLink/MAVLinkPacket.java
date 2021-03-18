@@ -309,6 +309,33 @@ public class MAVLinkPacket implements Serializable {
              
             case msg_pid_report.MAVLINK_MSG_ID_PID_REPORT:
                 return  new msg_pid_report(this);
+             
+            case msg_blink.MAVLINK_MSG_ID_BLINK:
+                return  new msg_blink(this);
+             
+            case msg_ble_mesh.MAVLINK_MSG_ID_BLE_MESH:
+                return  new msg_ble_mesh(this);
+             
+            case msg_onoff.MAVLINK_MSG_ID_ONOFF:
+                return  new msg_onoff(this);
+             
+            case msg_location.MAVLINK_MSG_ID_LOCATION:
+                return  new msg_location(this);
+             
+            case msg_location_reduced.MAVLINK_MSG_ID_LOCATION_REDUCED:
+                return  new msg_location_reduced(this);
+             
+            case msg_distance.MAVLINK_MSG_ID_DISTANCE:
+                return  new msg_distance(this);
+             
+            case msg_tof.MAVLINK_MSG_ID_TOF:
+                return  new msg_tof(this);
+             
+            case msg_slot.MAVLINK_MSG_ID_SLOT:
+                return  new msg_slot(this);
+             
+            case msg_tag.MAVLINK_MSG_ID_TAG:
+                return  new msg_tag(this);
             
             default:
                 return null;

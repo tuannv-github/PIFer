@@ -9,17 +9,18 @@
 		</enum>
 
 		<enum name="rmode_t">
-			<entry name="MODE_RUN">Default mode</entry>
-			<entry name="MODE_HW">Motor configuration mode</entry>
-			<entry name="MODE_IMU">IMU calibration mode</entry>
-			<entry name="MODE_PIDT_TW">PID calibration mode</entry>
-			<entry name="MODE_PIDT_TA">PID calibration mode</entry>
+			<entry name="MODE_RUN"></entry>
+			<entry name="MODE_HW"></entry>
+			<entry name="MODE_IMU"></entry>
+			<entry name="MODE_PIDT_TW"></entry>
+			<entry name="MODE_PIDT_TA"></entry>
 		</enum>
 
 		<enum name="cmd_t">
 			<entry name="CMD_SAVE"></entry>
 			<entry name="CMD_LOAD"></entry>
 		</enum>
+
 		<enum name="sensor_t">
 			<entry name="SENSOR_IMU_OK"></entry>
 			<entry name="SENSOR_IMU_ERROR"></entry>
@@ -31,20 +32,25 @@
 		</enum>
 
 		<enum name="pidc_t">
-			<entry name="PID_TILT">Two wheels robot</entry>
-			<entry name="PID_VEL">Two wheels robot</entry>
-			<entry name="PID_POS">Two wheels robot</entry>
+			<entry name="PID_TILT"></entry>
+			<entry name="PID_VEL"></entry>
+			<entry name="PID_POS"></entry>
 
-			<entry name="PID_WHE0">Tank PID</entry>
-			<entry name="PID_WHE1">Tank PID</entry>
-			<entry name="PID_WHE2">Tank PID</entry>
-			<entry name="PID_WHE3">Tank PID</entry>
-			<entry name="PID_SYNC">Tank PID</entry>
+			<entry name="PID_WHE0"></entry>
+			<entry name="PID_WHE1"></entry>
+			<entry name="PID_WHE2"></entry>
+			<entry name="PID_WHE3"></entry>
+			<entry name="PID_SYNC"></entry>
 		</enum>
 
 		<enum name="tilt_type_t">
-			<entry name="ROLL">Tilt angle is roll angle</entry>
-			<entry name="PITCH">Pitch angle is roll angle</entry>
+			<entry name="ROLL"></entry>
+			<entry name="PITCH"></entry>
+		</enum>
+
+		<enum name="role_t">
+			<entry name="ANCHOR"></entry>
+			<entry name="TAG"></entry>
 		</enum>
 	</enums>
 
@@ -165,6 +171,87 @@
 			<field type="float" name="I_Part">I part</field>
 			<field type="float" name="D_Part">D part</field>
 			<field type="float" name="U">Output</field>
+		</message>
+
+		<message id="17" name="BLINK">
+			<description>Location message</description>
+			<field type="uint16_t" name="uwb_address"/>
+			<field type="uint8_t" enum="role_t" name="role"/>
+		</message>
+
+		<message id="18" name="BLE_MESH">
+			<description>BLE mesh message</description>
+			<field type="uint16_t" name="uwb_address"/>
+			<field type="uint16_t" name="mesh_address"/>
+		</message>
+
+		<message id="19" name="ONOFF">
+			<description>On off message</description>
+			<field type="uint16_t" name="uwb_address"/>
+			<field type="uint8_t" name="value"/>
+		</message>
+
+		<message id="20" name="LOCATION">
+			<description>Location message</description>
+			<field type="uint16_t" name="uwb_address"/>
+			<field type="float" name="location_x"/>
+			<field type="float" name="location_y"/>
+			<field type="float" name="location_z"/>
+		</message>
+
+		<message id="21" name="LOCATION_REDUCED">
+			<description>Location message</description>
+			<field type="uint16_t" name="mesh_address"/>
+			<field type="float" name="location_x"/>
+			<field type="float" name="location_y"/>
+		</message>
+
+		<message id="22" name="DISTANCE">
+			<description>Distance message</description>
+			<field type="uint16_t" name="uwb_address"/>
+			<field type="uint16_t" name="anchor"/>
+			<field type="float" name="distance"/>
+		</message>
+
+		<message id="23" name="TOF">
+			<description>TOF message</description>
+			<field type="uint16_t" name="uwb_address"/>
+			<field type="uint16_t" name="anchor"/>
+			<field type="uint32_t" name="tof"/>
+		</message>
+
+		<message id="24" name="SLOT">
+			<description>Slot message</description>
+			<field type="uint16_t" name="uwb_address"/>
+			<field type="uint8_t" name="slot"/>
+		</message>
+
+		<message id="25" name="TAG">
+			<description>Tag message</description>
+			<field type="uint16_t" name="a0"/>
+			<field type="float" name="a0x"/>
+			<field type="float" name="a0y"/>
+			<field type="float" name="a0z"/>
+			<field type="float" name="a0r"/>
+			<field type="uint16_t" name="a1"/>
+			<field type="float" name="a1x"/>
+			<field type="float" name="a1y"/>
+			<field type="float" name="a1z"/>
+			<field type="float" name="a1r"/>
+			<field type="uint16_t" name="a2"/>
+			<field type="float" name="a2x"/>
+			<field type="float" name="a2y"/>
+			<field type="float" name="a2z"/>
+			<field type="float" name="a2r"/>
+			<field type="uint16_t" name="a3"/>
+			<field type="float" name="a3x"/>
+			<field type="float" name="a3y"/>
+			<field type="float" name="a3z"/>
+			<field type="float" name="a3r"/>
+			<field type="uint16_t" name="t0"/>
+			<field type="float" name="t0x"/>
+			<field type="float" name="t0y"/>
+			<field type="float" name="t0z"/>
 		</message>
 
 	</messages>

@@ -7,6 +7,7 @@
 package com.MAVLink.Messages;
 
 import com.MAVLink.MAVLinkPacket;
+import com.MAVLink.common.msg_radio_status;
 
 /**
  * Storage for MAVLink Packet and Error statistics
@@ -40,6 +41,9 @@ public class MAVLinkStats /* implements Serializable */{
      * @param packet Packet that should be checked
      */
     public void newPacket(MAVLinkPacket packet) {
+        if (ignoreRadioPackets && packet.msgid == msg_radio_status.MAVLINK_MSG_ID_RADIO_STATUS) {
+            return;
+        }
 
         if (systemStats[packet.sysid] == null) {
             // only allocate stats for systems that exsist on the network
