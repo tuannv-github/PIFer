@@ -49,4 +49,8 @@ typedef struct
     float yaw;
 }ekf_measurement_t;
 
+void ekf_init(ekf_t *ekf, ekf_params_t *params);
+void ekf_predict(ekf_t *ekf, ekf_control_t *c);
+void ekf_correct(ekf_t *ekf, ekf_measurement_t *m);
+
 #endif
