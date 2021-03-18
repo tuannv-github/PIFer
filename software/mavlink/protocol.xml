@@ -254,5 +254,18 @@
 			<field type="float" name="t0z"/>
 		</message>
 
+		<message id="26" name="CONTROL">
+			<description>Control message</description>
+			<field type="float" name="left"/>
+			<field type="float" name="right"/>
+		</message>
+
+		<message id="27" name="MEASUREMENT">
+			<description>Measurement message</description>
+			<field type="float" name="rx"/>
+			<field type="float" name="ry"/>
+			<field type="float" name="range"/>
+			<field type="float" name="yaw"/>
+		</message>
 	</messages>
 </mavlink>
