@@ -336,6 +336,15 @@ public class MAVLinkPacket implements Serializable {
              
             case msg_tag.MAVLINK_MSG_ID_TAG:
                 return  new msg_tag(this);
+             
+            case msg_control.MAVLINK_MSG_ID_CONTROL:
+                return  new msg_control(this);
+             
+            case msg_measurement.MAVLINK_MSG_ID_MEASUREMENT:
+                return  new msg_measurement(this);
+             
+            case msg_control_measurement.MAVLINK_MSG_ID_CONTROL_MEASUREMENT:
+                return  new msg_control_measurement(this);
             
             default:
                 return null;
