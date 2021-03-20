@@ -72,8 +72,6 @@ private slots:
     void gui_send(QByteArray ba);
 
     void on_btn_open_com_clicked();
-    void on_btn_open_server_clicked();
-
     void on_btn_open_socket_clicked();
 
 private:
