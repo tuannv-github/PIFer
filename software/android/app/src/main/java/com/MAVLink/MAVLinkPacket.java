@@ -292,17 +292,11 @@ public class MAVLinkPacket implements Serializable {
             case msg_comp_filter_params.MAVLINK_MSG_ID_COMP_FILTER_PARAMS:
                 return  new msg_comp_filter_params(this);
              
-            case msg_evt_accel_raw.MAVLINK_MSG_ID_EVT_ACCEL_RAW:
-                return  new msg_evt_accel_raw(this);
+            case msg_evt_gyro_accel_mag_raw.MAVLINK_MSG_ID_EVT_GYRO_ACCEL_MAG_RAW:
+                return  new msg_evt_gyro_accel_mag_raw(this);
              
-            case msg_evt_gyro_raw.MAVLINK_MSG_ID_EVT_GYRO_RAW:
-                return  new msg_evt_gyro_raw(this);
-             
-            case msg_evt_calibrated_gyro_raw.MAVLINK_MSG_ID_EVT_CALIBRATED_GYRO_RAW:
-                return  new msg_evt_calibrated_gyro_raw(this);
-             
-            case msg_evt_mag_raw.MAVLINK_MSG_ID_EVT_MAG_RAW:
-                return  new msg_evt_mag_raw(this);
+            case msg_evt_gyro_accel_mag_calibrated.MAVLINK_MSG_ID_EVT_GYRO_ACCEL_MAG_CALIBRATED:
+                return  new msg_evt_gyro_accel_mag_calibrated(this);
              
             case msg_pid_params.MAVLINK_MSG_ID_PID_PARAMS:
                 return  new msg_pid_params(this);

@@ -14,20 +14,13 @@ static void imu_raw_callback(void* ctx){
 	mavlink_message_t msg;
 	uint8_t gmav_send_buf[256];
 	uint16_t len;
-	float raw[3];
-
-	imu_get_accel_raw(raw);
-	mavlink_msg_evt_accel_raw_pack(0,0,&msg,raw[0],raw[1],raw[2]);
-	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
-	mav_send((char*)gmav_send_buf, len);
+	float raw[9];
 
 	imu_get_gyro_raw(raw);
-	mavlink_msg_evt_gyro_raw_pack(0,0,&msg,raw[0],raw[1],raw[2]);
-	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
-	mav_send((char*)gmav_send_buf, len);
+	imu_get_accel_raw(&raw[3]);
+	imu_get_mag_raw(&raw[6]);
 
-	imu_get_mag_raw(raw);
-	mavlink_msg_evt_mag_raw_pack(0,0,&msg,raw[0],raw[1],raw[2]);
+	mavlink_msg_evt_gyro_accel_mag_raw_pack(0, 0, &msg, raw[0], raw[1], raw[2], raw[3], raw[4], raw[5], raw[6], raw[7], raw[8]);
 	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
 	mav_send((char*)gmav_send_buf, len);
 
@@ -43,13 +36,17 @@ static void imu_result_callback(void* ctx){
 	mavlink_message_t msg;
 	uint8_t gmav_send_buf[256];
 	uint16_t len;
-	float raw[3];
+	float raw[9];
 
 	imu_get_gyro_raw(raw);
+	imu_get_accel_raw(&raw[3]);
+	imu_get_mag_raw(&raw[6]);
+
 	raw[0] -= params.gx_offset;
 	raw[1] -= params.gy_offset;
 	raw[2] -= params.gz_offset;
-	mavlink_msg_evt_calibrated_gyro_raw_pack(0,0,&msg,raw[0],raw[1],raw[2]);
+
+	mavlink_msg_evt_gyro_accel_mag_calibrated_pack(0, 0, &msg, raw[0], raw[1], raw[2], raw[3], raw[4], raw[5], raw[6], raw[7], raw[8]);
 	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
 	mav_send((char*)gmav_send_buf, len);
 

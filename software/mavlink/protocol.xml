@@ -126,32 +126,30 @@
 			<field type="float" name="g_believe">Belive in gyroscope</field>
 		</message>
 
-		<message id="11" name="EVT_ACCEL_RAW">
-			<description>IMU raw value. No need a respond message for confimation</description>
-			<field type="float" name="acc_x">Accel X</field>
-			<field type="float" name="acc_y">Accel Y</field>
-			<field type="float" name="acc_z">Accel Z</field>
+		<message id="11" name="EVT_GYRO_ACCEL_MAG_RAW">
+			<description>IMU raw value</description>
+			<field type="float" name="gx">Gyro X</field>
+			<field type="float" name="gy">Gyro Y</field>
+			<field type="float" name="gz">Gyro Z</field>
+			<field type="float" name="ax">Accel X</field>
+			<field type="float" name="ay">Accel Y</field>
+			<field type="float" name="az">Accel Z</field>
+			<field type="float" name="mx">Mag X</field>
+			<field type="float" name="my">Mag Y</field>
+			<field type="float" name="mz">Mag Z</field>
 		</message>
 
-		<message id="12" name="EVT_GYRO_RAW">
-			<description>IMU raw value. No need a respond message for confimation</description>
-			<field type="float" name="gyro_x">Gyro X</field>
-			<field type="float" name="gyro_y">Gyro Y</field>
-			<field type="float" name="gyro_z">Gyro Z</field>
-		</message>
-
-		<message id="13" name="EVT_CALIBRATED_GYRO_RAW">
-			<description>IMU raw value. No need a respond message for confimation</description>
-			<field type="float" name="gyro_x">Gyro X</field>
-			<field type="float" name="gyro_y">Gyro Y</field>
-			<field type="float" name="gyro_z">Gyro Z</field>
-		</message>
-
-		<message id="14" name="EVT_MAG_RAW">
-			<description>IMU raw value. No need a respond message for confimation</description>
-			<field type="float" name="mag_x">Mag X</field>
-			<field type="float" name="mag_y">Mag Y</field>
-			<field type="float" name="mag_z">Mag Z</field>
+		<message id="12" name="EVT_GYRO_ACCEL_MAG_CALIBRATED">
+			<description>IMU calibrated value</description>
+			<field type="float" name="gx">Gyro X</field>
+			<field type="float" name="gy">Gyro Y</field>
+			<field type="float" name="gz">Gyro Z</field>
+			<field type="float" name="ax">Accel X</field>
+			<field type="float" name="ay">Accel Y</field>
+			<field type="float" name="az">Accel Z</field>
+			<field type="float" name="mx">Mag X</field>
+			<field type="float" name="my">Mag Y</field>
+			<field type="float" name="mz">Mag Z</field>
 		</message>
 
 		<message id="15" name="PID_PARAMS">

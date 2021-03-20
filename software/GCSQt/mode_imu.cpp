@@ -15,34 +15,26 @@ Mode_imu::~Mode_imu()
 
 void Mode_imu::mav_recv(mavlink_message_t *msg){
     switch(msg->msgid) {
-    case MAVLINK_MSG_ID_EVT_ACCEL_RAW:
-        mavlink_evt_accel_raw_t accel_raw_msg;
-        mavlink_msg_evt_accel_raw_decode(msg, &accel_raw_msg);
-        ui->tb_ax->setText(QString::number(accel_raw_msg.acc_x));
-        ui->tb_ay->setText(QString::number(accel_raw_msg.acc_y));
-        ui->tb_az->setText(QString::number(accel_raw_msg.acc_z));
-        break;
-    case MAVLINK_MSG_ID_EVT_GYRO_RAW:
-        mavlink_evt_gyro_raw_t gyro_raw_msg;
-        mavlink_msg_evt_gyro_raw_decode(msg, &gyro_raw_msg);
-        ui->tb_gx->setText(QString::number(gyro_raw_msg.gyro_x));
-        ui->tb_gy->setText(QString::number(gyro_raw_msg.gyro_y));
-        ui->tb_gz->setText(QString::number(gyro_raw_msg.gyro_z));
+    case MAVLINK_MSG_ID_EVT_GYRO_ACCEL_MAG_RAW:
+        mavlink_evt_gyro_accel_mag_raw_t gyro_accel_mag_raw_msg;
+        mavlink_msg_evt_gyro_accel_mag_raw_decode(msg, &gyro_accel_mag_raw_msg);
+        ui->tb_ax->setText(QString::number(gyro_accel_mag_raw_msg.ax));
+        ui->tb_ay->setText(QString::number(gyro_accel_mag_raw_msg.ay));
+        ui->tb_az->setText(QString::number(gyro_accel_mag_raw_msg.az));
+        ui->tb_gx->setText(QString::number(gyro_accel_mag_raw_msg.gx));
+        ui->tb_gy->setText(QString::number(gyro_accel_mag_raw_msg.gy));
+        ui->tb_gz->setText(QString::number(gyro_accel_mag_raw_msg.gz));
         if(g_is_gyro_calibrating){
-            g_gx_offset += UPDATE_COEFF*(gyro_raw_msg.gyro_x - g_gx_offset);
-            g_gy_offset += UPDATE_COEFF*(gyro_raw_msg.gyro_y - g_gy_offset);
-            g_gz_offset += UPDATE_COEFF*(gyro_raw_msg.gyro_z - g_gz_offset);
+            g_gx_offset += UPDATE_COEFF*(gyro_accel_mag_raw_msg.gx - g_gx_offset);
+            g_gy_offset += UPDATE_COEFF*(gyro_accel_mag_raw_msg.gy - g_gy_offset);
+            g_gz_offset += UPDATE_COEFF*(gyro_accel_mag_raw_msg.gz - g_gz_offset);
             ui->tb_gx_offset->setText(QString::number(g_gx_offset));
             ui->tb_gy_offset->setText(QString::number(g_gy_offset));
             ui->tb_gz_offset->setText(QString::number(g_gz_offset));
         }
-        break;
-    case MAVLINK_MSG_ID_EVT_MAG_RAW:
-        mavlink_evt_mag_raw_t mag_raw_msg;
-        mavlink_msg_evt_mag_raw_decode(msg, &mag_raw_msg);
-        ui->tb_mx->setText(QString::number(mag_raw_msg.mag_x));
-        ui->tb_my->setText(QString::number(mag_raw_msg.mag_y));
-        ui->tb_mz->setText(QString::number(mag_raw_msg.mag_z));
+        ui->tb_mx->setText(QString::number(gyro_accel_mag_raw_msg.mx));
+        ui->tb_my->setText(QString::number(gyro_accel_mag_raw_msg.my));
+        ui->tb_mz->setText(QString::number(gyro_accel_mag_raw_msg.mz));
         break;
     case MAVLINK_MSG_ID_EVT_RPY:
         mavlink_evt_rpy_t rpy_msg;
@@ -92,13 +84,13 @@ void Mode_imu::mav_recv(mavlink_message_t *msg){
             ui->tb_gbelieve->setText(QString::number(static_cast<double>(comp_filter_params.g_believe)));
         }
         break;
-    case MAVLINK_MSG_ID_EVT_CALIBRATED_GYRO_RAW:
+    case MAVLINK_MSG_ID_EVT_GYRO_ACCEL_MAG_CALIBRATED:
         {
-            mavlink_evt_calibrated_gyro_raw_t calibrated_gyro_raw;
-            mavlink_msg_evt_calibrated_gyro_raw_decode(msg, &calibrated_gyro_raw);
-            ui->tb_cab_gx->setText(QString::number(calibrated_gyro_raw.gyro_x));
-            ui->tb_cab_gy->setText(QString::number(calibrated_gyro_raw.gyro_y));
-            ui->tb_cab_gz->setText(QString::number(calibrated_gyro_raw.gyro_z));
+            mavlink_evt_gyro_accel_mag_calibrated_t gyro_accel_mag_calibrated;
+            mavlink_msg_evt_gyro_accel_mag_calibrated_decode(msg, &gyro_accel_mag_calibrated);
+            ui->tb_cab_gx->setText(QString::number(gyro_accel_mag_calibrated.gx));
+            ui->tb_cab_gy->setText(QString::number(gyro_accel_mag_calibrated.gy));
+            ui->tb_cab_gz->setText(QString::number(gyro_accel_mag_calibrated.gz));
         }
     default:
         break;
