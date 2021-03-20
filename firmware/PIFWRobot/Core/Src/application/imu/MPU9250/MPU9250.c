@@ -1,149 +1,147 @@
 
 #include <string.h>
+#include <i2c.h>
 
-#include <application/imu/mpu9250/MPU9250.h>
+#include "mpu9250.h"
+#include "config.h"
+#include "register_map.h"
 
-#define MPU9250_I2C_ADDR	(0x68 << 1)
-#define AK8963_I2C_ADDR		(0x0c << 1)
-#define I2C_TIMEOUT_MS		20
+#define GYRO_FS_SEL_250DPS	(0b00 << 3)
+#define GYRO_FS_SEL_500DPS	(0b01 << 3)
+#define GYRO_FS_SEL_1000DPS	(0b10 << 3)
+#define GYRO_FS_SEL_2000DPS	(0b11 << 3)
 
-float g_lsb_per_dpfs;
-float g_lsb_per_g;
-float g_microTesla_per_LSB;
+#define ACCEL_FS_SEL_2G		(0b00 << 3)
+#define ACCEL_FS_SEL_4G		(0b01 << 3)
+#define ACCEL_FS_SEL_8G		(0b10 << 3)
+#define ACCEL_FS_SEL_16G	(0b11 << 3)
 
-static int mpu6500_read(uint8_t addr, uint8_t *value){
-	if(HAL_I2C_Mem_Read(&MPU9250_I2C, MPU9250_I2C_ADDR, addr, 1, value, 1, I2C_TIMEOUT_MS) != HAL_OK)
+
+static float g_lsb_per_dpfs;
+static float g_lsb_per_g;
+static float g_lsb_per_mili_gauss;
+
+static int mpu9250_read(uint8_t addr, uint8_t *value){
+	if(HAL_I2C_Mem_Read(&MPU9250_I2C, MPU9250_I2C_ADDR, addr, I2C_MEMADD_SIZE_8BIT, value, 1, I2C_TIMEOUT_MS) != HAL_OK){
+		*value = 0;
+		return -1;
+	}
+	return 0;
+}
+
+static int mpu9250_write(uint8_t addr, uint8_t *value){
+	if(HAL_I2C_Mem_Write(&MPU9250_I2C, MPU9250_I2C_ADDR, addr, I2C_MEMADD_SIZE_8BIT, value, 1, I2C_TIMEOUT_MS) != HAL_OK)
 		return -1;
 	return 0;
 }
 
-static int mpu6500_write(uint8_t addr, uint8_t *value){
-	if(HAL_I2C_Mem_Write(&MPU9250_I2C, MPU9250_I2C_ADDR, addr, 1, value, 1, I2C_TIMEOUT_MS) != HAL_OK)
-		return -1;
-	uint8_t tmp;
-	if(mpu6500_read(addr, &tmp) < 0) return -1;
-	if(tmp != *value) return -1;
-	return 0;
-}
-
-static int mpu6500_read_bytes(uint8_t addr, uint8_t* value, uint8_t len){
-	if(HAL_I2C_Mem_Read(&MPU9250_I2C, MPU9250_I2C_ADDR, addr, 1, value, len, I2C_TIMEOUT_MS) != HAL_OK){
+static int mpu9250_read_bytes(uint8_t addr, uint8_t* value, uint8_t len){
+	if(HAL_I2C_Mem_Read(&MPU9250_I2C, MPU9250_I2C_ADDR, addr, I2C_MEMADD_SIZE_8BIT, value, len, I2C_TIMEOUT_MS) != HAL_OK){
 		memset(value, 0, len);
 		return -1;
 	}
 	return 0;
 }
 
-//static int mpu6500_write_bytes(uint8_t addr, uint8_t* value, uint8_t len){
-//	if(HAL_I2C_Mem_Write(&MPU9250_I2C, MPU9250_I2C_ADDR, addr, 1, value, len, I2C_TIMEOUT_MS) != HAL_OK)
-//		return -1;
-//	return 0;
-//}
-
-//static int mpu6500_read_mask(uint8_t addr, uint8_t* value, uint8_t mask){
-//	if(HAL_I2C_Mem_Read(&MPU9250_I2C, MPU9250_I2C_ADDR, addr, 1, value, 1, I2C_TIMEOUT_MS) != HAL_OK){
-//		*value = 0;
-//		return -1;
-//	}
-//	*value &= mask;
-//	return 0;
-//}
-
-static int mpu6500_write_mask(uint8_t addr, uint8_t* value, uint8_t mask){
-	uint8_t tmp;
-	if(mpu6500_read(addr, &tmp) < 0) return -1;
-	tmp &= ~mask;
-	tmp += (*value & mask);
-	if(mpu6500_write(addr, &tmp) < 0) return -1;
+static int mpu9250_write_bytes(uint8_t addr, uint8_t* value, uint8_t len){
+	if(HAL_I2C_Mem_Write(&MPU9250_I2C, MPU9250_I2C_ADDR, addr, I2C_MEMADD_SIZE_8BIT, value, len, I2C_TIMEOUT_MS) != HAL_OK)
+		return -1;
 	return 0;
 }
 
-static void ak8963_read(uint8_t addr, uint8_t* value){
-	HAL_I2C_Mem_Read(&MPU9250_I2C, AK8963_I2C_ADDR, addr, 1, value, 1, I2C_TIMEOUT_MS);
+static int ak8963_read(uint8_t addr, uint8_t *value){
+	if(HAL_I2C_Mem_Read(&MPU9250_I2C, AK8963_I2C_ADDR, addr, I2C_MEMADD_SIZE_8BIT, value, 1, I2C_TIMEOUT_MS) != HAL_OK){
+		*value = 0;
+		return -1;
+	}
+	return 0;
 }
 
-//static void ak8963_write(uint8_t addr, uint8_t* value){
-//	HAL_I2C_Mem_Write(&MPU9250_I2C, AK8963_I2C_ADDR, addr, 1, value, 1, I2C_TIMEOUT_MS);
-//}
+static int ak8963_write(uint8_t addr, uint8_t *value){
+	if(HAL_I2C_Mem_Write(&MPU9250_I2C, AK8963_I2C_ADDR, addr, I2C_MEMADD_SIZE_8BIT, value, 1, I2C_TIMEOUT_MS) != HAL_OK)
+		return -1;
+	return 0;
+}
 
-int mpu9250_init(gyro_params_t gyro_params, accel_params_t accel_params, mag_params_t mag_params){
+static int ak8963_read_bytes(uint8_t addr, uint8_t *value, uint8_t len){
+	if(HAL_I2C_Mem_Read(&MPU9250_I2C, AK8963_I2C_ADDR, addr, I2C_MEMADD_SIZE_8BIT, value, len, I2C_TIMEOUT_MS) != HAL_OK){
+		memset(value, 0, len);
+		return -1;
+	}
+	return 0;
+}
+
+static int ak8963_write_bytes(uint8_t addr, uint8_t *value, uint8_t len){
+	if(HAL_I2C_Mem_Write(&MPU9250_I2C, AK8963_I2C_ADDR, addr, I2C_MEMADD_SIZE_8BIT, value, len, I2C_TIMEOUT_MS) != HAL_OK)
+		return -1;
+	return 0;
+}
+
+int mpu9250_init(){
 	uint8_t tmp;
 
 	// Reset mpu9250
-	tmp = H_RESET;
-	if(mpu6500_write_mask(MPU9250_PWR_MGMT_1, &tmp, H_RESET_MASK) < 0) return -1;
+	tmp = 0x80; // H_RESET
+	if(mpu9250_write(MPU9250_PWR_MGMT_1, &tmp) < 0) return -1;
+	for(int i=0;i<10;i++)for(int j=0;j<1000;j++)__NOP();
 
-	// Wake up chip.
-	tmp = 0x00;
-	if(mpu6500_write(MPU9250_PWR_MGMT_1, &tmp) < 0) return -1;
+	// Enable I2C bypass mode
+	tmp = 0x02; // BYPASS_EN
+	if(mpu9250_write(MPU9250_INT_PIN_CFG, &tmp) < 0) return -1;
 
-	// i2c bypass mode clock source
-	tmp = BYPASS_EN;
-	if(mpu6500_write_mask(MPU9250_INT_PIN_CFG, &tmp, BYPASS_EN_MASK) < 0) return -1;
+	// Reset AK8963
+	tmp = 0x01; // SRST
+	if(ak8963_write(AK8963_CNTL2, &tmp) < 0) return -1;
 
 	if(mpu9250_test() < 0) return -1;
 
-	// mpu9250 clock source
-	tmp = CLKSEL;
-	if(mpu6500_write_mask(MPU9250_PWR_MGMT_1, &tmp, CLKSEL_MASK) < 0) return -1;
+	// Set mpu9250 clock source
+	tmp = 0x01; // CLKSEL
+	if(mpu9250_write(MPU9250_PWR_MGMT_1, &tmp) < 0) return -1;
 
-	switch(gyro_params.gfsr){
-		case GFS_SEL_250DPS:
-			tmp = GYRO_FS_SEL_250DPS;
-			if(mpu6500_write_mask(MPU9250_GYRO_CONFIG, &tmp, GYRO_FS_SEL_MASK) < 0) return -1;
-			g_lsb_per_dpfs = 131.f;
-			break;
-		case GFS_SEL_500DPS:
-			tmp = GYRO_FS_SEL_500DPS;
-			if(mpu6500_write_mask(MPU9250_GYRO_CONFIG, &tmp, GYRO_FS_SEL_MASK) < 0) return -1;
-			g_lsb_per_dpfs = 65.5f;
-			break;
-	    case GFS_SEL_1000DPS:
-			tmp = GYRO_FS_SEL_1000DPS;
-			if(mpu6500_write_mask(MPU9250_GYRO_CONFIG, &tmp, GYRO_FS_SEL_MASK) < 0) return -1;
-			g_lsb_per_dpfs = 32.8f;
-	    	break;
-	    case GFS_SEL_2000DPS:
-			tmp = GYRO_FS_SEL_2000DPS;
-			if(mpu6500_write_mask(MPU9250_GYRO_CONFIG, &tmp, GYRO_FS_SEL_MASK) < 0) return -1;
-			g_lsb_per_dpfs = 16.4f;
-	      break;
-		default:
-			tmp = GYRO_FS_SEL_250DPS;
-			if(mpu6500_write_mask(MPU9250_GYRO_CONFIG, &tmp, GYRO_FS_SEL_MASK) < 0) return -1;
-			g_lsb_per_dpfs = 131.f;
-			break;
-	}
+#if GFS_SEL==0
+		tmp = GYRO_FS_SEL_250DPS;
+		if(mpu9250_write(MPU9250_GYRO_CONFIG, &tmp) < 0) return -1;
+		g_lsb_per_dpfs = 131.f;
+#elif GFS_SEL==1
+		tmp = GYRO_FS_SEL_500DPS;
+		if(mpu9250_write(MPU9250_GYRO_CONFIG, &tmp) < 0) return -1;
+		g_lsb_per_dpfs = 65.5f;
+#elif GFS_SEL==2
+		tmp = GYRO_FS_SEL_1000DPS;
+		if(mpu9250_write(MPU9250_GYRO_CONFIG, &tmp) < 0) return -1;
+		g_lsb_per_dpfs = 32.8f;
+#elif GFS_SEL==3
+		tmp = GYRO_FS_SEL_2000DPS;
+		if(mpu9250_write(MPU9250_GYRO_CONFIG, &tmp) < 0) return -1;
+		g_lsb_per_dpfs = 16.4f;
+#endif
 
-	switch(accel_params.afsr){
-		case AFS_SEL_2G:
-			tmp = ACCEL_FS_SEL_2G;
-			if(mpu6500_write_mask(MPU9250_ACCEL_CONFIG, &tmp, ACCEL_FS_SEL_MASK) < 0) return -1;
-			g_lsb_per_g = 16384.f;
-			break;
-		case AFS_SEL_4G:
-			tmp = ACCEL_FS_SEL_4G;
-			if(mpu6500_write_mask(MPU9250_ACCEL_CONFIG, &tmp, ACCEL_FS_SEL_MASK) < 0) return -1;
-			g_lsb_per_g = 8192.f;
-			break;
-	    case AFS_SEL_8G:
-			tmp = ACCEL_FS_SEL_8G;
-			if(mpu6500_write_mask(MPU9250_ACCEL_CONFIG, &tmp, ACCEL_FS_SEL_MASK) < 0) return -1;
-			g_lsb_per_g = 4096.f;
-	    	break;
-	    case AFS_SEL_16G:
-			tmp = ACCEL_FS_SEL_16G;
-			if(mpu6500_write_mask(MPU9250_ACCEL_CONFIG, &tmp, ACCEL_FS_SEL_MASK) < 0) return -1;
-			g_lsb_per_g = 2048.f;
-	      break;
-		default:
-			tmp = ACCEL_FS_SEL_2G;
-			if(mpu6500_write_mask(MPU9250_ACCEL_CONFIG, &tmp, ACCEL_FS_SEL_MASK) < 0) return -1;
-			g_lsb_per_g = 16384.f;
-			break;
-	}
+#if ACCEL_FS_SEL==0
+		tmp = ACCEL_FS_SEL_2G;
+		if(mpu9250_write(MPU9250_ACCEL_CONFIG, &tmp) < 0) return -1;
+		g_lsb_per_g = 16384.f;
+#elif ACCEL_FS_SEL==1
+		tmp = ACCEL_FS_SEL_4G;
+		if(mpu9250_write(MPU9250_ACCEL_CONFIG, &tmp) < 0) return -1;
+		g_lsb_per_g = 8192.f;
+#elif ACCEL_FS_SEL==2
+		tmp = ACCEL_FS_SEL_8G;
+		if(mpu9250_write(MPU9250_ACCEL_CONFIG, &tmp) < 0) return -1;
+		g_lsb_per_g = 4096.f;
+#elif ACCEL_FS_SEL==3
+		tmp = ACCEL_FS_SEL_16G;
+		if(mpu9250_write(MPU9250_ACCEL_CONFIG, &tmp) < 0) return -1;
+		g_lsb_per_g = 2048.f;
+#endif
 
-	g_microTesla_per_LSB = 0.6f;
+	tmp = 0x00; // Power-down mode
+	if(ak8963_write(AK8963_CNTL1, &tmp) < 0) return -1;
+	for(int i=0;i<10;i++)for(int j=0;j<1000;j++)__NOP();
+
+	tmp = 0x16; // Continuous measurement mode 2 + 16 bit resolution
+	if(ak8963_write(AK8963_CNTL1, &tmp) < 0) return -1;
+	g_lsb_per_mili_gauss = 32760.0f/4912.f;
 
 	return 0;
 }
@@ -151,7 +149,7 @@ int mpu9250_init(gyro_params_t gyro_params, accel_params_t accel_params, mag_par
 int mpu9250_test(){
 	uint8_t tmp;
 
-	mpu6500_read(MPU9250_WHO_AM_I, &tmp);
+	mpu9250_read(MPU9250_WHO_AM_I, &tmp);
 	if(tmp!=MPU9250_WAI_RESULT) return -1;
 
 	ak8963_read(AK8963_WIA, &tmp);
@@ -162,7 +160,7 @@ int mpu9250_test(){
 
 int mpu9250_get_accel_gyro(float *ax, float *ay, float *az, float *gx, float *gy, float *gz){
 	uint8_t buffer[14] = {};
-	if(mpu6500_read_bytes(MPU9250_ACCEL_XOUT_H, buffer, 14) < 0){
+	if(mpu9250_read_bytes(MPU9250_ACCEL_XOUT_H, buffer, 14) < 0){
 		return -1;
 	}
 
@@ -177,8 +175,22 @@ int mpu9250_get_accel_gyro(float *ax, float *ay, float *az, float *gx, float *gy
 }
 
 int mpu9250_get_mag(float *mx, float *my, float *mz){
-	*mx=0;
-	*my=0;
-	*mz=0;
-	return -1;
+	uint8_t tmp;
+	uint8_t raw[7];
+	uint16_t mag_raw[3];
+	if(ak8963_read(AK8963_ST1, &tmp) < 0) return -1;
+	else if(tmp & 0x01){
+		ak8963_read_bytes(AK8963_HXL, raw, 7);
+        uint8_t c = raw[6];                                         		// End data read by reading ST2 register
+        if (!(c & 0x08)) {                                               	// Check if magnetic sensor overflow set, if not then report data
+        	mag_raw[0] = ((int16_t)raw[1] << 8) | raw[0];  					// Turn the MSB and LSB into a signed 16-bit value
+        	mag_raw[1] = ((int16_t)raw[3] << 8) | raw[2];  					// Data stored as little Endian
+        	mag_raw[2] = ((int16_t)raw[5] << 8) | raw[4];
+        }
+        else return -1;
+	}
+	*mx = mag_raw[0]/g_lsb_per_mili_gauss;
+	*my = mag_raw[1]/g_lsb_per_mili_gauss;
+	*mz = mag_raw[2]/g_lsb_per_mili_gauss;
+	return 0;
 }

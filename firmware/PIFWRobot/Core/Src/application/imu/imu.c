@@ -15,14 +15,14 @@
 
 static float roll;
 static float pitch;
-static float motion_6[6];
+static float motion_6[9];
 
 TID(gtid_imu_callback);
 
 static void imu_callback(void* ctx){
-	if(mpu9250_get_accel_gyro(&motion_6[0], &motion_6[1], &motion_6[2], &motion_6[3], &motion_6[4], &motion_6[5]) < 0){
-		return;
-	}
+	if(mpu9250_get_accel_gyro(&motion_6[0], &motion_6[1], &motion_6[2], &motion_6[3], &motion_6[4], &motion_6[5]) < 0) return;
+	if(mpu9250_get_mag(&motion_6[6], &motion_6[7], &motion_6[8]) < 0) return;
+
 	float accel_roll  = atan2(motion_6[1], sqrt(motion_6[0]*motion_6[0] + motion_6[2]*motion_6[2]))*180.f/M_PI;
 	float accel_pitch = atan2(-motion_6[0], sqrt(motion_6[1]*motion_6[1] + motion_6[2]*motion_6[2]))*180.f/M_PI;
 	float roll_rate = (motion_6[3]-params.gx_offset)*0.001f*IMU_PERIOD;
@@ -34,15 +34,7 @@ static void imu_callback(void* ctx){
 }
 
 int imu_init(void){
-	gyro_params_t gyro_params = {
-			.gfsr = GFS_SEL_250DPS
-	};
-	accel_params_t accel_params = {
-			.afsr = AFS_SEL_2G
-	};
-	mag_params_t mag_params;
-
-	mpu9250_init(gyro_params, accel_params, mag_params);
+	mpu9250_init();
 	gtid_imu_callback = timer_register_callback(imu_callback, IMU_PERIOD, 0, TIMER_MODE_REPEAT);
 
 	return true;
@@ -84,10 +76,10 @@ int imu_get_gyro_raw(float raw[3]){
 }
 
 int imu_get_mag_raw(float raw[3]){
-	raw[0] = 0;
-	raw[1] = 0;
-	raw[2] = 0;
-	return -1;
+	raw[0] = motion_6[6];
+	raw[1] = motion_6[7];
+	raw[2] = motion_6[8];
+	return 0;
 }
 
 #endif /* USERCODE_IMU_IMU_C_ */

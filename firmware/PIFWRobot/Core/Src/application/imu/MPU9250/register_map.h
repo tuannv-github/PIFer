@@ -115,8 +115,8 @@ enum ak8963_register {
 	AK8963_HZL = 0x7,
 	AK8963_HZH = 0x8,
 	AK8963_ST2 = 0x9,
-	AK8963_CNTL = 0xA,
-	AK8963_RSV = 0xB,
+	AK8963_CNTL1 = 0xA,
+	AK8963_CNTL2 = 0xB,
 	AK8963_ASTC = 0xC,
 	AK8963_TS1 = 0xD,
 	AK8963_TS2 = 0xE,
@@ -128,26 +128,5 @@ enum ak8963_register {
 
 #define MPU9250_WAI_RESULT	0x71
 #define AK8963_WAI_RESULT	0x48
-
-#define H_RESET				(0b1 << 0)
-#define H_RESET_MASK		(0b1 << 0)
-
-#define CLKSEL				(0b1 << 0)
-#define CLKSEL_MASK			(0b111 << 0)
-
-#define BYPASS_EN			(0b1 << 1)
-#define BYPASS_EN_MASK		(0b1 << 1)
-
-#define GYRO_FS_SEL_250DPS	(0b00 << 3)
-#define GYRO_FS_SEL_500DPS	(0b01 << 3)
-#define GYRO_FS_SEL_1000DPS	(0b10 << 3)
-#define GYRO_FS_SEL_2000DPS	(0b11 << 3)
-#define GYRO_FS_SEL_MASK	(0b11 << 3)
-
-#define ACCEL_FS_SEL_2G		(0b00 << 3)
-#define ACCEL_FS_SEL_4G		(0b01 << 3)
-#define ACCEL_FS_SEL_8G		(0b10 << 3)
-#define ACCEL_FS_SEL_16G	(0b11 << 3)
-#define ACCEL_FS_SEL_MASK	(0b11 << 3)
 
 #endif // _REGISTER_MAP_H_
