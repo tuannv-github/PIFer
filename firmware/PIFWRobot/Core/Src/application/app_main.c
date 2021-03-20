@@ -80,12 +80,22 @@ static void on_mavlink_recv(mavlink_message_t *msg){
 	}
 }
 
+#if ENABLE_NEOPIXEL == 0
+static void led_callback(){
+	HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+}
+#endif
+
 void app_main(){
 
 	buzzer_sys_start();
 	timer_init();
 
+#if ENABLE_NEOPIXEL == 1
 	neopixel_init();
+#else
+	timer_register_callback(led_callback, 500, 0, TIMER_MODE_REPEAT);
+#endif
 
 	// Load parameters from non-volatile memory
 	params_load();

@@ -16,15 +16,18 @@ static mavlink_status_t  status;
 static on_mav_recv_t gon_mav_recv;
 
 static uart_drv_t uart_drv[] = {
-//		{
-//			.huart = &SOU_USART,
-//			.cb_period = SOU_PERIOD,
-//		},
+		{
+			.huart = &STD_USART,
+			.cb_period = STD_PERIOD,
+		},
 		{
 			.huart = &SOE_USART,
 			.cb_period = SOE_PERIOD,
+		},
+		{
+			.huart = &SOU_USART,
+			.cb_period = SOU_PERIOD,
 		}
-
 };
 
 void mavlink_callback(void* ctx){
@@ -47,11 +50,21 @@ void mavlink_callback(void* ctx){
 			gon_mav_recv(&msg);
 		}
 	}
+
+	mavbuf_len = MAV_BUFF_SIZE;
+	uart_recv(&uart_drv[2], mavbuf, &mavbuf_len);
+	for(uint16_t i = 0; i < mavbuf_len; i++){
+		uint8_t msg_received = mavlink_parse_char(MAVLINK_COMM_1, mavbuf[i], &msg, &status);
+		if(msg_received == 1 && gon_mav_recv!=0){
+			gon_mav_recv(&msg);
+		}
+	}
 }
 
 void mav_init(){
 	uart_init(&uart_drv[0]);
-//	uart_init(&uart_drv[1]);
+	uart_init(&uart_drv[1]);
+	uart_init(&uart_drv[2]);
 	timer_register_callback(mavlink_callback, MAVLINK_CB_PERIOD, 0, TIMER_MODE_REPEAT);
 }
 
@@ -60,8 +73,9 @@ void mav_set_on_mav_recv(on_mav_recv_t on_mav_recv){
 }
 
 void mav_send(char *data, uint16_t len){
-	uart_send(&uart_drv[0], data, len);
-//	uart_send(&uart_drv[1], data, len);
+//	uart_send(&uart_drv[0], data, len);
+	uart_send(&uart_drv[1], data, len);
+	uart_send(&uart_drv[2], data, len);
 }
 
 void respond_ok(void){

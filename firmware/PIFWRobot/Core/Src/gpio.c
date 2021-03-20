@@ -56,8 +56,8 @@ void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOD, MTR2_DIR_MCU_Pin|MTR2_ENB_MCU_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, BLUE_RESET_Pin|RF_PWR_Pin|BLUE_KEY_Pin|NRF24_IRQ_Pin
-                          |NRF24_CSN_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, BLUE_RESET_Pin|RF_PWR_Pin|LED_Pin|BLUE_KEY_Pin
+                          |NRF24_IRQ_Pin|NRF24_CSN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(RF_SET_GPIO_Port, RF_SET_Pin, GPIO_PIN_RESET);
@@ -77,9 +77,9 @@ void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PAPin PAPin PAPin PAPin
-                           PAPin */
-  GPIO_InitStruct.Pin = BLUE_RESET_Pin|RF_PWR_Pin|BLUE_KEY_Pin|NRF24_IRQ_Pin
-                          |NRF24_CSN_Pin;
+                           PAPin PAPin */
+  GPIO_InitStruct.Pin = BLUE_RESET_Pin|RF_PWR_Pin|LED_Pin|BLUE_KEY_Pin
+                          |NRF24_IRQ_Pin|NRF24_CSN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

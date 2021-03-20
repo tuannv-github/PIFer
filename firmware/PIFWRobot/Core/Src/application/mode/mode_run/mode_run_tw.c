@@ -19,13 +19,16 @@ typedef struct{
 	bool is_dir_change;
 }cmd_velocity_t;
 
-static cmd_velocity_t gcmd_velocity;
-
 TID(gtid_tilt_controller);
 TID(gtid_vel_controller);
 TID(gtid_imu_tilt);
 
+static cmd_velocity_t gcmd_velocity;
 static float tilt_setpoint;
+
+static uint32_t g_left = 0;
+static uint32_t g_right = 0;
+static uint32_t g_yaw = 0;
 
 static void tilt_controller_callback(void* ctx){
 	float tilt;
@@ -71,7 +74,7 @@ static void vel_controller_callback(void *ctx){
 
 static void tilt_report_callback(void *ctx){
 	mavlink_message_t msg;
-	uint8_t mav_send_buf[256];
+	uint8_t mav_send_buf[64];
 	float tilt;
 	switch(params.tilt_type){
 	case ROLL:
@@ -125,11 +128,12 @@ void mode_run_deinit(){
 	timer_unregister_callback(gtid_imu_tilt);
 }
 
+#if ENABLE_NEOPIXEL == 1
 static timer_id_t g_neopixel_timeout_timer_id = TID_INVALID;
-
 static void neopixel_change_app_idle(void *context){
 	neopixel_set_app(NEOPIXEL_APP_RAINBOW);
 }
+#endif
 
 void on_mode_run_mavlink_recv(mavlink_message_t *msg){
 	switch(msg->msgid){
@@ -151,6 +155,7 @@ void on_mode_run_mavlink_recv(mavlink_message_t *msg){
 
 			gcmd_velocity.cnt = (CONTROL_TIMEOUT_MS/VEL_CONTROLLER_PERIOD);
 
+#if ENABLE_NEOPIXEL == 1
 			float a = gcmd_velocity.vx > 0 ? gcmd_velocity.vx : -gcmd_velocity.vx;
 			float b = gcmd_velocity.omega > 0 ? gcmd_velocity.omega : -gcmd_velocity.omega;
 			if(a < 0.1f && b < 0.1f){
@@ -163,9 +168,20 @@ void on_mode_run_mavlink_recv(mavlink_message_t *msg){
 				g_neopixel_timeout_timer_id = TID_INVALID;
 			}
 			neopixel_app_self_balancing_set(gcmd_velocity.vx*4.0f, gcmd_velocity.omega*4.0f);
+#endif
 		}
 		break;
-	default:
+	case MAVLINK_MSG_ID_DISTANCE:
+		{
+			mavlink_distance_t distance;
+			mavlink_msg_distance_decode(msg, &distance);
+
+			mavlink_message_t cm_msg_mav;
+			uint8_t mav_send_buf[64];
+//			mavlink_msg_control_measurement_pack(0, 0, &cm_msg_mav, left, right, rx, ry, range, yaw);
+			uint16_t len = mavlink_msg_to_send_buffer(mav_send_buf, &cm_msg_mav);
+			mav_send((char*)mav_send_buf, len);
+		}
 		break;
 	}
 }

@@ -56,13 +56,17 @@
 #define TX_CIR_BUF_SIZE 	512
 #define RX_CIR_BUF_SIZE 	512
 
-// Serial over UART define
-#define SOU_USART			huart3
-#define SOU_PERIOD			100
+// Serial to DWM1001
+#define STD_USART			huart1
+#define STD_PERIOD			100
 
 // Serial over ESP8266
 #define SOE_USART			huart2
 #define SOE_PERIOD			100
+
+// Serial over UART define
+#define SOU_USART			huart3
+#define SOU_PERIOD			100
 
 // Mavlink
 #define MAV_BUFF_SIZE 		512
@@ -93,5 +97,6 @@
 
 #define CONST_G 					9.807f
 
+#define ENABLE_NEOPIXEL				0
 
 #endif /* USERCODE_USER_DEFINE_H_ */
