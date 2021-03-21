@@ -16,6 +16,10 @@
 #include "usart.h"
 #include "gpio.h"
 
+// Self-balancing-DC	--> 0
+// Turtle-Step			--> 1
+#define ROBOT_MODEL		1
+
 // Timer callback define
 #define MAX_CALLBACK_FUNC	10
 
@@ -37,12 +41,6 @@
 //AFS_SEL_16G		--> 3
 #define ACCEL_FS_SEL	0
 /* End of IMU definition */
-
-// Self-balancing	--> 0
-// Turtle			--> 1
-#define ROBOT_MODEL		1
-//#define ROBOT_MODEL_TANK
-//#define ROBOT_MODEL_OMNI
 
 // DC				--> 0
 // STEP				--> 1
