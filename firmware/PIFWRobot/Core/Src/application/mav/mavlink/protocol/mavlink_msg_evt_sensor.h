@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE EVT_SENSOR PACKING
 
-#define MAVLINK_MSG_ID_EVT_SENSOR 6
+#define MAVLINK_MSG_ID_EVT_SENSOR 7
 
 
 typedef struct __mavlink_evt_sensor_t {
@@ -10,17 +10,17 @@ typedef struct __mavlink_evt_sensor_t {
 
 #define MAVLINK_MSG_ID_EVT_SENSOR_LEN 1
 #define MAVLINK_MSG_ID_EVT_SENSOR_MIN_LEN 1
-#define MAVLINK_MSG_ID_6_LEN 1
-#define MAVLINK_MSG_ID_6_MIN_LEN 1
+#define MAVLINK_MSG_ID_7_LEN 1
+#define MAVLINK_MSG_ID_7_MIN_LEN 1
 
 #define MAVLINK_MSG_ID_EVT_SENSOR_CRC 54
-#define MAVLINK_MSG_ID_6_CRC 54
+#define MAVLINK_MSG_ID_7_CRC 54
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_EVT_SENSOR { \
-    6, \
+    7, \
     "EVT_SENSOR", \
     1, \
     {  { "imu_status", NULL, MAVLINK_TYPE_INT8_T, 0, 0, offsetof(mavlink_evt_sensor_t, imu_status) }, \

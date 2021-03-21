@@ -45,6 +45,7 @@ typedef struct{
 	int16_t motor1_pos_deadband;
 	int16_t motor1_neg_deadband;
 
+	float complementary_gain;
 	float madgwick_beta;
 
 }params_t;

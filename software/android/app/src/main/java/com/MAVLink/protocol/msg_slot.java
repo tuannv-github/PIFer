@@ -15,7 +15,7 @@ import com.MAVLink.Messages.MAVLinkPayload;
  */
 public class msg_slot extends MAVLinkMessage {
 
-    public static final int MAVLINK_MSG_ID_SLOT = 25;
+    public static final int MAVLINK_MSG_ID_SLOT = 26;
     public static final int MAVLINK_MSG_LENGTH = 3;
     private static final long serialVersionUID = MAVLINK_MSG_ID_SLOT;
 

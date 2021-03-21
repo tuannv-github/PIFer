@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE TOF PACKING
 
-#define MAVLINK_MSG_ID_TOF 24
+#define MAVLINK_MSG_ID_TOF 25
 
 
 typedef struct __mavlink_tof_t {
@@ -12,17 +12,17 @@ typedef struct __mavlink_tof_t {
 
 #define MAVLINK_MSG_ID_TOF_LEN 8
 #define MAVLINK_MSG_ID_TOF_MIN_LEN 8
-#define MAVLINK_MSG_ID_24_LEN 8
-#define MAVLINK_MSG_ID_24_MIN_LEN 8
+#define MAVLINK_MSG_ID_25_LEN 8
+#define MAVLINK_MSG_ID_25_MIN_LEN 8
 
 #define MAVLINK_MSG_ID_TOF_CRC 4
-#define MAVLINK_MSG_ID_24_CRC 4
+#define MAVLINK_MSG_ID_25_CRC 4
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_TOF { \
-    24, \
+    25, \
     "TOF", \
     3, \
     {  { "uwb_address", NULL, MAVLINK_TYPE_UINT16_T, 0, 4, offsetof(mavlink_tof_t, uwb_address) }, \

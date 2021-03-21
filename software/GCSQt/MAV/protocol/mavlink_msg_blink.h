@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE BLINK PACKING
 
-#define MAVLINK_MSG_ID_BLINK 18
+#define MAVLINK_MSG_ID_BLINK 19
 
 
 typedef struct __mavlink_blink_t {
@@ -11,17 +11,17 @@ typedef struct __mavlink_blink_t {
 
 #define MAVLINK_MSG_ID_BLINK_LEN 3
 #define MAVLINK_MSG_ID_BLINK_MIN_LEN 3
-#define MAVLINK_MSG_ID_18_LEN 3
-#define MAVLINK_MSG_ID_18_MIN_LEN 3
+#define MAVLINK_MSG_ID_19_LEN 3
+#define MAVLINK_MSG_ID_19_MIN_LEN 3
 
 #define MAVLINK_MSG_ID_BLINK_CRC 92
-#define MAVLINK_MSG_ID_18_CRC 92
+#define MAVLINK_MSG_ID_19_CRC 92
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_BLINK { \
-    18, \
+    19, \
     "BLINK", \
     2, \
     {  { "uwb_address", NULL, MAVLINK_TYPE_UINT16_T, 0, 0, offsetof(mavlink_blink_t, uwb_address) }, \

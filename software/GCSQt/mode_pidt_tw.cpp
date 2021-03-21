@@ -56,9 +56,9 @@ void Mode_pidt_tw::mav_recv(mavlink_message_t *msg){
             else failed();
         }
         break;
-    case MAVLINK_MSG_ID_EVT_TILT:
-        mavlink_evt_tilt_t tilt_msg;
-        mavlink_msg_evt_tilt_decode(msg,&tilt_msg);
+    case MAVLINK_MSG_ID_EVT_TILT_RAW:
+        mavlink_evt_tilt_raw_t tilt_msg;
+        mavlink_msg_evt_tilt_raw_decode(msg,&tilt_msg);
         break;
     case MAVLINK_MSG_ID_PID_REPORT:
         pid_report_recv(msg);

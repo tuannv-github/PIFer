@@ -90,11 +90,18 @@ void Mode_imu::mav_recv(mavlink_message_t *msg){
             ui->tb_mz_scale->setText(QString::number(params_msg.mag_scale_z));
         }
         break;
-    case MAVLINK_MSG_ID_EVT_TILT:
+    case MAVLINK_MSG_ID_EVT_TILT_RAW:
         {
-            mavlink_evt_tilt_t tilt_msg;
-            mavlink_msg_evt_tilt_decode(msg, &tilt_msg);
-            ui->txtb_tilt_0->setText(QString::number(tilt_msg.tilt));
+            mavlink_evt_tilt_raw_t tilt_msg;
+            mavlink_msg_evt_tilt_raw_decode(msg, &tilt_msg);
+            ui->tb_tilt_raw->setText(QString::number(tilt_msg.tilt));
+        }
+        break;
+    case MAVLINK_MSG_ID_EVT_TILT_CAL:
+        {
+            mavlink_evt_tilt_cal_t tilt_msg;
+            mavlink_msg_evt_tilt_cal_decode(msg, &tilt_msg);
+            ui->tb_tilt_cal->setText(QString::number(tilt_msg.tilt));
         }
         break;
     case MAVLINK_MSG_ID_FILTER_PARAMS:
@@ -103,8 +110,10 @@ void Mode_imu::mav_recv(mavlink_message_t *msg){
             mavlink_msg_filter_params_decode(msg, &filter_params);
             ui->cb_tilt->setCurrentText(filter_params.tilt_type == ROLL ? QString("ROLL"): QString("PITCH"));
             ui->tb_angle_adjust->setText(QString::number(static_cast<double>(filter_params.tilt_offset)));
+
             ui->tb_gbelieve->setText(QString::number(static_cast<double>(filter_params.g_believe)));
             ui->tb_madgwick_beta->setText(QString::number(static_cast<double>(filter_params.madgwick_beta)));
+            ui->tb_complementary_gain->setText(QString::number(static_cast<double>(filter_params.complementary_gain)));
         }
         break;
     default:
@@ -131,7 +140,10 @@ void Mode_imu::on_btn_mode_imu_load_params_clicked()
     ui->tb_mz_scale->setText("");
 
     ui->tb_angle_adjust->setText("");
+
+
     ui->tb_gbelieve->setText("");
+    ui->tb_complementary_gain->setText("");
     ui->tb_madgwick_beta->setText("");
 
     this->load_params();
@@ -172,11 +184,13 @@ void Mode_imu::on_btn_mode_imu_write_params_clicked()
     emit mav_send(QByteArray::fromRawData(reinterpret_cast<char*>(mav_send_buf),len));
     set_timeout(WRITE_TIMEOUT);
 
-    float g_believe = ui->tb_gbelieve->text().toFloat();
+
     float tilt_offset = ui->tb_angle_adjust->text().toFloat();
     tilt_type_t tilt_type = ui->cb_tilt->currentText() == "ROLL" ? ROLL : PITCH;
+    float g_believe = ui->tb_gbelieve->text().toFloat();
+    float complementary_gain = ui->tb_complementary_gain->text().toFloat();
     float madgwick_beta = ui->tb_madgwick_beta->text().toFloat();
-    mavlink_msg_filter_params_pack(0,0,&msg, tilt_type, tilt_offset, g_believe, madgwick_beta);
+    mavlink_msg_filter_params_pack(0,0,&msg, tilt_type, tilt_offset, g_believe, complementary_gain, madgwick_beta);
     len = mavlink_msg_to_send_buffer(mav_send_buf, &msg);
     emit mav_send(QByteArray::fromRawData(reinterpret_cast<char*>(mav_send_buf),len));
     set_timeout(WRITE_TIMEOUT);

@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE BLE_MESH PACKING
 
-#define MAVLINK_MSG_ID_BLE_MESH 19
+#define MAVLINK_MSG_ID_BLE_MESH 20
 
 
 typedef struct __mavlink_ble_mesh_t {
@@ -11,17 +11,17 @@ typedef struct __mavlink_ble_mesh_t {
 
 #define MAVLINK_MSG_ID_BLE_MESH_LEN 4
 #define MAVLINK_MSG_ID_BLE_MESH_MIN_LEN 4
-#define MAVLINK_MSG_ID_19_LEN 4
-#define MAVLINK_MSG_ID_19_MIN_LEN 4
+#define MAVLINK_MSG_ID_20_LEN 4
+#define MAVLINK_MSG_ID_20_MIN_LEN 4
 
 #define MAVLINK_MSG_ID_BLE_MESH_CRC 91
-#define MAVLINK_MSG_ID_19_CRC 91
+#define MAVLINK_MSG_ID_20_CRC 91
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_BLE_MESH { \
-    19, \
+    20, \
     "BLE_MESH", \
     2, \
     {  { "uwb_address", NULL, MAVLINK_TYPE_UINT16_T, 0, 0, offsetof(mavlink_ble_mesh_t, uwb_address) }, \

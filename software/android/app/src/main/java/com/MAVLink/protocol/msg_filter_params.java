@@ -15,8 +15,8 @@ import com.MAVLink.Messages.MAVLinkPayload;
  */
 public class msg_filter_params extends MAVLinkMessage {
 
-    public static final int MAVLINK_MSG_ID_FILTER_PARAMS = 13;
-    public static final int MAVLINK_MSG_LENGTH = 13;
+    public static final int MAVLINK_MSG_ID_FILTER_PARAMS = 14;
+    public static final int MAVLINK_MSG_LENGTH = 17;
     private static final long serialVersionUID = MAVLINK_MSG_ID_FILTER_PARAMS;
 
       
@@ -29,6 +29,11 @@ public class msg_filter_params extends MAVLinkMessage {
      * Belive in gyroscope
      */
     public float g_believe;
+      
+    /**
+     * 
+     */
+    public float complementary_gain;
       
     /**
      * 
@@ -54,6 +59,7 @@ public class msg_filter_params extends MAVLinkMessage {
         
         packet.payload.putFloat(tilt_offset);
         packet.payload.putFloat(g_believe);
+        packet.payload.putFloat(complementary_gain);
         packet.payload.putFloat(madgwick_beta);
         packet.payload.putUnsignedByte(tilt_type);
         
@@ -74,6 +80,7 @@ public class msg_filter_params extends MAVLinkMessage {
         
         this.tilt_offset = payload.getFloat();
         this.g_believe = payload.getFloat();
+        this.complementary_gain = payload.getFloat();
         this.madgwick_beta = payload.getFloat();
         this.tilt_type = payload.getUnsignedByte();
         
@@ -92,11 +99,12 @@ public class msg_filter_params extends MAVLinkMessage {
     /**
      * Constructor for a new message, initializes msgid and all payload variables
      */
-    public msg_filter_params( float tilt_offset, float g_believe, float madgwick_beta, short tilt_type) {
+    public msg_filter_params( float tilt_offset, float g_believe, float complementary_gain, float madgwick_beta, short tilt_type) {
         this.msgid = MAVLINK_MSG_ID_FILTER_PARAMS;
 
         this.tilt_offset = tilt_offset;
         this.g_believe = g_believe;
+        this.complementary_gain = complementary_gain;
         this.madgwick_beta = madgwick_beta;
         this.tilt_type = tilt_type;
         
@@ -105,7 +113,7 @@ public class msg_filter_params extends MAVLinkMessage {
     /**
      * Constructor for a new message, initializes everything
      */
-    public msg_filter_params( float tilt_offset, float g_believe, float madgwick_beta, short tilt_type, int sysid, int compid, boolean isMavlink2) {
+    public msg_filter_params( float tilt_offset, float g_believe, float complementary_gain, float madgwick_beta, short tilt_type, int sysid, int compid, boolean isMavlink2) {
         this.msgid = MAVLINK_MSG_ID_FILTER_PARAMS;
         this.sysid = sysid;
         this.compid = compid;
@@ -113,6 +121,7 @@ public class msg_filter_params extends MAVLinkMessage {
 
         this.tilt_offset = tilt_offset;
         this.g_believe = g_believe;
+        this.complementary_gain = complementary_gain;
         this.madgwick_beta = madgwick_beta;
         this.tilt_type = tilt_type;
         
@@ -132,13 +141,13 @@ public class msg_filter_params extends MAVLinkMessage {
         unpack(mavLinkPacket.payload);
     }
 
-            
+              
     /**
      * Returns a string with the MSG name and data
      */
     @Override
     public String toString() {
-        return "MAVLINK_MSG_ID_FILTER_PARAMS - sysid:"+sysid+" compid:"+compid+" tilt_offset:"+tilt_offset+" g_believe:"+g_believe+" madgwick_beta:"+madgwick_beta+" tilt_type:"+tilt_type+"";
+        return "MAVLINK_MSG_ID_FILTER_PARAMS - sysid:"+sysid+" compid:"+compid+" tilt_offset:"+tilt_offset+" g_believe:"+g_believe+" complementary_gain:"+complementary_gain+" madgwick_beta:"+madgwick_beta+" tilt_type:"+tilt_type+"";
     }
     
     /**

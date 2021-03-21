@@ -15,7 +15,7 @@ import com.MAVLink.Messages.MAVLinkPayload;
  */
 public class msg_evt_sensor extends MAVLinkMessage {
 
-    public static final int MAVLINK_MSG_ID_EVT_SENSOR = 6;
+    public static final int MAVLINK_MSG_ID_EVT_SENSOR = 7;
     public static final int MAVLINK_MSG_LENGTH = 1;
     private static final long serialVersionUID = MAVLINK_MSG_ID_EVT_SENSOR;
 

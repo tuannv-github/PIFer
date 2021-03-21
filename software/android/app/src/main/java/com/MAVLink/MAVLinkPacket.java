@@ -271,8 +271,11 @@ public class MAVLinkPacket implements Serializable {
             case msg_cmd_velocity.MAVLINK_MSG_ID_CMD_VELOCITY:
                 return  new msg_cmd_velocity(this);
              
-            case msg_evt_tilt.MAVLINK_MSG_ID_EVT_TILT:
-                return  new msg_evt_tilt(this);
+            case msg_evt_tilt_raw.MAVLINK_MSG_ID_EVT_TILT_RAW:
+                return  new msg_evt_tilt_raw(this);
+             
+            case msg_evt_tilt_cal.MAVLINK_MSG_ID_EVT_TILT_CAL:
+                return  new msg_evt_tilt_cal(this);
              
             case msg_evt_rpy.MAVLINK_MSG_ID_EVT_RPY:
                 return  new msg_evt_rpy(this);

@@ -15,7 +15,7 @@ import com.MAVLink.Messages.MAVLinkPayload;
  */
 public class msg_ble_mesh extends MAVLinkMessage {
 
-    public static final int MAVLINK_MSG_ID_BLE_MESH = 19;
+    public static final int MAVLINK_MSG_ID_BLE_MESH = 20;
     public static final int MAVLINK_MSG_LENGTH = 4;
     private static final long serialVersionUID = MAVLINK_MSG_ID_BLE_MESH;
 

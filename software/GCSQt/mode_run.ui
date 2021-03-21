@@ -99,7 +99,7 @@
      <string>Tilt:</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="txtb_tilt_1">
+   <widget class="QLineEdit" name="tb_tilt_cal">
     <property name="geometry">
      <rect>
       <x>370</x>

@@ -15,7 +15,7 @@ import com.MAVLink.Messages.MAVLinkPayload;
  */
 public class msg_location_reduced extends MAVLinkMessage {
 
-    public static final int MAVLINK_MSG_ID_LOCATION_REDUCED = 22;
+    public static final int MAVLINK_MSG_ID_LOCATION_REDUCED = 23;
     public static final int MAVLINK_MSG_LENGTH = 10;
     private static final long serialVersionUID = MAVLINK_MSG_ID_LOCATION_REDUCED;
 

@@ -15,7 +15,7 @@ import com.MAVLink.Messages.MAVLinkPayload;
  */
 public class msg_distance extends MAVLinkMessage {
 
-    public static final int MAVLINK_MSG_ID_DISTANCE = 23;
+    public static final int MAVLINK_MSG_ID_DISTANCE = 24;
     public static final int MAVLINK_MSG_LENGTH = 8;
     private static final long serialVersionUID = MAVLINK_MSG_ID_DISTANCE;
 

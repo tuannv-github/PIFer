@@ -15,7 +15,7 @@ import com.MAVLink.Messages.MAVLinkPayload;
  */
 public class msg_accel_params extends MAVLinkMessage {
 
-    public static final int MAVLINK_MSG_ID_ACCEL_PARAMS = 11;
+    public static final int MAVLINK_MSG_ID_ACCEL_PARAMS = 12;
     public static final int MAVLINK_MSG_LENGTH = 12;
     private static final long serialVersionUID = MAVLINK_MSG_ID_ACCEL_PARAMS;
 

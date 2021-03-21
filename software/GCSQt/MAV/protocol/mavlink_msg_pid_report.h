@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE PID_REPORT PACKING
 
-#define MAVLINK_MSG_ID_PID_REPORT 17
+#define MAVLINK_MSG_ID_PID_REPORT 18
 
 
 typedef struct __mavlink_pid_report_t {
@@ -16,17 +16,17 @@ typedef struct __mavlink_pid_report_t {
 
 #define MAVLINK_MSG_ID_PID_REPORT_LEN 25
 #define MAVLINK_MSG_ID_PID_REPORT_MIN_LEN 25
-#define MAVLINK_MSG_ID_17_LEN 25
-#define MAVLINK_MSG_ID_17_MIN_LEN 25
+#define MAVLINK_MSG_ID_18_LEN 25
+#define MAVLINK_MSG_ID_18_MIN_LEN 25
 
 #define MAVLINK_MSG_ID_PID_REPORT_CRC 198
-#define MAVLINK_MSG_ID_17_CRC 198
+#define MAVLINK_MSG_ID_18_CRC 198
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_PID_REPORT { \
-    17, \
+    18, \
     "PID_REPORT", \
     7, \
     {  { "pid_control", NULL, MAVLINK_TYPE_UINT8_T, 0, 24, offsetof(mavlink_pid_report_t, pid_control) }, \

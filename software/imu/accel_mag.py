@@ -10,17 +10,17 @@ DATASET_FOLDER = "imu_data/"
 # r_pitch = np.load(DATASET_FOLDER + 'pitch.npy')
 # r_yaw = np.load(DATASET_FOLDER + 'yaw.npy')
 
-gx_bias = (-0.9616763967158748, 0.01716347107127141)
-gy_bias = (0.6969435718363407, 0.02303707571665565)
-gz_bias = (-0.732405328727236, 0.023635633242456173)
+# gx_bias = (-0.9616763967158748, 0.01716347107127141)
+# gy_bias = (0.6969435718363407, 0.02303707571665565)
+# gz_bias = (-0.732405328727236, 0.023635633242456173)
 
 gx = np.load(DATASET_FOLDER + 'gx.npy')
 gy = np.load(DATASET_FOLDER + 'gy.npy')
 gz = np.load(DATASET_FOLDER + 'gz.npy')
 
-gx = [(g-gx_bias[0])/180.0*pi for g in  gx]
-gy = [(g-gy_bias[0])/180.0*pi for g in  gy]
-gz = [(g-gz_bias[0])/180.0*pi for g in  gz]
+# gx = [(g-gx_bias[0])/180.0*pi for g in  gx]
+# gy = [(g-gy_bias[0])/180.0*pi for g in  gy]
+# gz = [(g-gz_bias[0])/180.0*pi for g in  gz]
 
 ax = np.load(DATASET_FOLDER + 'ax.npy')
 ay = np.load(DATASET_FOLDER + 'ay.npy')
@@ -39,12 +39,13 @@ for i in range(0, len(ay)):
     p = atan2(-ax[i], sqrt(ay[i]**2 + az[i]**2))
 
     by = my[i]*cos(p) - mz[i]*sin(p)
-    bx = mx[i]*sin(r) + my[i]*sin(r)*sin(p) + mz[i]*sin(r)*cos(p)
+    bx = mx[i]*cos(r) + my[i]*sin(r)*sin(p) + mz[i]*sin(r)*cos(p)
+    print((-by,bx))
     y = atan2(-by, bx)
 
-    roll.append(r)
-    pitch.append(p)
-    yaw.append(y)
+    roll.append(r*180/pi)
+    pitch.append(p*180/pi)
+    yaw.append(y*180/pi)
 
 x = np.linspace(0, len(gx), len(gx))
 

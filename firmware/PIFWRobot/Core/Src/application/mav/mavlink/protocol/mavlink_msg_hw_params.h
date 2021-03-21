@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE HW_PARAMS PACKING
 
-#define MAVLINK_MSG_ID_HW_PARAMS 9
+#define MAVLINK_MSG_ID_HW_PARAMS 10
 
 
 typedef struct __mavlink_hw_params_t {
@@ -19,17 +19,17 @@ typedef struct __mavlink_hw_params_t {
 
 #define MAVLINK_MSG_ID_HW_PARAMS_LEN 14
 #define MAVLINK_MSG_ID_HW_PARAMS_MIN_LEN 14
-#define MAVLINK_MSG_ID_9_LEN 14
-#define MAVLINK_MSG_ID_9_MIN_LEN 14
+#define MAVLINK_MSG_ID_10_LEN 14
+#define MAVLINK_MSG_ID_10_MIN_LEN 14
 
 #define MAVLINK_MSG_ID_HW_PARAMS_CRC 30
-#define MAVLINK_MSG_ID_9_CRC 30
+#define MAVLINK_MSG_ID_10_CRC 30
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_HW_PARAMS { \
-    9, \
+    10, \
     "HW_PARAMS", \
     10, \
     {  { "motor_type", NULL, MAVLINK_TYPE_INT8_T, 0, 8, offsetof(mavlink_hw_params_t, motor_type) }, \

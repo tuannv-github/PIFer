@@ -15,7 +15,7 @@ import com.MAVLink.Messages.MAVLinkPayload;
  */
 public class msg_motor_speed_step extends MAVLinkMessage {
 
-    public static final int MAVLINK_MSG_ID_MOTOR_SPEED_STEP = 8;
+    public static final int MAVLINK_MSG_ID_MOTOR_SPEED_STEP = 9;
     public static final int MAVLINK_MSG_LENGTH = 8;
     private static final long serialVersionUID = MAVLINK_MSG_ID_MOTOR_SPEED_STEP;
 

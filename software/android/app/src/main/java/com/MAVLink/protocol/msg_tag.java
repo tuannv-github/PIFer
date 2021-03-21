@@ -15,7 +15,7 @@ import com.MAVLink.Messages.MAVLinkPayload;
  */
 public class msg_tag extends MAVLinkMessage {
 
-    public static final int MAVLINK_MSG_ID_TAG = 26;
+    public static final int MAVLINK_MSG_ID_TAG = 27;
     public static final int MAVLINK_MSG_LENGTH = 86;
     private static final long serialVersionUID = MAVLINK_MSG_ID_TAG;
 

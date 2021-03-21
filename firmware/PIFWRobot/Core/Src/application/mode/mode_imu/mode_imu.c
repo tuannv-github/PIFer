@@ -24,6 +24,21 @@ static void imu_raw_callback(void* ctx){
 	mavlink_msg_evt_gyro_accel_mag_raw_pack(0, 0, &msg, raw[0], raw[1], raw[2], raw[3], raw[4], raw[5], raw[6], raw[7], raw[8]);
 	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
 	mav_send((char*)gmav_send_buf, len);
+
+	float tilt;
+	switch(params.tilt_type){
+	case ROLL:
+		tilt = imu_get_roll();
+		break;
+	case PITCH:
+		tilt = imu_get_pitch();
+		break;
+	default:
+		tilt = 0;
+	}
+	mavlink_msg_evt_tilt_raw_pack(0,0,&msg,tilt);
+	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
+	mav_send((char*)gmav_send_buf, len);
 }
 
 static void imu_cal_callback(void* ctx){
@@ -52,7 +67,7 @@ static void imu_cal_callback(void* ctx){
 		tilt = 0;
 	}
 	tilt -= params.tilt_offset;
-	mavlink_msg_evt_tilt_pack(0,0,&msg,tilt);
+	mavlink_msg_evt_tilt_cal_pack(0,0,&msg,tilt);
 	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
 	mav_send((char*)gmav_send_buf, len);
 }
@@ -88,7 +103,7 @@ static int load_imu_params(){
 	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
 	mav_send((char*)gmav_send_buf, len);
 
-	mavlink_msg_filter_params_pack(0,0,&msg, params.tilt_type, params.tilt_offset, params.g_believe, params.madgwick_beta);
+	mavlink_msg_filter_params_pack(0,0,&msg, params.tilt_type, params.tilt_offset, params.g_believe, params.complementary_gain, params.madgwick_beta);
 	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
 	mav_send((char*)gmav_send_buf, len);
 
@@ -178,6 +193,7 @@ void on_mode_imu_mavlink_recv(mavlink_message_t *msg){
 		params.tilt_type = filter_params_msg.tilt_type;
 		params.g_believe = filter_params_msg.g_believe;
 		params.tilt_offset = filter_params_msg.tilt_offset;
+		params.complementary_gain = filter_params_msg.complementary_gain;
 		params.madgwick_beta = filter_params_msg.madgwick_beta;
 		respond_ok();
 	}

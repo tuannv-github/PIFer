@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE ONOFF PACKING
 
-#define MAVLINK_MSG_ID_ONOFF 20
+#define MAVLINK_MSG_ID_ONOFF 21
 
 
 typedef struct __mavlink_onoff_t {
@@ -11,17 +11,17 @@ typedef struct __mavlink_onoff_t {
 
 #define MAVLINK_MSG_ID_ONOFF_LEN 3
 #define MAVLINK_MSG_ID_ONOFF_MIN_LEN 3
-#define MAVLINK_MSG_ID_20_LEN 3
-#define MAVLINK_MSG_ID_20_MIN_LEN 3
+#define MAVLINK_MSG_ID_21_LEN 3
+#define MAVLINK_MSG_ID_21_MIN_LEN 3
 
 #define MAVLINK_MSG_ID_ONOFF_CRC 35
-#define MAVLINK_MSG_ID_20_CRC 35
+#define MAVLINK_MSG_ID_21_CRC 35
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_ONOFF { \
-    20, \
+    21, \
     "ONOFF", \
     2, \
     {  { "uwb_address", NULL, MAVLINK_TYPE_UINT16_T, 0, 0, offsetof(mavlink_onoff_t, uwb_address) }, \

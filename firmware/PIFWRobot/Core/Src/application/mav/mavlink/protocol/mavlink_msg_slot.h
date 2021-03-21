@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE SLOT PACKING
 
-#define MAVLINK_MSG_ID_SLOT 25
+#define MAVLINK_MSG_ID_SLOT 26
 
 
 typedef struct __mavlink_slot_t {
@@ -11,17 +11,17 @@ typedef struct __mavlink_slot_t {
 
 #define MAVLINK_MSG_ID_SLOT_LEN 3
 #define MAVLINK_MSG_ID_SLOT_MIN_LEN 3
-#define MAVLINK_MSG_ID_25_LEN 3
-#define MAVLINK_MSG_ID_25_MIN_LEN 3
+#define MAVLINK_MSG_ID_26_LEN 3
+#define MAVLINK_MSG_ID_26_MIN_LEN 3
 
 #define MAVLINK_MSG_ID_SLOT_CRC 177
-#define MAVLINK_MSG_ID_25_CRC 177
+#define MAVLINK_MSG_ID_26_CRC 177
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_SLOT { \
-    25, \
+    26, \
     "SLOT", \
     2, \
     {  { "uwb_address", NULL, MAVLINK_TYPE_UINT16_T, 0, 0, offsetof(mavlink_slot_t, uwb_address) }, \

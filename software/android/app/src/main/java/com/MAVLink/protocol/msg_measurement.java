@@ -15,7 +15,7 @@ import com.MAVLink.Messages.MAVLinkPayload;
  */
 public class msg_measurement extends MAVLinkMessage {
 
-    public static final int MAVLINK_MSG_ID_MEASUREMENT = 28;
+    public static final int MAVLINK_MSG_ID_MEASUREMENT = 29;
     public static final int MAVLINK_MSG_LENGTH = 16;
     private static final long serialVersionUID = MAVLINK_MSG_ID_MEASUREMENT;
 

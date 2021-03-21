@@ -13,7 +13,9 @@
 #include <application/user_define.h>
 #include <math.h>
 
+#include "utils.h"
 #include "madgwick/madgwick.h"
+#include "complementary/complementary.h"
 
 static float roll;
 static float pitch;
@@ -38,21 +40,22 @@ static void imu_callback(void* ctx){
 	gam_cab[0] = (gam_raw[3] - params.gx_bias)*M_PI/180.0f;
 	gam_cab[1] = (gam_raw[4] - params.gy_bias)*M_PI/180.0f;
 	gam_cab[2] = (gam_raw[5] - params.gz_bias)*M_PI/180.0f;
-	gam_cab[3] = gam_raw[0];
-	gam_cab[4] = gam_raw[1];
-	gam_cab[5] = gam_raw[2];
+	gam_cab[3] = gam_raw[0] - params.ax_bias;
+	gam_cab[4] = gam_raw[1] - params.ay_bias;
+	gam_cab[5] = gam_raw[2] - params.az_bias;
 	gam_cab[6] = (gam_raw[6] - params.mx_bias)/params.mx_scale;
 	gam_cab[7] = (gam_raw[7] - params.my_bias)/params.my_scale;
 	gam_cab[8] = (gam_raw[8] - params.mz_bias)/params.mz_scale;
-	madwgick_gam_update(gam_cab[0], gam_cab[1], gam_cab[2],
-			gam_cab[3], gam_cab[4], gam_cab[5], gam_cab[6], gam_cab[7], gam_cab[8], 0.001f*IMU_PERIOD_MS);
+
+	complementary_update(gam_cab[0], gam_cab[1], gam_cab[2],
+							gam_cab[3], gam_cab[4], gam_cab[5], gam_cab[6], gam_cab[7], gam_cab[8], 0.001f*IMU_PERIOD_MS);
 }
 
 int imu_init(void){
 	mpu9250_init();
 	gtid_imu_callback = timer_register_callback(imu_callback, IMU_PERIOD_MS, 0, TIMER_MODE_REPEAT);
 
-	madwgick_init(params.madgwick_beta);
+	complementary_init();
 
 	return true;
 }
@@ -79,7 +82,10 @@ float imu_get_yaw(void){
 }
 
 int imu_get_rpy(float rpy[3]){
-	magwick_get_rpy(rpy);
+	float q[4];
+	complementary_get_q(q);
+	quaternion_to_rpy(rpy, q);
+	return 0;
 }
 
 int imu_get_gyro_raw(float raw[3]){

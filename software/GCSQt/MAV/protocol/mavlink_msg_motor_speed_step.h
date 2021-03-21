@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE MOTOR_SPEED_STEP PACKING
 
-#define MAVLINK_MSG_ID_MOTOR_SPEED_STEP 8
+#define MAVLINK_MSG_ID_MOTOR_SPEED_STEP 9
 
 
 typedef struct __mavlink_motor_speed_step_t {
@@ -11,17 +11,17 @@ typedef struct __mavlink_motor_speed_step_t {
 
 #define MAVLINK_MSG_ID_MOTOR_SPEED_STEP_LEN 8
 #define MAVLINK_MSG_ID_MOTOR_SPEED_STEP_MIN_LEN 8
-#define MAVLINK_MSG_ID_8_LEN 8
-#define MAVLINK_MSG_ID_8_MIN_LEN 8
+#define MAVLINK_MSG_ID_9_LEN 8
+#define MAVLINK_MSG_ID_9_MIN_LEN 8
 
 #define MAVLINK_MSG_ID_MOTOR_SPEED_STEP_CRC 75
-#define MAVLINK_MSG_ID_8_CRC 75
+#define MAVLINK_MSG_ID_9_CRC 75
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_MOTOR_SPEED_STEP { \
-    8, \
+    9, \
     "MOTOR_SPEED_STEP", \
     2, \
     {  { "motor_0", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_motor_speed_step_t, motor_0) }, \

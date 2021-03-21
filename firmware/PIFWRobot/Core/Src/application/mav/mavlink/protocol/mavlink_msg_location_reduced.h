@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE LOCATION_REDUCED PACKING
 
-#define MAVLINK_MSG_ID_LOCATION_REDUCED 22
+#define MAVLINK_MSG_ID_LOCATION_REDUCED 23
 
 
 typedef struct __mavlink_location_reduced_t {
@@ -12,17 +12,17 @@ typedef struct __mavlink_location_reduced_t {
 
 #define MAVLINK_MSG_ID_LOCATION_REDUCED_LEN 10
 #define MAVLINK_MSG_ID_LOCATION_REDUCED_MIN_LEN 10
-#define MAVLINK_MSG_ID_22_LEN 10
-#define MAVLINK_MSG_ID_22_MIN_LEN 10
+#define MAVLINK_MSG_ID_23_LEN 10
+#define MAVLINK_MSG_ID_23_MIN_LEN 10
 
 #define MAVLINK_MSG_ID_LOCATION_REDUCED_CRC 244
-#define MAVLINK_MSG_ID_22_CRC 244
+#define MAVLINK_MSG_ID_23_CRC 244
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_LOCATION_REDUCED { \
-    22, \
+    23, \
     "LOCATION_REDUCED", \
     3, \
     {  { "mesh_address", NULL, MAVLINK_TYPE_UINT16_T, 0, 8, offsetof(mavlink_location_reduced_t, mesh_address) }, \

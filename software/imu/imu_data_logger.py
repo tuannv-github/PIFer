@@ -7,7 +7,8 @@ import os
 
 from mavlink import *
 
-PORT = "/dev/ttyUSB0"
+# PORT = "/dev/ttyUSB0"
+PORT = "COM9"
 BAUD = 57600
 
 class TAG:
@@ -33,7 +34,6 @@ class TAG:
 
 
     def run(self):
-        retry_count = 0
         while not self.stop:
             try:
                 serial = Serial(PORT, BAUD)
@@ -67,7 +67,9 @@ class TAG:
                 byte = serial.read()
                 msg = mav.parse_char(byte)
                 if msg is not None:
+                    print(msg.to_json())
                     if msg.id == MAVLINK_MSG_ID_EVT_GYRO_ACCEL_MAG_CALIBRATED:
+                    # if msg.id == MAVLINK_MSG_ID_EVT_GYRO_ACCEL_MAG_RAW:
                         self.gx.append(msg.gx)
                         self.gy.append(msg.gy)
                         self.gz.append(msg.gz)
@@ -77,12 +79,10 @@ class TAG:
                         self.mx.append(msg.mx)
                         self.my.append(msg.my)
                         self.mz.append(msg.mz)
-                        print(msg.to_json())
                     elif msg.id == MAVLINK_MSG_ID_EVT_RPY:
                         self.roll.append(msg.roll)
                         self.pitch.append(msg.pitch)
                         self.yaw.append(msg.yaw)
-                        print(msg.to_json())
             except:
                 pass
 

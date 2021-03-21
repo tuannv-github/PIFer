@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE EVT_RPY PACKING
 
-#define MAVLINK_MSG_ID_EVT_RPY 5
+#define MAVLINK_MSG_ID_EVT_RPY 6
 
 
 typedef struct __mavlink_evt_rpy_t {
@@ -12,17 +12,17 @@ typedef struct __mavlink_evt_rpy_t {
 
 #define MAVLINK_MSG_ID_EVT_RPY_LEN 12
 #define MAVLINK_MSG_ID_EVT_RPY_MIN_LEN 12
-#define MAVLINK_MSG_ID_5_LEN 12
-#define MAVLINK_MSG_ID_5_MIN_LEN 12
+#define MAVLINK_MSG_ID_6_LEN 12
+#define MAVLINK_MSG_ID_6_MIN_LEN 12
 
 #define MAVLINK_MSG_ID_EVT_RPY_CRC 93
-#define MAVLINK_MSG_ID_5_CRC 93
+#define MAVLINK_MSG_ID_6_CRC 93
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_EVT_RPY { \
-    5, \
+    6, \
     "EVT_RPY", \
     3, \
     {  { "roll", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_evt_rpy_t, roll) }, \

@@ -154,6 +154,7 @@ void params_save(){
 	write((uint32_t*)(&params.motor1_pos_deadband));
 	write((uint32_t*)(&params.motor1_neg_deadband));
 
+	write((uint32_t*)(&params.complementary_gain));
 	write((uint32_t*)(&params.madgwick_beta));
 
 	HAL_FLASH_Lock();
@@ -212,6 +213,7 @@ bool params_load(){
 	read((uint32_t*)(&params.motor1_pos_deadband));
 	read((uint32_t*)(&params.motor1_neg_deadband));
 
+	read((uint32_t*)(&params.complementary_gain));
 	read((uint32_t*)(&params.madgwick_beta));
 
 	return true;

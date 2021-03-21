@@ -34,10 +34,10 @@ void Mode_run::mav_recv(mavlink_message_t *msg){
             show_status("IMU ERROR", 1000);
         }
         break;
-    case MAVLINK_MSG_ID_EVT_TILT:
-        mavlink_evt_tilt_t tilt_msg;
-        mavlink_msg_evt_tilt_decode(msg,&tilt_msg);
-        ui->txtb_tilt_1->setText(QString::number(tilt_msg.tilt));
+    case MAVLINK_MSG_ID_EVT_TILT_CAL:
+        mavlink_evt_tilt_raw_t tilt_msg;
+        mavlink_msg_evt_tilt_raw_decode(msg,&tilt_msg);
+        ui->tb_tilt_cal->setText(QString::number(tilt_msg.tilt));
         break;
     }
 }

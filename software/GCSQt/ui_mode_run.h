@@ -28,7 +28,7 @@ public:
     QLineEdit *txtBoxPitch;
     QLineEdit *txtBoxYaw;
     QLabel *label_79;
-    QLineEdit *txtb_tilt_1;
+    QLineEdit *tb_tilt_cal;
     QPushButton *btn_change_mode_run;
     QGroupBox *groupBox_12;
     QLabel *label_61;
@@ -65,10 +65,10 @@ public:
         label_79 = new QLabel(groupBox_11);
         label_79->setObjectName(QString::fromUtf8("label_79"));
         label_79->setGeometry(QRect(350, 20, 31, 16));
-        txtb_tilt_1 = new QLineEdit(groupBox_11);
-        txtb_tilt_1->setObjectName(QString::fromUtf8("txtb_tilt_1"));
-        txtb_tilt_1->setGeometry(QRect(370, 20, 91, 20));
-        txtb_tilt_1->setReadOnly(true);
+        tb_tilt_cal = new QLineEdit(groupBox_11);
+        tb_tilt_cal->setObjectName(QString::fromUtf8("tb_tilt_cal"));
+        tb_tilt_cal->setGeometry(QRect(370, 20, 91, 20));
+        tb_tilt_cal->setReadOnly(true);
         btn_change_mode_run = new QPushButton(Mode_run);
         btn_change_mode_run->setObjectName(QString::fromUtf8("btn_change_mode_run"));
         btn_change_mode_run->setGeometry(QRect(10, 10, 101, 23));
@@ -114,7 +114,7 @@ public:
         txtBoxPitch->setText(QApplication::translate("Mode_run", "NR", nullptr));
         txtBoxYaw->setText(QApplication::translate("Mode_run", "NR", nullptr));
         label_79->setText(QApplication::translate("Mode_run", "Tilt:", nullptr));
-        txtb_tilt_1->setText(QApplication::translate("Mode_run", "NR", nullptr));
+        tb_tilt_cal->setText(QApplication::translate("Mode_run", "NR", nullptr));
         btn_change_mode_run->setText(QApplication::translate("Mode_run", "Mode Run", nullptr));
         groupBox_12->setTitle(QApplication::translate("Mode_run", "Control", nullptr));
         label_61->setText(QApplication::translate("Mode_run", "VX:", nullptr));

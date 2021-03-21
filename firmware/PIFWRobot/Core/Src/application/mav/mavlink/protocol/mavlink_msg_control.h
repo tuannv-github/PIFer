@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE CONTROL PACKING
 
-#define MAVLINK_MSG_ID_CONTROL 27
+#define MAVLINK_MSG_ID_CONTROL 28
 
 
 typedef struct __mavlink_control_t {
@@ -11,17 +11,17 @@ typedef struct __mavlink_control_t {
 
 #define MAVLINK_MSG_ID_CONTROL_LEN 8
 #define MAVLINK_MSG_ID_CONTROL_MIN_LEN 8
-#define MAVLINK_MSG_ID_27_LEN 8
-#define MAVLINK_MSG_ID_27_MIN_LEN 8
+#define MAVLINK_MSG_ID_28_LEN 8
+#define MAVLINK_MSG_ID_28_MIN_LEN 8
 
 #define MAVLINK_MSG_ID_CONTROL_CRC 103
-#define MAVLINK_MSG_ID_27_CRC 103
+#define MAVLINK_MSG_ID_28_CRC 103
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_CONTROL { \
-    27, \
+    28, \
     "CONTROL", \
     2, \
     {  { "left", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_control_t, left) }, \

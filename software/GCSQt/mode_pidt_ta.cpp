@@ -56,13 +56,7 @@ void Mode_pidt_ta::mav_recv(mavlink_message_t *msg){
             }
         }
         break;
-    case MAVLINK_MSG_ID_EVT_TILT:
-        mavlink_evt_tilt_t tilt_msg;
-        mavlink_msg_evt_tilt_decode(msg,&tilt_msg);
-//        on_tilt_recv(tilt_msg.tilt);
-        break;
     case MAVLINK_MSG_ID_PID_REPORT:
-//        on_pid_report_recv(msg);
         break;
     case MAVLINK_MSG_ID_MOTOR_SPEED:
         mavlink_motor_speed_t motor_speed_msg;
