@@ -4,31 +4,31 @@
  * java mavlink generator tool. It should not be modified by hand.
  */
 
-// MESSAGE ONOFF PACKING
+// MESSAGE MOTOR_SPEED_STEP PACKING
 package com.MAVLink.protocol;
 import com.MAVLink.MAVLinkPacket;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPayload;
         
 /**
- * On off message
+ * 
  */
-public class msg_onoff extends MAVLinkMessage {
+public class msg_motor_speed_step extends MAVLinkMessage {
 
-    public static final int MAVLINK_MSG_ID_ONOFF = 20;
-    public static final int MAVLINK_MSG_LENGTH = 3;
-    private static final long serialVersionUID = MAVLINK_MSG_ID_ONOFF;
+    public static final int MAVLINK_MSG_ID_MOTOR_SPEED_STEP = 8;
+    public static final int MAVLINK_MSG_LENGTH = 8;
+    private static final long serialVersionUID = MAVLINK_MSG_ID_MOTOR_SPEED_STEP;
 
       
     /**
-     * 
+     * Motor 0 speed
      */
-    public int uwb_address;
+    public float motor_0;
       
     /**
-     * 
+     * Motor 1 Speed
      */
-    public short value;
+    public float motor_1;
     
 
     /**
@@ -40,10 +40,10 @@ public class msg_onoff extends MAVLinkMessage {
         MAVLinkPacket packet = new MAVLinkPacket(MAVLINK_MSG_LENGTH,isMavlink2);
         packet.sysid = 255;
         packet.compid = 190;
-        packet.msgid = MAVLINK_MSG_ID_ONOFF;
+        packet.msgid = MAVLINK_MSG_ID_MOTOR_SPEED_STEP;
         
-        packet.payload.putUnsignedShort(uwb_address);
-        packet.payload.putUnsignedByte(value);
+        packet.payload.putFloat(motor_0);
+        packet.payload.putFloat(motor_1);
         
         if (isMavlink2) {
             
@@ -52,7 +52,7 @@ public class msg_onoff extends MAVLinkMessage {
     }
 
     /**
-     * Decode a onoff message into this class fields
+     * Decode a motor_speed_step message into this class fields
      *
      * @param payload The message to decode
      */
@@ -60,8 +60,8 @@ public class msg_onoff extends MAVLinkMessage {
     public void unpack(MAVLinkPayload payload) {
         payload.resetIndex();
         
-        this.uwb_address = payload.getUnsignedShort();
-        this.value = payload.getUnsignedByte();
+        this.motor_0 = payload.getFloat();
+        this.motor_1 = payload.getFloat();
         
         if (isMavlink2) {
             
@@ -71,32 +71,32 @@ public class msg_onoff extends MAVLinkMessage {
     /**
      * Constructor for a new message, just initializes the msgid
      */
-    public msg_onoff() {
-        this.msgid = MAVLINK_MSG_ID_ONOFF;
+    public msg_motor_speed_step() {
+        this.msgid = MAVLINK_MSG_ID_MOTOR_SPEED_STEP;
     }
     
     /**
      * Constructor for a new message, initializes msgid and all payload variables
      */
-    public msg_onoff( int uwb_address, short value) {
-        this.msgid = MAVLINK_MSG_ID_ONOFF;
+    public msg_motor_speed_step( float motor_0, float motor_1) {
+        this.msgid = MAVLINK_MSG_ID_MOTOR_SPEED_STEP;
 
-        this.uwb_address = uwb_address;
-        this.value = value;
+        this.motor_0 = motor_0;
+        this.motor_1 = motor_1;
         
     }
     
     /**
      * Constructor for a new message, initializes everything
      */
-    public msg_onoff( int uwb_address, short value, int sysid, int compid, boolean isMavlink2) {
-        this.msgid = MAVLINK_MSG_ID_ONOFF;
+    public msg_motor_speed_step( float motor_0, float motor_1, int sysid, int compid, boolean isMavlink2) {
+        this.msgid = MAVLINK_MSG_ID_MOTOR_SPEED_STEP;
         this.sysid = sysid;
         this.compid = compid;
         this.isMavlink2 = isMavlink2;
 
-        this.uwb_address = uwb_address;
-        this.value = value;
+        this.motor_0 = motor_0;
+        this.motor_1 = motor_1;
         
     }
 
@@ -105,8 +105,8 @@ public class msg_onoff extends MAVLinkMessage {
      * from a mavlink packet
      *
      */
-    public msg_onoff(MAVLinkPacket mavLinkPacket) {
-        this.msgid = MAVLINK_MSG_ID_ONOFF;
+    public msg_motor_speed_step(MAVLinkPacket mavLinkPacket) {
+        this.msgid = MAVLINK_MSG_ID_MOTOR_SPEED_STEP;
         
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
@@ -120,7 +120,7 @@ public class msg_onoff extends MAVLinkMessage {
      */
     @Override
     public String toString() {
-        return "MAVLINK_MSG_ID_ONOFF - sysid:"+sysid+" compid:"+compid+" uwb_address:"+uwb_address+" value:"+value+"";
+        return "MAVLINK_MSG_ID_MOTOR_SPEED_STEP - sysid:"+sysid+" compid:"+compid+" motor_0:"+motor_0+" motor_1:"+motor_1+"";
     }
     
     /**
@@ -128,7 +128,7 @@ public class msg_onoff extends MAVLinkMessage {
      */
     @Override
     public String name() {
-        return "MAVLINK_MSG_ID_ONOFF";
+        return "MAVLINK_MSG_ID_MOTOR_SPEED_STEP";
     }
 }
         

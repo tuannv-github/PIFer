@@ -356,6 +356,17 @@ enums['role_t'][2] = EnumEntry('TAG', '''''')
 role_t_ENUM_END = 3 # 
 enums['role_t'][3] = EnumEntry('role_t_ENUM_END', '''''')
 
+# motor_type_t
+enums['motor_type_t'] = {}
+MOTOR_TYPE_UNKNOWN = 1 # 
+enums['motor_type_t'][1] = EnumEntry('MOTOR_TYPE_UNKNOWN', '''''')
+MOTOR_TYPE_DC = 2 # 
+enums['motor_type_t'][2] = EnumEntry('MOTOR_TYPE_DC', '''''')
+MOTOR_TYPE_STEP = 3 # 
+enums['motor_type_t'][3] = EnumEntry('MOTOR_TYPE_STEP', '''''')
+motor_type_t_ENUM_END = 4 # 
+enums['motor_type_t'][4] = EnumEntry('motor_type_t_ENUM_END', '''''')
+
 # message IDs
 MAVLINK_MSG_ID_BAD_DATA = -1
 MAVLINK_MSG_ID_RESPOND = 0
@@ -366,27 +377,28 @@ MAVLINK_MSG_ID_EVT_TILT = 4
 MAVLINK_MSG_ID_EVT_RPY = 5
 MAVLINK_MSG_ID_EVT_SENSOR = 6
 MAVLINK_MSG_ID_MOTOR_SPEED = 7
-MAVLINK_MSG_ID_HW_PARAMS = 8
-MAVLINK_MSG_ID_GYRO_PARAMS = 9
-MAVLINK_MSG_ID_ACCEL_PARAMS = 10
-MAVLINK_MSG_ID_MAG_PARAMS = 11
-MAVLINK_MSG_ID_COMP_FILTER_PARAMS = 12
-MAVLINK_MSG_ID_EVT_GYRO_ACCEL_MAG_RAW = 13
-MAVLINK_MSG_ID_EVT_GYRO_ACCEL_MAG_CALIBRATED = 14
-MAVLINK_MSG_ID_PID_PARAMS = 15
-MAVLINK_MSG_ID_PID_REPORT = 16
-MAVLINK_MSG_ID_BLINK = 17
-MAVLINK_MSG_ID_BLE_MESH = 18
-MAVLINK_MSG_ID_ONOFF = 19
-MAVLINK_MSG_ID_LOCATION = 20
-MAVLINK_MSG_ID_LOCATION_REDUCED = 21
-MAVLINK_MSG_ID_DISTANCE = 22
-MAVLINK_MSG_ID_TOF = 23
-MAVLINK_MSG_ID_SLOT = 24
-MAVLINK_MSG_ID_TAG = 25
-MAVLINK_MSG_ID_CONTROL = 26
-MAVLINK_MSG_ID_MEASUREMENT = 27
-MAVLINK_MSG_ID_CONTROL_MEASUREMENT = 28
+MAVLINK_MSG_ID_MOTOR_SPEED_STEP = 8
+MAVLINK_MSG_ID_HW_PARAMS = 9
+MAVLINK_MSG_ID_GYRO_PARAMS = 10
+MAVLINK_MSG_ID_ACCEL_PARAMS = 11
+MAVLINK_MSG_ID_MAG_PARAMS = 12
+MAVLINK_MSG_ID_COMP_FILTER_PARAMS = 13
+MAVLINK_MSG_ID_EVT_GYRO_ACCEL_MAG_RAW = 14
+MAVLINK_MSG_ID_EVT_GYRO_ACCEL_MAG_CALIBRATED = 15
+MAVLINK_MSG_ID_PID_PARAMS = 16
+MAVLINK_MSG_ID_PID_REPORT = 17
+MAVLINK_MSG_ID_BLINK = 18
+MAVLINK_MSG_ID_BLE_MESH = 19
+MAVLINK_MSG_ID_ONOFF = 20
+MAVLINK_MSG_ID_LOCATION = 21
+MAVLINK_MSG_ID_LOCATION_REDUCED = 22
+MAVLINK_MSG_ID_DISTANCE = 23
+MAVLINK_MSG_ID_TOF = 24
+MAVLINK_MSG_ID_SLOT = 25
+MAVLINK_MSG_ID_TAG = 26
+MAVLINK_MSG_ID_CONTROL = 27
+MAVLINK_MSG_ID_MEASUREMENT = 28
+MAVLINK_MSG_ID_CONTROL_MEASUREMENT = 29
 
 class MAVLink_respond_message(MAVLink_message):
         '''
@@ -652,6 +664,39 @@ class MAVLink_motor_speed_message(MAVLink_message):
         def pack(self, mav, force_mavlink1=False):
                 return MAVLink_message.pack(self, mav, 183, struct.pack('<hh', self.motor_speed_0, self.motor_speed_1), force_mavlink1=force_mavlink1)
 
+class MAVLink_motor_speed_step_message(MAVLink_message):
+        '''
+
+        '''
+        id = MAVLINK_MSG_ID_MOTOR_SPEED_STEP
+        name = 'MOTOR_SPEED_STEP'
+        fieldnames = ['motor_0', 'motor_1']
+        ordered_fieldnames = ['motor_0', 'motor_1']
+        fieldtypes = ['float', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {}
+        format = '<ff'
+        native_format = bytearray('<ff', 'ascii')
+        orders = [0, 1]
+        lengths = [1, 1]
+        array_lengths = [0, 0]
+        crc_extra = 75
+        unpacker = struct.Struct('<ff')
+        instance_field = None
+        instance_offset = -1
+
+        def __init__(self, motor_0, motor_1):
+                MAVLink_message.__init__(self, MAVLink_motor_speed_step_message.id, MAVLink_motor_speed_step_message.name)
+                self._fieldnames = MAVLink_motor_speed_step_message.fieldnames
+                self._instance_field = MAVLink_motor_speed_step_message.instance_field
+                self._instance_offset = MAVLink_motor_speed_step_message.instance_offset
+                self.motor_0 = motor_0
+                self.motor_1 = motor_1
+
+        def pack(self, mav, force_mavlink1=False):
+                return MAVLink_message.pack(self, mav, 75, struct.pack('<ff', self.motor_0, self.motor_1), force_mavlink1=force_mavlink1)
+
 class MAVLink_hw_params_message(MAVLink_message):
         '''
         Switch to invert motor rotation direction. Need a respond
@@ -659,27 +704,28 @@ class MAVLink_hw_params_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_HW_PARAMS
         name = 'HW_PARAMS'
-        fieldnames = ['motor0_invert', 'motor1_invert', 'encoder0_invert', 'encoder1_invert', 'encoder_exchange', 'motor0_pos_deadband', 'motor0_neg_deadband', 'motor1_pos_deadband', 'motor1_neg_deadband']
-        ordered_fieldnames = ['motor0_pos_deadband', 'motor0_neg_deadband', 'motor1_pos_deadband', 'motor1_neg_deadband', 'motor0_invert', 'motor1_invert', 'encoder0_invert', 'encoder1_invert', 'encoder_exchange']
-        fieldtypes = ['int8_t', 'int8_t', 'int8_t', 'int8_t', 'int8_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t']
+        fieldnames = ['motor_type', 'motor0_invert', 'motor1_invert', 'encoder0_invert', 'encoder1_invert', 'encoder_exchange', 'motor0_pos_deadband', 'motor0_neg_deadband', 'motor1_pos_deadband', 'motor1_neg_deadband']
+        ordered_fieldnames = ['motor0_pos_deadband', 'motor0_neg_deadband', 'motor1_pos_deadband', 'motor1_neg_deadband', 'motor_type', 'motor0_invert', 'motor1_invert', 'encoder0_invert', 'encoder1_invert', 'encoder_exchange']
+        fieldtypes = ['int8_t', 'int8_t', 'int8_t', 'int8_t', 'int8_t', 'int8_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t']
         fielddisplays_by_name = {}
-        fieldenums_by_name = {"motor0_invert": "bool_t", "motor1_invert": "bool_t", "encoder0_invert": "bool_t", "encoder1_invert": "bool_t", "encoder_exchange": "bool_t"}
+        fieldenums_by_name = {"motor_type": "motor_type_t", "motor0_invert": "bool_t", "motor1_invert": "bool_t", "encoder0_invert": "bool_t", "encoder1_invert": "bool_t", "encoder_exchange": "bool_t"}
         fieldunits_by_name = {}
-        format = '<hhhhbbbbb'
-        native_format = bytearray('<hhhhbbbbb', 'ascii')
-        orders = [4, 5, 6, 7, 8, 0, 1, 2, 3]
-        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-        crc_extra = 55
-        unpacker = struct.Struct('<hhhhbbbbb')
+        format = '<hhhhbbbbbb'
+        native_format = bytearray('<hhhhbbbbbb', 'ascii')
+        orders = [4, 5, 6, 7, 8, 9, 0, 1, 2, 3]
+        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        crc_extra = 30
+        unpacker = struct.Struct('<hhhhbbbbbb')
         instance_field = None
         instance_offset = -1
 
-        def __init__(self, motor0_invert, motor1_invert, encoder0_invert, encoder1_invert, encoder_exchange, motor0_pos_deadband, motor0_neg_deadband, motor1_pos_deadband, motor1_neg_deadband):
+        def __init__(self, motor_type, motor0_invert, motor1_invert, encoder0_invert, encoder1_invert, encoder_exchange, motor0_pos_deadband, motor0_neg_deadband, motor1_pos_deadband, motor1_neg_deadband):
                 MAVLink_message.__init__(self, MAVLink_hw_params_message.id, MAVLink_hw_params_message.name)
                 self._fieldnames = MAVLink_hw_params_message.fieldnames
                 self._instance_field = MAVLink_hw_params_message.instance_field
                 self._instance_offset = MAVLink_hw_params_message.instance_offset
+                self.motor_type = motor_type
                 self.motor0_invert = motor0_invert
                 self.motor1_invert = motor1_invert
                 self.encoder0_invert = encoder0_invert
@@ -691,7 +737,7 @@ class MAVLink_hw_params_message(MAVLink_message):
                 self.motor1_neg_deadband = motor1_neg_deadband
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 55, struct.pack('<hhhhbbbbb', self.motor0_pos_deadband, self.motor0_neg_deadband, self.motor1_pos_deadband, self.motor1_neg_deadband, self.motor0_invert, self.motor1_invert, self.encoder0_invert, self.encoder1_invert, self.encoder_exchange), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 30, struct.pack('<hhhhbbbbbb', self.motor0_pos_deadband, self.motor0_neg_deadband, self.motor1_pos_deadband, self.motor1_neg_deadband, self.motor_type, self.motor0_invert, self.motor1_invert, self.encoder0_invert, self.encoder1_invert, self.encoder_exchange), force_mavlink1=force_mavlink1)
 
 class MAVLink_gyro_params_message(MAVLink_message):
         '''
@@ -1425,6 +1471,7 @@ mavlink_map = {
         MAVLINK_MSG_ID_EVT_RPY : MAVLink_evt_rpy_message,
         MAVLINK_MSG_ID_EVT_SENSOR : MAVLink_evt_sensor_message,
         MAVLINK_MSG_ID_MOTOR_SPEED : MAVLink_motor_speed_message,
+        MAVLINK_MSG_ID_MOTOR_SPEED_STEP : MAVLink_motor_speed_step_message,
         MAVLINK_MSG_ID_HW_PARAMS : MAVLink_hw_params_message,
         MAVLINK_MSG_ID_GYRO_PARAMS : MAVLink_gyro_params_message,
         MAVLINK_MSG_ID_ACCEL_PARAMS : MAVLink_accel_params_message,
@@ -2035,11 +2082,32 @@ class MAVLink(object):
                 '''
                 return self.send(self.motor_speed_encode(motor_speed_0, motor_speed_1), force_mavlink1=force_mavlink1)
 
-        def hw_params_encode(self, motor0_invert, motor1_invert, encoder0_invert, encoder1_invert, encoder_exchange, motor0_pos_deadband, motor0_neg_deadband, motor1_pos_deadband, motor1_neg_deadband):
+        def motor_speed_step_encode(self, motor_0, motor_1):
+                '''
+                
+
+                motor_0                   : Motor 0 speed (type:float)
+                motor_1                   : Motor 1 Speed (type:float)
+
+                '''
+                return MAVLink_motor_speed_step_message(motor_0, motor_1)
+
+        def motor_speed_step_send(self, motor_0, motor_1, force_mavlink1=False):
+                '''
+                
+
+                motor_0                   : Motor 0 speed (type:float)
+                motor_1                   : Motor 1 Speed (type:float)
+
+                '''
+                return self.send(self.motor_speed_step_encode(motor_0, motor_1), force_mavlink1=force_mavlink1)
+
+        def hw_params_encode(self, motor_type, motor0_invert, motor1_invert, encoder0_invert, encoder1_invert, encoder_exchange, motor0_pos_deadband, motor0_neg_deadband, motor1_pos_deadband, motor1_neg_deadband):
                 '''
                 Switch to invert motor rotation direction. Need a respond message for
                 confimation
 
+                motor_type                :  (type:int8_t, values:motor_type_t)
                 motor0_invert             : Motor 0 Invert (type:int8_t, values:bool_t)
                 motor1_invert             : Motor 1 Invert (type:int8_t, values:bool_t)
                 encoder0_invert           : Encoder 0 Invert (type:int8_t, values:bool_t)
@@ -2051,13 +2119,14 @@ class MAVLink(object):
                 motor1_neg_deadband        : Motor 1 negative deadband (type:int16_t)
 
                 '''
-                return MAVLink_hw_params_message(motor0_invert, motor1_invert, encoder0_invert, encoder1_invert, encoder_exchange, motor0_pos_deadband, motor0_neg_deadband, motor1_pos_deadband, motor1_neg_deadband)
+                return MAVLink_hw_params_message(motor_type, motor0_invert, motor1_invert, encoder0_invert, encoder1_invert, encoder_exchange, motor0_pos_deadband, motor0_neg_deadband, motor1_pos_deadband, motor1_neg_deadband)
 
-        def hw_params_send(self, motor0_invert, motor1_invert, encoder0_invert, encoder1_invert, encoder_exchange, motor0_pos_deadband, motor0_neg_deadband, motor1_pos_deadband, motor1_neg_deadband, force_mavlink1=False):
+        def hw_params_send(self, motor_type, motor0_invert, motor1_invert, encoder0_invert, encoder1_invert, encoder_exchange, motor0_pos_deadband, motor0_neg_deadband, motor1_pos_deadband, motor1_neg_deadband, force_mavlink1=False):
                 '''
                 Switch to invert motor rotation direction. Need a respond message for
                 confimation
 
+                motor_type                :  (type:int8_t, values:motor_type_t)
                 motor0_invert             : Motor 0 Invert (type:int8_t, values:bool_t)
                 motor1_invert             : Motor 1 Invert (type:int8_t, values:bool_t)
                 encoder0_invert           : Encoder 0 Invert (type:int8_t, values:bool_t)
@@ -2069,7 +2138,7 @@ class MAVLink(object):
                 motor1_neg_deadband        : Motor 1 negative deadband (type:int16_t)
 
                 '''
-                return self.send(self.hw_params_encode(motor0_invert, motor1_invert, encoder0_invert, encoder1_invert, encoder_exchange, motor0_pos_deadband, motor0_neg_deadband, motor1_pos_deadband, motor1_neg_deadband), force_mavlink1=force_mavlink1)
+                return self.send(self.hw_params_encode(motor_type, motor0_invert, motor1_invert, encoder0_invert, encoder1_invert, encoder_exchange, motor0_pos_deadband, motor0_neg_deadband, motor1_pos_deadband, motor1_neg_deadband), force_mavlink1=force_mavlink1)
 
         def gyro_params_encode(self, gyro_bias_x, gyro_bias_y, gyro_bias_z):
                 '''

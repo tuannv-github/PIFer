@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE MAG_PARAMS PACKING
 
-#define MAVLINK_MSG_ID_MAG_PARAMS 11
+#define MAVLINK_MSG_ID_MAG_PARAMS 12
 
 
 typedef struct __mavlink_mag_params_t {
@@ -15,17 +15,17 @@ typedef struct __mavlink_mag_params_t {
 
 #define MAVLINK_MSG_ID_MAG_PARAMS_LEN 24
 #define MAVLINK_MSG_ID_MAG_PARAMS_MIN_LEN 24
-#define MAVLINK_MSG_ID_11_LEN 24
-#define MAVLINK_MSG_ID_11_MIN_LEN 24
+#define MAVLINK_MSG_ID_12_LEN 24
+#define MAVLINK_MSG_ID_12_MIN_LEN 24
 
 #define MAVLINK_MSG_ID_MAG_PARAMS_CRC 31
-#define MAVLINK_MSG_ID_11_CRC 31
+#define MAVLINK_MSG_ID_12_CRC 31
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_MAG_PARAMS { \
-    11, \
+    12, \
     "MAG_PARAMS", \
     6, \
     {  { "mag_bias_x", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_mag_params_t, mag_bias_x) }, \

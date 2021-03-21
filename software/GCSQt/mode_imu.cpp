@@ -60,9 +60,9 @@ void Mode_imu::mav_recv(mavlink_message_t *msg){
         {
             mavlink_gyro_params_t gyro_params_msg;
             mavlink_msg_gyro_params_decode(msg,&gyro_params_msg);
-            g_gx_offset = gyro_params_msg.gyro_offset_x;
-            g_gy_offset = gyro_params_msg.gyro_offset_y;
-            g_gz_offset = gyro_params_msg.gyro_offset_z;
+            g_gx_offset = gyro_params_msg.gyro_bias_x;
+            g_gy_offset = gyro_params_msg.gyro_bias_y;
+            g_gz_offset = gyro_params_msg.gyro_bias_z;
             ui->tb_gx_offset->setText(QString::number(g_gx_offset));
             ui->tb_gy_offset->setText(QString::number(g_gy_offset));
             ui->tb_gz_offset->setText(QString::number(g_gz_offset));

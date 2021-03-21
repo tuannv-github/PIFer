@@ -132,13 +132,13 @@ void MainWindow::com_connection_evt(Com::com_evt_t evt){
 void MainWindow::js_axis_change(const int js, const int axis, const qreal value){
     Q_UNUSED(js)
     if(axis == 0){
-        g_mode_pidt_tw->update_joystick(Mode_common::AXIS_0, value);
-        g_mode_pidt_ta->update_joystick(Mode_common::AXIS_0, value);
-        g_mode_run->update_joystick(Mode_common::AXIS_0, value);
+        g_mode_pidt_tw->update_joystick(Mode_common::AXIS_0, -value);
+        g_mode_pidt_ta->update_joystick(Mode_common::AXIS_0, -value);
+        g_mode_run->update_joystick(Mode_common::AXIS_0, -value);
     }
     else if(axis == 1){
-        g_mode_pidt_tw->update_joystick(Mode_common::AXIS_1, value);
-        g_mode_pidt_ta->update_joystick(Mode_common::AXIS_1, value);
-        g_mode_run->update_joystick(Mode_common::AXIS_1, value);
+        g_mode_pidt_tw->update_joystick(Mode_common::AXIS_1, -value);
+        g_mode_pidt_ta->update_joystick(Mode_common::AXIS_1, -value);
+        g_mode_run->update_joystick(Mode_common::AXIS_1, -value);
     }
 }

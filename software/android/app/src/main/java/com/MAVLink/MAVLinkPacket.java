@@ -283,6 +283,9 @@ public class MAVLinkPacket implements Serializable {
             case msg_motor_speed.MAVLINK_MSG_ID_MOTOR_SPEED:
                 return  new msg_motor_speed(this);
              
+            case msg_motor_speed_step.MAVLINK_MSG_ID_MOTOR_SPEED_STEP:
+                return  new msg_motor_speed_step(this);
+             
             case msg_hw_params.MAVLINK_MSG_ID_HW_PARAMS:
                 return  new msg_hw_params(this);
              

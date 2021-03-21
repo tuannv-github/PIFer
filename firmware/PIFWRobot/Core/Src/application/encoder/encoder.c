@@ -11,6 +11,8 @@
 #include <application/user_define.h>
 #include "tim.h"
 
+#if MOTOR_TYPE==0
+
 typedef int16_t (*enc_read_t)(motors_t motor); // int16_t (*)(motors_t)
 
 static int16_t enc_read_0(motors_t motor);
@@ -83,3 +85,5 @@ static int16_t enc_read_1(motors_t motor){
 	}
 	return 0;
 }
+
+#endif

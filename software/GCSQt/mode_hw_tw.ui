@@ -6,172 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>653</width>
-    <height>211</height>
+    <width>648</width>
+    <height>316</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QGroupBox" name="groupBox_9">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>120</y>
-     <width>631</width>
-     <height>81</height>
-    </rect>
-   </property>
-   <property name="title">
-    <string>Motor 1:</string>
-   </property>
-   <widget class="QLineEdit" name="txtb_motor1_duty">
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>20</y>
-      <width>111</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>0</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_17">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>20</y>
-      <width>31</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Duty:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_19">
-    <property name="geometry">
-     <rect>
-      <x>310</x>
-      <y>20</y>
-      <width>51</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Enc speed:</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="txtb_enc1_speed">
-    <property name="geometry">
-     <rect>
-      <x>380</x>
-      <y>20</y>
-      <width>101</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>0</string>
-    </property>
-    <property name="readOnly">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btn_set_duty1">
-    <property name="geometry">
-     <rect>
-      <x>180</x>
-      <y>20</y>
-      <width>71</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Set duty</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="cb_motor1_invert">
-    <property name="geometry">
-     <rect>
-      <x>530</x>
-      <y>20</y>
-      <width>81</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Motor Invert</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="cb_enc1_invert">
-    <property name="geometry">
-     <rect>
-      <x>530</x>
-      <y>50</y>
-      <width>70</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Enc Invert</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_22">
-    <property name="geometry">
-     <rect>
-      <x>320</x>
-      <y>50</y>
-      <width>51</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Neg db:</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="txtb_motor1_neg_deadband">
-    <property name="geometry">
-     <rect>
-      <x>380</x>
-      <y>50</y>
-      <width>101</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>0</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="txtb_motor1_pos_deadband">
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>50</y>
-      <width>111</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>0</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_23">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>50</y>
-      <width>81</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Pos db:</string>
-    </property>
-   </widget>
-  </widget>
   <widget class="QPushButton" name="btn_mode_hw_save_params">
    <property name="geometry">
     <rect>
@@ -216,139 +57,45 @@
     <rect>
      <x>10</x>
      <y>40</y>
-     <width>631</width>
-     <height>81</height>
+     <width>81</width>
+     <height>111</height>
     </rect>
    </property>
    <property name="title">
-    <string>Motor 0:</string>
+    <string>Set Speed</string>
    </property>
    <widget class="QLineEdit" name="txtb_motor0_duty">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>20</y>
-      <width>111</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>0</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_16">
-    <property name="geometry">
-     <rect>
       <x>10</x>
       <y>20</y>
-      <width>31</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Duty:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_18">
-    <property name="geometry">
-     <rect>
-      <x>310</x>
-      <y>20</y>
-      <width>71</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Enc speed:</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="txtb_enc0_speed">
-    <property name="geometry">
-     <rect>
-      <x>380</x>
-      <y>20</y>
-      <width>101</width>
+      <width>61</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
      <string>0</string>
-    </property>
-    <property name="readOnly">
-     <bool>true</bool>
     </property>
    </widget>
    <widget class="QPushButton" name="btn_set_duty0">
     <property name="geometry">
      <rect>
-      <x>180</x>
-      <y>20</y>
-      <width>71</width>
+      <x>10</x>
+      <y>80</y>
+      <width>61</width>
       <height>23</height>
      </rect>
     </property>
     <property name="text">
-     <string>Set duty</string>
+     <string>Set speed</string>
     </property>
    </widget>
-   <widget class="QCheckBox" name="cb_motor0_invert">
-    <property name="geometry">
-     <rect>
-      <x>530</x>
-      <y>20</y>
-      <width>81</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Motor Invert</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="cb_enc0_invert">
-    <property name="geometry">
-     <rect>
-      <x>530</x>
-      <y>50</y>
-      <width>70</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Enc Invert</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="txtb_motor0_pos_deadband">
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>50</y>
-      <width>111</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>0</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_20">
+   <widget class="QLineEdit" name="txtb_motor1_duty">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>50</y>
-      <width>81</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Pos db:</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="txtb_motor0_neg_deadband">
-    <property name="geometry">
-     <rect>
-      <x>380</x>
-      <y>50</y>
-      <width>101</width>
+      <width>61</width>
       <height>20</height>
      </rect>
     </property>
@@ -356,32 +103,6 @@
      <string>0</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_21">
-    <property name="geometry">
-     <rect>
-      <x>330</x>
-      <y>50</y>
-      <width>51</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Neg db:</string>
-    </property>
-   </widget>
-  </widget>
-  <widget class="QCheckBox" name="cb_enc_exchange">
-   <property name="geometry">
-    <rect>
-     <x>490</x>
-     <y>10</y>
-     <width>111</width>
-     <height>17</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Encoder exchange</string>
-   </property>
   </widget>
   <widget class="QPushButton" name="btn_mode_hw_load_params">
    <property name="geometry">
@@ -395,6 +116,240 @@
    <property name="text">
     <string>Load</string>
    </property>
+  </widget>
+  <widget class="QComboBox" name="cb_motor_type">
+   <property name="geometry">
+    <rect>
+     <x>490</x>
+     <y>10</y>
+     <width>91</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>DC</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>STEP</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>40</y>
+     <width>81</width>
+     <height>111</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Encoder</string>
+   </property>
+   <widget class="QLineEdit" name="txtb_enc0_speed">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>61</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtb_enc1_speed">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>50</y>
+      <width>61</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="groupBox_2">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>40</y>
+     <width>81</width>
+     <height>111</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Pos dead</string>
+   </property>
+   <widget class="QLineEdit" name="txtb_motor0_pos_deadband">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>61</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtb_motor1_pos_deadband">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>50</y>
+      <width>61</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="groupBox_3">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>40</y>
+     <width>81</width>
+     <height>111</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Neg dead</string>
+   </property>
+   <widget class="QLineEdit" name="txtb_motor0_neg_deadband">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>61</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtb_motor1_neg_deadband">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>50</y>
+      <width>61</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="groupBox_4">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>40</y>
+     <width>81</width>
+     <height>111</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Inverse</string>
+   </property>
+   <widget class="QCheckBox" name="cb_motor0_invert">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>81</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Motor 0</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="cb_motor1_invert">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>50</y>
+      <width>81</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Motor 1</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="groupBox_5">
+   <property name="geometry">
+    <rect>
+     <x>460</x>
+     <y>40</y>
+     <width>81</width>
+     <height>111</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Encoder</string>
+   </property>
+   <widget class="QCheckBox" name="cb_enc0_invert">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>50</y>
+      <width>70</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Enc Inv 0</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="cb_enc1_invert">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>80</y>
+      <width>70</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Enc Inv 1</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="cb_enc_exchange">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>71</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Exchange</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>

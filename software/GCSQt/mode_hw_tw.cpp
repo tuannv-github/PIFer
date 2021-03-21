@@ -29,6 +29,14 @@ void Mode_hw_tw::mav_recv(mavlink_message_t *msg){
         {
             mavlink_hw_params_t hw_params_msg;
             mavlink_msg_hw_params_decode(msg,&hw_params_msg);
+            switch (hw_params_msg.motor_type) {
+                case MOTOR_TYPE_DC:
+                    ui->cb_motor_type->setCurrentText("DC");
+                break;
+                case MOTOR_TYPE_STEP:
+                    ui->cb_motor_type->setCurrentText("STEP");
+                break;
+            }
             ui->cb_motor0_invert->setCheckState(hw_params_msg.motor0_invert == MAV_TRUE  ? Qt::CheckState::Checked : Qt::CheckState::Unchecked);
             ui->cb_motor1_invert->setCheckState(hw_params_msg.motor1_invert == MAV_TRUE  ? Qt::CheckState::Checked : Qt::CheckState::Unchecked);
             ui->cb_enc0_invert->setCheckState(hw_params_msg.encoder0_invert == MAV_TRUE  ? Qt::CheckState::Checked : Qt::CheckState::Unchecked);
@@ -75,7 +83,7 @@ void Mode_hw_tw::on_btn_mode_hw_write_params_clicked()
     int16_t motor0_neg_deadband = ui->txtb_motor0_neg_deadband->text().toInt();
     int16_t motor1_pos_deadband = ui->txtb_motor1_pos_deadband->text().toInt();
     int16_t motor1_neg_deadband = ui->txtb_motor1_neg_deadband->text().toInt();
-    mavlink_msg_hw_params_pack(0,0,&msg,motor0_invert,motor1_invert,encoder0_invert,encoder1_invert, encoder_ex,
+    mavlink_msg_hw_params_pack(0,0,&msg,MOTOR_TYPE_UNKNOWN,motor0_invert,motor1_invert,encoder0_invert,encoder1_invert, encoder_ex,
                                motor0_pos_deadband, motor0_neg_deadband, motor1_pos_deadband, motor1_neg_deadband);
     uint16_t len = mavlink_msg_to_send_buffer(mav_send_buf, &msg);
 
@@ -94,26 +102,19 @@ void Mode_hw_tw::on_btn_set_duty0_clicked()
 {
     mavlink_message_t msg;
     uint8_t mav_send_buf[255];
-    int16_t motor0_duty = static_cast<int16_t>(ui->txtb_motor0_duty->text().toInt());
-    int16_t motor1_duty = static_cast<int16_t>(ui->txtb_motor1_duty->text().toInt());
 
-    mavlink_msg_motor_speed_pack(0,0,&msg,motor0_duty,motor1_duty);
+    if(ui->cb_motor_type->currentText() == "DC"){
+        int16_t m0 = static_cast<int16_t>(ui->txtb_motor0_duty->text().toInt());
+        int16_t m1 = static_cast<int16_t>(ui->txtb_motor1_duty->text().toInt());
+        mavlink_msg_motor_speed_pack(0,0,&msg,m0,m1);
+    }
+    else if (ui->cb_motor_type->currentText() == "STEP"){
+        float m0 = ui->txtb_motor0_duty->text().toFloat();
+        float m1 = ui->txtb_motor1_duty->text().toFloat();
+        mavlink_msg_motor_speed_step_pack(0,0,&msg,m0,m1);
+    }
+
     uint16_t len = mavlink_msg_to_send_buffer(mav_send_buf, &msg);
-
-    emit mav_send(QByteArray::fromRawData(reinterpret_cast<char*>(mav_send_buf),len));
-    show_status("Writing motor duty params",1000);
-}
-
-void Mode_hw_tw::on_btn_set_duty1_clicked()
-{
-    mavlink_message_t msg;
-    uint8_t mav_send_buf[255];
-    int16_t motor0_duty = static_cast<int16_t>(ui->txtb_motor0_duty->text().toInt());
-    int16_t motor1_duty = static_cast<int16_t>(ui->txtb_motor1_duty->text().toInt());
-
-    mavlink_msg_motor_speed_pack(0,0,&msg,motor0_duty,motor1_duty);
-    uint16_t len = mavlink_msg_to_send_buffer(mav_send_buf, &msg);
-
     emit mav_send(QByteArray::fromRawData(reinterpret_cast<char*>(mav_send_buf),len));
     show_status("Writing motor duty params",1000);
 }

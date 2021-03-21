@@ -62,13 +62,14 @@ static void on_mavlink_recv(mavlink_message_t *msg){
 		else if(cmd_change_mode.cmd_change_mode == MODE_HW){
 			app_reset(&g_app, mode_hw_init, mode_hw_deinit, on_mode_hw_mavlink_recv);
 		}
+#if ROBOT_MODEL==0
 		else if(cmd_change_mode.cmd_change_mode == MODE_IMU){
 			app_reset(&g_app, mode_imu_init, mode_imu_deinit, on_mode_imu_mavlink_recv);
 		}
 		else if(cmd_change_mode.cmd_change_mode == MODE_PIDT_TW || cmd_change_mode.cmd_change_mode == MODE_PIDT_TA){
 			app_reset(&g_app, mode_pidt_init, mode_pidt_deinit, on_mode_pidt_mavlink_recv);
 		}
-
+#endif
 		// Initialize new mode
 		app_run_init(&g_app);
 

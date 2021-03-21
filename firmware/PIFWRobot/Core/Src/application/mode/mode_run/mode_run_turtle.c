@@ -28,7 +28,7 @@ void on_mode_run_mavlink_recv(mavlink_message_t *msg){
 			mavlink_msg_cmd_velocity_decode(msg, &cmd_velocity);
 //			float gmotor0_speed = (cmd_velocity.v - cmd_velocity.omega);
 //			float gmotor1_speed = (cmd_velocity.v + cmd_velocity.omega);
-			stepmotor_set_speed(cmd_velocity.v*LINEAR_SPEED_MAX,  cmd_velocity.omega*ANGULAR_SPEED_MAX);
+			stepmotor_vw(cmd_velocity.v*LINEAR_SPEED_MAX,  cmd_velocity.omega*ANGULAR_SPEED_MAX);
 		}
 		break;
 	default:

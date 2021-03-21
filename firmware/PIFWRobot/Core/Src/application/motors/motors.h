@@ -11,10 +11,7 @@
 #include <application/user_define.h>
 #include <stdbool.h>
 
-typedef enum{
-	MOTOR_0,
-	MOTOR_1
-}motors_t;
+#include "common.h"
 
 void motors_init();
 void motors_deinit();

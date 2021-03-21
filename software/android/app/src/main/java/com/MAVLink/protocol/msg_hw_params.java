@@ -15,8 +15,8 @@ import com.MAVLink.Messages.MAVLinkPayload;
  */
 public class msg_hw_params extends MAVLinkMessage {
 
-    public static final int MAVLINK_MSG_ID_HW_PARAMS = 8;
-    public static final int MAVLINK_MSG_LENGTH = 13;
+    public static final int MAVLINK_MSG_ID_HW_PARAMS = 9;
+    public static final int MAVLINK_MSG_LENGTH = 14;
     private static final long serialVersionUID = MAVLINK_MSG_ID_HW_PARAMS;
 
       
@@ -39,6 +39,11 @@ public class msg_hw_params extends MAVLinkMessage {
      * Motor 1 negative deadband
      */
     public short motor1_neg_deadband;
+      
+    /**
+     * 
+     */
+    public byte motor_type;
       
     /**
      * Motor 0 Invert
@@ -81,6 +86,7 @@ public class msg_hw_params extends MAVLinkMessage {
         packet.payload.putShort(motor0_neg_deadband);
         packet.payload.putShort(motor1_pos_deadband);
         packet.payload.putShort(motor1_neg_deadband);
+        packet.payload.putByte(motor_type);
         packet.payload.putByte(motor0_invert);
         packet.payload.putByte(motor1_invert);
         packet.payload.putByte(encoder0_invert);
@@ -106,6 +112,7 @@ public class msg_hw_params extends MAVLinkMessage {
         this.motor0_neg_deadband = payload.getShort();
         this.motor1_pos_deadband = payload.getShort();
         this.motor1_neg_deadband = payload.getShort();
+        this.motor_type = payload.getByte();
         this.motor0_invert = payload.getByte();
         this.motor1_invert = payload.getByte();
         this.encoder0_invert = payload.getByte();
@@ -127,13 +134,14 @@ public class msg_hw_params extends MAVLinkMessage {
     /**
      * Constructor for a new message, initializes msgid and all payload variables
      */
-    public msg_hw_params( short motor0_pos_deadband, short motor0_neg_deadband, short motor1_pos_deadband, short motor1_neg_deadband, byte motor0_invert, byte motor1_invert, byte encoder0_invert, byte encoder1_invert, byte encoder_exchange) {
+    public msg_hw_params( short motor0_pos_deadband, short motor0_neg_deadband, short motor1_pos_deadband, short motor1_neg_deadband, byte motor_type, byte motor0_invert, byte motor1_invert, byte encoder0_invert, byte encoder1_invert, byte encoder_exchange) {
         this.msgid = MAVLINK_MSG_ID_HW_PARAMS;
 
         this.motor0_pos_deadband = motor0_pos_deadband;
         this.motor0_neg_deadband = motor0_neg_deadband;
         this.motor1_pos_deadband = motor1_pos_deadband;
         this.motor1_neg_deadband = motor1_neg_deadband;
+        this.motor_type = motor_type;
         this.motor0_invert = motor0_invert;
         this.motor1_invert = motor1_invert;
         this.encoder0_invert = encoder0_invert;
@@ -145,7 +153,7 @@ public class msg_hw_params extends MAVLinkMessage {
     /**
      * Constructor for a new message, initializes everything
      */
-    public msg_hw_params( short motor0_pos_deadband, short motor0_neg_deadband, short motor1_pos_deadband, short motor1_neg_deadband, byte motor0_invert, byte motor1_invert, byte encoder0_invert, byte encoder1_invert, byte encoder_exchange, int sysid, int compid, boolean isMavlink2) {
+    public msg_hw_params( short motor0_pos_deadband, short motor0_neg_deadband, short motor1_pos_deadband, short motor1_neg_deadband, byte motor_type, byte motor0_invert, byte motor1_invert, byte encoder0_invert, byte encoder1_invert, byte encoder_exchange, int sysid, int compid, boolean isMavlink2) {
         this.msgid = MAVLINK_MSG_ID_HW_PARAMS;
         this.sysid = sysid;
         this.compid = compid;
@@ -155,6 +163,7 @@ public class msg_hw_params extends MAVLinkMessage {
         this.motor0_neg_deadband = motor0_neg_deadband;
         this.motor1_pos_deadband = motor1_pos_deadband;
         this.motor1_neg_deadband = motor1_neg_deadband;
+        this.motor_type = motor_type;
         this.motor0_invert = motor0_invert;
         this.motor1_invert = motor1_invert;
         this.encoder0_invert = encoder0_invert;
@@ -177,13 +186,13 @@ public class msg_hw_params extends MAVLinkMessage {
         unpack(mavLinkPacket.payload);
     }
 
-                      
+                        
     /**
      * Returns a string with the MSG name and data
      */
     @Override
     public String toString() {
-        return "MAVLINK_MSG_ID_HW_PARAMS - sysid:"+sysid+" compid:"+compid+" motor0_pos_deadband:"+motor0_pos_deadband+" motor0_neg_deadband:"+motor0_neg_deadband+" motor1_pos_deadband:"+motor1_pos_deadband+" motor1_neg_deadband:"+motor1_neg_deadband+" motor0_invert:"+motor0_invert+" motor1_invert:"+motor1_invert+" encoder0_invert:"+encoder0_invert+" encoder1_invert:"+encoder1_invert+" encoder_exchange:"+encoder_exchange+"";
+        return "MAVLINK_MSG_ID_HW_PARAMS - sysid:"+sysid+" compid:"+compid+" motor0_pos_deadband:"+motor0_pos_deadband+" motor0_neg_deadband:"+motor0_neg_deadband+" motor1_pos_deadband:"+motor1_pos_deadband+" motor1_neg_deadband:"+motor1_neg_deadband+" motor_type:"+motor_type+" motor0_invert:"+motor0_invert+" motor1_invert:"+motor1_invert+" encoder0_invert:"+encoder0_invert+" encoder1_invert:"+encoder1_invert+" encoder_exchange:"+encoder_exchange+"";
     }
     
     /**

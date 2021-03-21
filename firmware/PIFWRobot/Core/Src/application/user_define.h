@@ -27,17 +27,33 @@
 //#define ROBOT_MODEL_TANK
 //#define ROBOT_MODEL_OMNI
 
+// DC				--> 0
+// STEP				--> 1
+#define MOTOR_TYPE		1
+
 // Motor 0 define
-#define MOTOR0_TIMER 	htim2
-#define MOTOR0_CHANNEL 	TIM_CHANNEL_1
-#define MOTOR0_ENCODER	htim3
-#define MOTOR0_INVERT	// define if you want to change motor direction
+#if MOTOR_TYPE == 0
+	#define MOTOR0_TIMER 	htim2
+	#define MOTOR0_CHANNEL 	TIM_CHANNEL_1
+	#define MOTOR0_ENCODER	htim3
+#elif MOTOR_TYPE==1
+	#define MOTOR0_TIMER		htim3
+	#define MOTOR0_CHANNEL		TIM_CHANNEL_1
+	#define MOTOR0_DIR_PORT		GPIOC
+	#define MOTOR0_DIR_PIN		GPIO_PIN_14
+#endif
 
 // Motor 1 define
-//#define MOTOR1_TIMER 	htim2
-//#define MOTOR1_CHANNEL 	TIM_CHANNEL_2
-#define MOTOR1_ENCODER	htim4
-#define MOTOR1_INVERT	// define if you want to change motor direction
+#if MOTOR_TYPE == 0
+	#define MOTOR1_TIMER 		htim2
+	#define MOTOR1_CHANNEL 	TIM_CHANNEL_2
+	#define MOTOR1_ENCODER	htim4
+#elif MOTOR_TYPE==1
+	#define MOTOR1_TIMER		htim4
+	#define MOTOR1_CHANNEL  	TIM_CHANNEL_2
+	#define MOTOR1_DIR_PORT		GPIOD
+	#define MOTOR1_DIR_PIN		GPIO_PIN_0
+#endif
 
 // Motor common define
 #define ENC_PERIOD		100
@@ -103,19 +119,9 @@
 
 
 // STEP MOTOR DEFINE
-#define MOTOR1_TIMER	htim3
-#define MOTOR1_CHANNEL	TIM_CHANNEL_1
-#define MOTOR1_DIR_PORT	GPIOC
-#define MOTOR1_DIR_PIN	GPIO_PIN_14
-
-#define MOTOR2_TIMER	htim4
-#define MOTOR2_CHANNEL  TIM_CHANNEL_2
-#define MOTOR2_DIR_PORT	GPIOD
-#define MOTOR2_DIR_PIN	GPIO_PIN_0
-
 #define STEP_PER_REV 		200
 #define PULSES_PER_METER 	7643
-#define WHEEL_WIDTH 		0.16
+#define ROBOT_WIDTH 		0.16f
 #define	LINEAR_SPEED_MAX	0.30f
 #define ANGULAR_SPEED_MAX	3.0f
 

@@ -52,6 +52,12 @@
 			<entry name="ANCHOR"></entry>
 			<entry name="TAG"></entry>
 		</enum>
+
+		<enum name="motor_type_t">
+			<entry name="MOTOR_TYPE_UNKNOWN"></entry>
+			<entry name="MOTOR_TYPE_DC"></entry>
+			<entry name="MOTOR_TYPE_STEP"></entry>
+		</enum>
 	</enums>
 
 	<messages>
@@ -99,8 +105,15 @@
 			<field type="int16_t" name="motor_speed_1">Motor 1 Speed</field>
 		</message>
 
-		<message id="8" name="HW_PARAMS">
+		<message id="8" name="MOTOR_SPEED_STEP">
+			<description></description>
+			<field type="float" name="motor_0">Motor 0 speed</field>
+			<field type="float" name="motor_1">Motor 1 Speed</field>
+		</message>
+
+		<message id="9" name="HW_PARAMS">
 			<description>Switch to invert motor rotation direction. Need a respond message for confimation</description>
+			<field type="int8_t" name="motor_type" enum="motor_type_t"></field>
 			<field type="int8_t" name="motor0_invert" enum="bool_t">Motor 0 Invert</field>
 			<field type="int8_t" name="motor1_invert" enum="bool_t">Motor 1 Invert</field>
 			<field type="int8_t" name="encoder0_invert" enum="bool_t">Encoder 0 Invert</field>
@@ -112,21 +125,21 @@
 			<field type="int16_t" name="motor1_neg_deadband">Motor 1 negative deadband</field>
 		</message>
 
-		<message id="9" name="GYRO_PARAMS">
+		<message id="10" name="GYRO_PARAMS">
 			<description></description>
 			<field type="float" name="gyro_bias_x"></field>
 			<field type="float" name="gyro_bias_y"></field>
 			<field type="float" name="gyro_bias_z"></field>
 		</message>
 
-		<message id="10" name="ACCEL_PARAMS">
+		<message id="11" name="ACCEL_PARAMS">
 			<description></description>
 			<field type="float" name="accel_bias_x"></field>
 			<field type="float" name="accel_bias_y"></field>
 			<field type="float" name="accel_bias_z"></field>
 		</message>
 
-		<message id="11" name="MAG_PARAMS">
+		<message id="12" name="MAG_PARAMS">
 			<description></description>
 			<field type="float" name="mag_bias_x"></field>
 			<field type="float" name="mag_bias_y"></field>
@@ -136,14 +149,14 @@
 			<field type="float" name="mag_scale_z"></field>
 		</message>
 
-		<message id="12" name="COMP_FILTER_PARAMS">
+		<message id="13" name="COMP_FILTER_PARAMS">
 			<description>Complimentary filter parameters. No need a respond message for confimation</description>
 			<field type="uint8_t" name="tilt_type" enum="tilt_type_t">Tilt type</field>
 			<field type="float" name="tilt_offset">Tilt angle offset</field>
 			<field type="float" name="g_believe">Belive in gyroscope</field>
 		</message>
 
-		<message id="13" name="EVT_GYRO_ACCEL_MAG_RAW">
+		<message id="14" name="EVT_GYRO_ACCEL_MAG_RAW">
 			<description>IMU raw value</description>
 			<field type="float" name="gx">Gyro X</field>
 			<field type="float" name="gy">Gyro Y</field>
@@ -156,7 +169,7 @@
 			<field type="float" name="mz">Mag Z</field>
 		</message>
 
-		<message id="14" name="EVT_GYRO_ACCEL_MAG_CALIBRATED">
+		<message id="15" name="EVT_GYRO_ACCEL_MAG_CALIBRATED">
 			<description>IMU calibrated value</description>
 			<field type="float" name="gx">Gyro X</field>
 			<field type="float" name="gy">Gyro Y</field>
@@ -169,7 +182,7 @@
 			<field type="float" name="mz">Mag Z</field>
 		</message>
 
-		<message id="15" name="PID_PARAMS">
+		<message id="16" name="PID_PARAMS">
 			<description>PID Coefficent. No need a respond message for confimation</description>
 			<field type="uint8_t" name="pid_control" enum="pidc_t">Object that PID control</field>
 			<field type="float" name="KP">KP</field>
@@ -177,7 +190,7 @@
 			<field type="float" name="KD">KD</field>
 		</message>
 
-		<message id="16" name="PID_REPORT">
+		<message id="17" name="PID_REPORT">
 			<description>Report pid internal parameter</description>
 			<field type="uint8_t" name="pid_control" enum="pidc_t">Object that PID control</field>
 			<field type="float" name="sp">Set point</field>
@@ -188,25 +201,25 @@
 			<field type="float" name="U">Output</field>
 		</message>
 
-		<message id="17" name="BLINK">
+		<message id="18" name="BLINK">
 			<description>Location message</description>
 			<field type="uint16_t" name="uwb_address"/>
 			<field type="uint8_t" enum="role_t" name="role"/>
 		</message>
 
-		<message id="18" name="BLE_MESH">
+		<message id="19" name="BLE_MESH">
 			<description>BLE mesh message</description>
 			<field type="uint16_t" name="uwb_address"/>
 			<field type="uint16_t" name="mesh_address"/>
 		</message>
 
-		<message id="19" name="ONOFF">
+		<message id="20" name="ONOFF">
 			<description>On off message</description>
 			<field type="uint16_t" name="uwb_address"/>
 			<field type="uint8_t" name="value"/>
 		</message>
 
-		<message id="20" name="LOCATION">
+		<message id="21" name="LOCATION">
 			<description>Location message</description>
 			<field type="uint16_t" name="uwb_address"/>
 			<field type="float" name="location_x"/>
@@ -214,34 +227,34 @@
 			<field type="float" name="location_z"/>
 		</message>
 
-		<message id="21" name="LOCATION_REDUCED">
+		<message id="22" name="LOCATION_REDUCED">
 			<description>Location message</description>
 			<field type="uint16_t" name="mesh_address"/>
 			<field type="float" name="location_x"/>
 			<field type="float" name="location_y"/>
 		</message>
 
-		<message id="22" name="DISTANCE">
+		<message id="23" name="DISTANCE">
 			<description>Distance message</description>
 			<field type="uint16_t" name="uwb_address"/>
 			<field type="uint16_t" name="anchor"/>
 			<field type="float" name="distance"/>
 		</message>
 
-		<message id="23" name="TOF">
+		<message id="24" name="TOF">
 			<description>TOF message</description>
 			<field type="uint16_t" name="uwb_address"/>
 			<field type="uint16_t" name="anchor"/>
 			<field type="uint32_t" name="tof"/>
 		</message>
 
-		<message id="24" name="SLOT">
+		<message id="25" name="SLOT">
 			<description>Slot message</description>
 			<field type="uint16_t" name="uwb_address"/>
 			<field type="uint8_t" name="slot"/>
 		</message>
 
-		<message id="25" name="TAG">
+		<message id="26" name="TAG">
 			<description>Tag message</description>
 			<field type="uint16_t" name="a0"/>
 			<field type="float" name="a0x"/>
@@ -269,13 +282,13 @@
 			<field type="float" name="t0z"/>
 		</message>
 
-		<message id="26" name="CONTROL">
+		<message id="27" name="CONTROL">
 			<description>Control message</description>
 			<field type="float" name="left"/>
 			<field type="float" name="right"/>
 		</message>
 
-		<message id="27" name="MEASUREMENT">
+		<message id="28" name="MEASUREMENT">
 			<description>Measurement message</description>
 			<field type="float" name="rx"/>
 			<field type="float" name="ry"/>
@@ -283,7 +296,7 @@
 			<field type="float" name="yaw"/>
 		</message>
 
-		<message id="28" name="CONTROL_MEASUREMENT">
+		<message id="29" name="CONTROL_MEASUREMENT">
 			<description>Control and measurement message</description>
 			<field type="float" name="left"/>
 			<field type="float" name="right"/>

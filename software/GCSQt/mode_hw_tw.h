@@ -25,7 +25,6 @@ private slots:
     void on_btn_mode_hw_write_params_clicked();
     void on_btn_mode_hw_save_params_clicked();
     void on_btn_set_duty0_clicked();
-    void on_btn_set_duty1_clicked();
 
 private:
     Ui::Mode_hw_tw *ui;

@@ -15,7 +15,7 @@ import com.MAVLink.Messages.MAVLinkPayload;
  */
 public class msg_pid_report extends MAVLinkMessage {
 
-    public static final int MAVLINK_MSG_ID_PID_REPORT = 16;
+    public static final int MAVLINK_MSG_ID_PID_REPORT = 17;
     public static final int MAVLINK_MSG_LENGTH = 25;
     private static final long serialVersionUID = MAVLINK_MSG_ID_PID_REPORT;
 

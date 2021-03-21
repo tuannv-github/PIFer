@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE GYRO_PARAMS PACKING
 
-#define MAVLINK_MSG_ID_GYRO_PARAMS 9
+#define MAVLINK_MSG_ID_GYRO_PARAMS 10
 
 
 typedef struct __mavlink_gyro_params_t {
@@ -12,17 +12,17 @@ typedef struct __mavlink_gyro_params_t {
 
 #define MAVLINK_MSG_ID_GYRO_PARAMS_LEN 12
 #define MAVLINK_MSG_ID_GYRO_PARAMS_MIN_LEN 12
-#define MAVLINK_MSG_ID_9_LEN 12
-#define MAVLINK_MSG_ID_9_MIN_LEN 12
+#define MAVLINK_MSG_ID_10_LEN 12
+#define MAVLINK_MSG_ID_10_MIN_LEN 12
 
 #define MAVLINK_MSG_ID_GYRO_PARAMS_CRC 170
-#define MAVLINK_MSG_ID_9_CRC 170
+#define MAVLINK_MSG_ID_10_CRC 170
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_GYRO_PARAMS { \
-    9, \
+    10, \
     "GYRO_PARAMS", \
     3, \
     {  { "gyro_bias_x", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_gyro_params_t, gyro_bias_x) }, \

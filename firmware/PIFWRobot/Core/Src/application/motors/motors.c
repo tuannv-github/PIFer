@@ -6,7 +6,6 @@
  */
 
 #include <application/motors/motors.h>
-#include <application/params/params.h>
 #include <stdlib.h>
 
 #include "tim.h"

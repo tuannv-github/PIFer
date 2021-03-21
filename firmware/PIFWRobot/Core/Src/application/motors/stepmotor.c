@@ -9,63 +9,65 @@
 
 void stepmotor_init()
 {
+	HAL_TIM_PWM_Start(&MOTOR0_TIMER, MOTOR0_CHANNEL);
 	HAL_TIM_PWM_Start(&MOTOR1_TIMER, MOTOR1_CHANNEL);
-	HAL_TIM_PWM_Start(&MOTOR2_TIMER, MOTOR2_CHANNEL);
+	__HAL_TIM_SET_COMPARE(&MOTOR0_TIMER, MOTOR0_CHANNEL, 0);
 	__HAL_TIM_SET_COMPARE(&MOTOR1_TIMER, MOTOR1_CHANNEL, 0);
-	__HAL_TIM_SET_COMPARE(&MOTOR2_TIMER, MOTOR2_CHANNEL, 0);
 }
 
-void stepmotor_set_speed(float v_linear, float v_angular)
-{
-	float vel_motor1 = v_linear - (v_angular * WHEEL_WIDTH/2.0f);
-	float vel_motor2 = v_linear + (v_angular * WHEEL_WIDTH/2.0f);
-	if (vel_motor1 >=0)
-	{
-		HAL_GPIO_WritePin(MOTOR1_DIR_PORT, MOTOR1_DIR_PIN, GPIO_PIN_RESET);
-	}
-	else
-	{
-		vel_motor1 = abs(vel_motor1);
-		HAL_GPIO_WritePin(MOTOR1_DIR_PORT, MOTOR1_DIR_PIN, GPIO_PIN_SET);
-	}
-	if (vel_motor2 >=0)
-	{
-		HAL_GPIO_WritePin(MOTOR2_DIR_PORT, MOTOR2_DIR_PIN, GPIO_PIN_SET);
-	}
-	else
-	{
-		vel_motor2 = abs(vel_motor2);
-		HAL_GPIO_WritePin(MOTOR2_DIR_PORT, MOTOR2_DIR_PIN, GPIO_PIN_RESET);
-	}
-	int freq1,freq2;
-	int pulse1,pulse2,pulsespersecond1;
-	if (vel_motor1 <= 0.003)
-		{
-			freq1 = 0;
-			pulse1 = freq1;
+void stepmotor_speed(motors_t motor, float speed){
+	switch(motor){
+	case MOTOR_0:
+		if(speed > 0){
+			if(params.motor0_invert) HAL_GPIO_WritePin(MOTOR0_DIR_PORT, MOTOR0_DIR_PIN, GPIO_PIN_RESET);
+			else HAL_GPIO_WritePin(MOTOR0_DIR_PORT, MOTOR0_DIR_PIN, GPIO_PIN_SET);
 		}
-	else
-	{
-		float pulsespersecond1 = PULSES_PER_METER * vel_motor1;
-		freq1 =1000000/pulsespersecond1  ;
-		pulse1 = freq1;
+		else{
+			if(params.motor0_invert) HAL_GPIO_WritePin(MOTOR0_DIR_PORT, MOTOR0_DIR_PIN, GPIO_PIN_SET);
+			else HAL_GPIO_WritePin(MOTOR0_DIR_PORT, MOTOR0_DIR_PIN, GPIO_PIN_RESET);
+		}
+		speed = fabs(speed);
+		if(speed < 0.003){
+			MOTOR0_TIMER.Instance->ARR = 0;
+			__HAL_TIM_SET_COMPARE(&MOTOR0_TIMER, MOTOR0_CHANNEL,  0);
+		}
+		else{
+			float pulses_per_second = PULSES_PER_METER * speed;
+			uint32_t counter_period = (uint32_t)(1000000.0f/pulses_per_second);
+			MOTOR0_TIMER.Instance->ARR = counter_period;
+			__HAL_TIM_SET_COMPARE(&MOTOR0_TIMER, MOTOR0_CHANNEL,  counter_period/2);
+		}
+		break;
+	case MOTOR_1:
+		if(speed > 0){
+			if(params.motor1_invert) HAL_GPIO_WritePin(MOTOR1_DIR_PORT, MOTOR1_DIR_PIN, GPIO_PIN_RESET);
+			else HAL_GPIO_WritePin(MOTOR1_DIR_PORT, MOTOR1_DIR_PIN, GPIO_PIN_SET);
+		}
+		else{
+			if(params.motor1_invert) HAL_GPIO_WritePin(MOTOR1_DIR_PORT, MOTOR1_DIR_PIN, GPIO_PIN_SET);
+			else HAL_GPIO_WritePin(MOTOR1_DIR_PORT, MOTOR1_DIR_PIN, GPIO_PIN_RESET);
+		}
+		speed = fabs(speed);
+		if(speed < 0.003){
+			MOTOR1_TIMER.Instance->ARR = 0;
+			__HAL_TIM_SET_COMPARE(&MOTOR1_TIMER, MOTOR1_CHANNEL,  0);
+		}
+		else{
+			float pulses_per_second = PULSES_PER_METER * speed;
+			uint32_t counter_period = (uint32_t)(1000000.0f/pulses_per_second);
+			 MOTOR1_TIMER.Instance->ARR = counter_period;
+			__HAL_TIM_SET_COMPARE(&MOTOR1_TIMER, MOTOR1_CHANNEL,  counter_period/2);;
+		}
+		break;
 	}
-	if (vel_motor2 <= 0.003)
-	{
-		freq2 = 0;
-		pulse2 = freq2;
-	}
-	else
-	{
-		float pulsespersecond2 = PULSES_PER_METER * vel_motor2;
-		freq2 =1000000/pulsespersecond2  ;
-		pulse2 = freq2;
-	}
+}
 
-	MOTOR1_TIMER.Instance->ARR = pulse1;
-	__HAL_TIM_SET_COMPARE(&MOTOR1_TIMER, MOTOR1_CHANNEL,  pulse1/2);
-	MOTOR2_TIMER.Instance->ARR = pulse2;
-	__HAL_TIM_SET_COMPARE(&MOTOR2_TIMER, MOTOR1_CHANNEL,  pulse2/2);
+void stepmotor_vw(float v, float w)
+{
+	float v0 = v - (w * ROBOT_WIDTH/2.0f);
+	float v1 = v + (w * ROBOT_WIDTH/2.0f);
 
+	stepmotor_speed(MOTOR_0, v0);
+	stepmotor_speed(MOTOR_1, v1);
 }
 

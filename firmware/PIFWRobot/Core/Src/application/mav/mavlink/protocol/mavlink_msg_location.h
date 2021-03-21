@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE LOCATION PACKING
 
-#define MAVLINK_MSG_ID_LOCATION 20
+#define MAVLINK_MSG_ID_LOCATION 21
 
 
 typedef struct __mavlink_location_t {
@@ -13,17 +13,17 @@ typedef struct __mavlink_location_t {
 
 #define MAVLINK_MSG_ID_LOCATION_LEN 14
 #define MAVLINK_MSG_ID_LOCATION_MIN_LEN 14
-#define MAVLINK_MSG_ID_20_LEN 14
-#define MAVLINK_MSG_ID_20_MIN_LEN 14
+#define MAVLINK_MSG_ID_21_LEN 14
+#define MAVLINK_MSG_ID_21_MIN_LEN 14
 
 #define MAVLINK_MSG_ID_LOCATION_CRC 170
-#define MAVLINK_MSG_ID_20_CRC 170
+#define MAVLINK_MSG_ID_21_CRC 170
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_LOCATION { \
-    20, \
+    21, \
     "LOCATION", \
     4, \
     {  { "uwb_address", NULL, MAVLINK_TYPE_UINT16_T, 0, 12, offsetof(mavlink_location_t, uwb_address) }, \

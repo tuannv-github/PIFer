@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE ACCEL_PARAMS PACKING
 
-#define MAVLINK_MSG_ID_ACCEL_PARAMS 10
+#define MAVLINK_MSG_ID_ACCEL_PARAMS 11
 
 
 typedef struct __mavlink_accel_params_t {
@@ -12,17 +12,17 @@ typedef struct __mavlink_accel_params_t {
 
 #define MAVLINK_MSG_ID_ACCEL_PARAMS_LEN 12
 #define MAVLINK_MSG_ID_ACCEL_PARAMS_MIN_LEN 12
-#define MAVLINK_MSG_ID_10_LEN 12
-#define MAVLINK_MSG_ID_10_MIN_LEN 12
+#define MAVLINK_MSG_ID_11_LEN 12
+#define MAVLINK_MSG_ID_11_MIN_LEN 12
 
 #define MAVLINK_MSG_ID_ACCEL_PARAMS_CRC 8
-#define MAVLINK_MSG_ID_10_CRC 8
+#define MAVLINK_MSG_ID_11_CRC 8
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_ACCEL_PARAMS { \
-    10, \
+    11, \
     "ACCEL_PARAMS", \
     3, \
     {  { "accel_bias_x", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_accel_params_t, accel_bias_x) }, \

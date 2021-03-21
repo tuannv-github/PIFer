@@ -15,7 +15,7 @@ import com.MAVLink.Messages.MAVLinkPayload;
  */
 public class msg_blink extends MAVLinkMessage {
 
-    public static final int MAVLINK_MSG_ID_BLINK = 17;
+    public static final int MAVLINK_MSG_ID_BLINK = 18;
     public static final int MAVLINK_MSG_LENGTH = 3;
     private static final long serialVersionUID = MAVLINK_MSG_ID_BLINK;
 
