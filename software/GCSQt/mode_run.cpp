@@ -22,6 +22,7 @@ void Mode_run::mav_recv(mavlink_message_t *msg){
         mavlink_msg_evt_rpy_decode(msg, &evt_rpy);
         ui->txtBoxRoll->setText(QString::number(static_cast<double>(evt_rpy.roll)));
         ui->txtBoxPitch->setText(QString::number(static_cast<double>(evt_rpy.pitch)));
+        ui->txtBoxYaw->setText(QString::number(static_cast<double>(evt_rpy.yaw)));
         break;
     case MAVLINK_MSG_ID_EVT_SENSOR:
         mavlink_evt_sensor_t sensor_status;

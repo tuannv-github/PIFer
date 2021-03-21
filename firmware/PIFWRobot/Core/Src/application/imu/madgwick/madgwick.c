@@ -170,17 +170,18 @@ void madwgick_ga_update(float gx, float gy, float gz, float ax, float ay, float 
 	q3 *= recipNorm;
 }
 
-void magwick_get_rpy(float *r, float *p, float *y){
-    float t0 = +2.0 * (q0 * q1 + q2 * q3);
-    float t1 = +1.0 - 2.0 * (q1 * q1 + q2 * q2);
-    *r = atan2(t0, t1);
-    float t2 = +2.0 * (q0 * q2 - q3 * q1);
-    t2 = t2 > +1.0  ? +1.0 : t2;
+void magwick_get_rpy(float rpy[3]){
+	float x=q1, y=q2, z=q3, w=q0;
+    float t0 = +2.0 * (w * x + y * z);
+	float t1 = +1.0 - 2.0 * (x * x + y * y);
+	rpy[0] = atan2(t0, t1)*180.0f/M_PI;
+	float t2 = +2.0 * (w * y - z * x);
+    t2 = t2 > +1.0 ? +1.0 : t2;
     t2 = t2 < -1.0 ? -1.0 : t2;
-    *p = asin(t2);
-    float t3 = +2.0 * (q0 * q3 + q1 * q2);
-    float t4 = +1.0 - 2.0 * (q2 * q2 + q3 * q3);
-    *y = atan2(t3, t4);
+	rpy[1] = asin(t2)*180.0f/M_PI;
+    float t3 = +2.0 * (w * z + x * y);
+    float t4 = +1.0 - 2.0 * (y * y + z * z);
+	rpy[2] = atan2(t3, t4)*180.0f/M_PI;
 }
 
 float inv_sqrt(float x) {

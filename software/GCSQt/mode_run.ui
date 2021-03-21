@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>640</width>
-    <height>180</height>
+    <height>272</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,8 +18,8 @@
     <rect>
      <x>10</x>
      <y>40</y>
-     <width>621</width>
-     <height>61</height>
+     <width>471</width>
+     <height>51</height>
     </rect>
    </property>
    <property name="title">
@@ -29,20 +29,20 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>30</y>
+      <y>20</y>
       <width>31</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>Roll:</string>
+     <string>RPY:</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="txtBoxRoll">
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>30</y>
+      <y>20</y>
       <width>91</width>
       <height>20</height>
      </rect>
@@ -52,26 +52,13 @@
     </property>
     <property name="readOnly">
      <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_48">
-    <property name="geometry">
-     <rect>
-      <x>160</x>
-      <y>30</y>
-      <width>31</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Pitch:</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="txtBoxPitch">
     <property name="geometry">
      <rect>
-      <x>190</x>
-      <y>30</y>
+      <x>140</x>
+      <y>20</y>
       <width>91</width>
       <height>20</height>
      </rect>
@@ -83,24 +70,11 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="label_54">
-    <property name="geometry">
-     <rect>
-      <x>310</x>
-      <y>30</y>
-      <width>31</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Yaw:</string>
-    </property>
-   </widget>
    <widget class="QLineEdit" name="txtBoxYaw">
     <property name="geometry">
      <rect>
-      <x>350</x>
-      <y>30</y>
+      <x>240</x>
+      <y>20</y>
       <width>91</width>
       <height>20</height>
      </rect>
@@ -115,8 +89,8 @@
    <widget class="QLabel" name="label_79">
     <property name="geometry">
      <rect>
-      <x>470</x>
-      <y>30</y>
+      <x>350</x>
+      <y>20</y>
       <width>31</width>
       <height>16</height>
      </rect>
@@ -128,8 +102,8 @@
    <widget class="QLineEdit" name="txtb_tilt_1">
     <property name="geometry">
      <rect>
-      <x>510</x>
-      <y>30</y>
+      <x>370</x>
+      <y>20</y>
       <width>91</width>
       <height>20</height>
      </rect>
@@ -159,9 +133,9 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>110</y>
-     <width>621</width>
-     <height>61</height>
+     <y>90</y>
+     <width>441</width>
+     <height>51</height>
     </rect>
    </property>
    <property name="title">
@@ -171,7 +145,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>30</y>
+      <y>20</y>
       <width>31</width>
       <height>16</height>
      </rect>
@@ -184,8 +158,8 @@
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>30</y>
-      <width>113</width>
+      <y>20</y>
+      <width>91</width>
       <height>20</height>
      </rect>
     </property>
@@ -199,8 +173,8 @@
    <widget class="QLabel" name="label_62">
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>30</y>
+      <x>150</x>
+      <y>20</y>
       <width>31</width>
       <height>16</height>
      </rect>
@@ -209,27 +183,11 @@
      <string>VY:</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="txtBoxVY">
-    <property name="geometry">
-     <rect>
-      <x>210</x>
-      <y>30</y>
-      <width>113</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>0</string>
-    </property>
-    <property name="readOnly">
-     <bool>true</bool>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_63">
     <property name="geometry">
      <rect>
-      <x>340</x>
-      <y>30</y>
+      <x>290</x>
+      <y>20</y>
       <width>41</width>
       <height>16</height>
      </rect>
@@ -238,12 +196,12 @@
      <string>OMEGA:</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="txtb_pidt_w">
+   <widget class="QLineEdit" name="txtBoxVY">
     <property name="geometry">
      <rect>
-      <x>390</x>
-      <y>30</y>
-      <width>113</width>
+      <x>180</x>
+      <y>20</y>
+      <width>91</width>
       <height>20</height>
      </rect>
     </property>
@@ -254,19 +212,35 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QPushButton" name="btn_control_enable">
+   <widget class="QLineEdit" name="txtb_pidt_w">
     <property name="geometry">
      <rect>
-      <x>520</x>
-      <y>30</y>
-      <width>81</width>
-      <height>21</height>
+      <x>340</x>
+      <y>20</y>
+      <width>91</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string>Disabled</string>
+     <string>0</string>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
     </property>
    </widget>
+  </widget>
+  <widget class="QPushButton" name="btn_control_enable">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>10</y>
+     <width>101</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Disabled</string>
+   </property>
   </widget>
  </widget>
  <resources/>

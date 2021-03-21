@@ -382,7 +382,7 @@ MAVLINK_MSG_ID_HW_PARAMS = 9
 MAVLINK_MSG_ID_GYRO_PARAMS = 10
 MAVLINK_MSG_ID_ACCEL_PARAMS = 11
 MAVLINK_MSG_ID_MAG_PARAMS = 12
-MAVLINK_MSG_ID_COMP_FILTER_PARAMS = 13
+MAVLINK_MSG_ID_FILTER_PARAMS = 13
 MAVLINK_MSG_ID_EVT_GYRO_ACCEL_MAG_RAW = 14
 MAVLINK_MSG_ID_EVT_GYRO_ACCEL_MAG_CALIBRATED = 15
 MAVLINK_MSG_ID_PID_PARAMS = 16
@@ -844,40 +844,40 @@ class MAVLink_mag_params_message(MAVLink_message):
         def pack(self, mav, force_mavlink1=False):
                 return MAVLink_message.pack(self, mav, 31, struct.pack('<ffffff', self.mag_bias_x, self.mag_bias_y, self.mag_bias_z, self.mag_scale_x, self.mag_scale_y, self.mag_scale_z), force_mavlink1=force_mavlink1)
 
-class MAVLink_comp_filter_params_message(MAVLink_message):
+class MAVLink_filter_params_message(MAVLink_message):
         '''
-        Complimentary filter parameters. No need a respond message for
-        confimation
+
         '''
-        id = MAVLINK_MSG_ID_COMP_FILTER_PARAMS
-        name = 'COMP_FILTER_PARAMS'
-        fieldnames = ['tilt_type', 'tilt_offset', 'g_believe']
-        ordered_fieldnames = ['tilt_offset', 'g_believe', 'tilt_type']
-        fieldtypes = ['uint8_t', 'float', 'float']
+        id = MAVLINK_MSG_ID_FILTER_PARAMS
+        name = 'FILTER_PARAMS'
+        fieldnames = ['tilt_type', 'tilt_offset', 'g_believe', 'madgwick_beta']
+        ordered_fieldnames = ['tilt_offset', 'g_believe', 'madgwick_beta', 'tilt_type']
+        fieldtypes = ['uint8_t', 'float', 'float', 'float']
         fielddisplays_by_name = {}
         fieldenums_by_name = {"tilt_type": "tilt_type_t"}
         fieldunits_by_name = {}
-        format = '<ffB'
-        native_format = bytearray('<ffB', 'ascii')
-        orders = [2, 0, 1]
-        lengths = [1, 1, 1]
-        array_lengths = [0, 0, 0]
-        crc_extra = 157
-        unpacker = struct.Struct('<ffB')
+        format = '<fffB'
+        native_format = bytearray('<fffB', 'ascii')
+        orders = [3, 0, 1, 2]
+        lengths = [1, 1, 1, 1]
+        array_lengths = [0, 0, 0, 0]
+        crc_extra = 253
+        unpacker = struct.Struct('<fffB')
         instance_field = None
         instance_offset = -1
 
-        def __init__(self, tilt_type, tilt_offset, g_believe):
-                MAVLink_message.__init__(self, MAVLink_comp_filter_params_message.id, MAVLink_comp_filter_params_message.name)
-                self._fieldnames = MAVLink_comp_filter_params_message.fieldnames
-                self._instance_field = MAVLink_comp_filter_params_message.instance_field
-                self._instance_offset = MAVLink_comp_filter_params_message.instance_offset
+        def __init__(self, tilt_type, tilt_offset, g_believe, madgwick_beta):
+                MAVLink_message.__init__(self, MAVLink_filter_params_message.id, MAVLink_filter_params_message.name)
+                self._fieldnames = MAVLink_filter_params_message.fieldnames
+                self._instance_field = MAVLink_filter_params_message.instance_field
+                self._instance_offset = MAVLink_filter_params_message.instance_offset
                 self.tilt_type = tilt_type
                 self.tilt_offset = tilt_offset
                 self.g_believe = g_believe
+                self.madgwick_beta = madgwick_beta
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 157, struct.pack('<ffB', self.tilt_offset, self.g_believe, self.tilt_type), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 253, struct.pack('<fffB', self.tilt_offset, self.g_believe, self.madgwick_beta, self.tilt_type), force_mavlink1=force_mavlink1)
 
 class MAVLink_evt_gyro_accel_mag_raw_message(MAVLink_message):
         '''
@@ -1476,7 +1476,7 @@ mavlink_map = {
         MAVLINK_MSG_ID_GYRO_PARAMS : MAVLink_gyro_params_message,
         MAVLINK_MSG_ID_ACCEL_PARAMS : MAVLink_accel_params_message,
         MAVLINK_MSG_ID_MAG_PARAMS : MAVLink_mag_params_message,
-        MAVLINK_MSG_ID_COMP_FILTER_PARAMS : MAVLink_comp_filter_params_message,
+        MAVLINK_MSG_ID_FILTER_PARAMS : MAVLink_filter_params_message,
         MAVLINK_MSG_ID_EVT_GYRO_ACCEL_MAG_RAW : MAVLink_evt_gyro_accel_mag_raw_message,
         MAVLINK_MSG_ID_EVT_GYRO_ACCEL_MAG_CALIBRATED : MAVLink_evt_gyro_accel_mag_calibrated_message,
         MAVLINK_MSG_ID_PID_PARAMS : MAVLink_pid_params_message,
@@ -2212,29 +2212,29 @@ class MAVLink(object):
                 '''
                 return self.send(self.mag_params_encode(mag_bias_x, mag_bias_y, mag_bias_z, mag_scale_x, mag_scale_y, mag_scale_z), force_mavlink1=force_mavlink1)
 
-        def comp_filter_params_encode(self, tilt_type, tilt_offset, g_believe):
+        def filter_params_encode(self, tilt_type, tilt_offset, g_believe, madgwick_beta):
                 '''
-                Complimentary filter parameters. No need a respond message for
-                confimation
+                
 
                 tilt_type                 : Tilt type (type:uint8_t, values:tilt_type_t)
                 tilt_offset               : Tilt angle offset (type:float)
                 g_believe                 : Belive in gyroscope (type:float)
+                madgwick_beta             :  (type:float)
 
                 '''
-                return MAVLink_comp_filter_params_message(tilt_type, tilt_offset, g_believe)
+                return MAVLink_filter_params_message(tilt_type, tilt_offset, g_believe, madgwick_beta)
 
-        def comp_filter_params_send(self, tilt_type, tilt_offset, g_believe, force_mavlink1=False):
+        def filter_params_send(self, tilt_type, tilt_offset, g_believe, madgwick_beta, force_mavlink1=False):
                 '''
-                Complimentary filter parameters. No need a respond message for
-                confimation
+                
 
                 tilt_type                 : Tilt type (type:uint8_t, values:tilt_type_t)
                 tilt_offset               : Tilt angle offset (type:float)
                 g_believe                 : Belive in gyroscope (type:float)
+                madgwick_beta             :  (type:float)
 
                 '''
-                return self.send(self.comp_filter_params_encode(tilt_type, tilt_offset, g_believe), force_mavlink1=force_mavlink1)
+                return self.send(self.filter_params_encode(tilt_type, tilt_offset, g_believe, madgwick_beta), force_mavlink1=force_mavlink1)
 
         def evt_gyro_accel_mag_raw_encode(self, gx, gy, gz, ax, ay, az, mx, my, mz):
                 '''

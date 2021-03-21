@@ -36,15 +36,6 @@ private slots:
 private:
     Ui::Mode_imu *ui;
     QStatusBar *g_q_status_bar = nullptr;
-
-    float g_gx_offset;
-    float g_gy_offset;
-    float g_gz_offset;
-    float g_tilt_offset;
-    float g_gbelive;
-
-    bool g_is_gyro_calibrating = false;
-    bool g_is_tilt_calibrating = false;
 };
 
 #endif // MODE_IMU_H

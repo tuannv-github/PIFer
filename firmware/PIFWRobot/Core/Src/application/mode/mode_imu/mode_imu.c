@@ -8,7 +8,8 @@
 #include "mode_imu.h"
 
 TID(gtid_imu_raw);
-TID(gtid_imu_calibrated);
+TID(gtid_imu_cab);
+TID(gtid_imu_rpy);
 
 static void imu_raw_callback(void* ctx){
 	mavlink_message_t msg;
@@ -23,28 +24,17 @@ static void imu_raw_callback(void* ctx){
 	mavlink_msg_evt_gyro_accel_mag_raw_pack(0, 0, &msg, raw[0], raw[1], raw[2], raw[3], raw[4], raw[5], raw[6], raw[7], raw[8]);
 	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
 	mav_send((char*)gmav_send_buf, len);
-
-	float r = imu_get_roll();
-	float p = imu_get_pitch();
-	float y = imu_get_yaw();
-	mavlink_msg_evt_rpy_pack(0,0,&msg,r,p,y);
-	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
-	mav_send((char*)gmav_send_buf, len);
 }
 
-static void imu_calibrated_callback(void* ctx){
+static void imu_cal_callback(void* ctx){
 	mavlink_message_t msg;
 	uint8_t gmav_send_buf[256];
 	uint16_t len;
 	float raw[9];
 
-	imu_get_gyro_raw(raw);
-	imu_get_accel_raw(&raw[3]);
-	imu_get_mag_raw(&raw[6]);
-
-	raw[0] -= params.gx_bias;
-	raw[1] -= params.gy_bias;
-	raw[2] -= params.gz_bias;
+	imu_get_gyro_cab(raw);
+	imu_get_accel_cab(&raw[3]);
+	imu_get_mag_cab(&raw[6]);
 
 	mavlink_msg_evt_gyro_accel_mag_calibrated_pack(0, 0, &msg, raw[0], raw[1], raw[2], raw[3], raw[4], raw[5], raw[6], raw[7], raw[8]);
 	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
@@ -67,6 +57,16 @@ static void imu_calibrated_callback(void* ctx){
 	mav_send((char*)gmav_send_buf, len);
 }
 
+static void imu_rpy_callback(void* ctx){
+	mavlink_message_t msg;
+	uint8_t gmav_send_buf[256];
+	float rpy[3];
+	imu_get_rpy(rpy);
+	mavlink_msg_evt_rpy_pack(0,0,&msg,rpy[0],rpy[1],rpy[2]);
+	uint16_t len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
+	mav_send((char*)gmav_send_buf, len);
+}
+
 static int load_imu_params(){
 	// Load parameters from non-volatile memory
 	params_load();
@@ -80,7 +80,7 @@ static int load_imu_params(){
 	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
 	mav_send((char*)gmav_send_buf, len);
 
-	mavlink_msg_accel_params_pack(0,0,&msg, 0, 0, 0);
+	mavlink_msg_accel_params_pack(0,0,&msg, params.ax_bias, params.ay_bias, params.az_bias);
 	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
 	mav_send((char*)gmav_send_buf, len);
 
@@ -88,7 +88,7 @@ static int load_imu_params(){
 	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
 	mav_send((char*)gmav_send_buf, len);
 
-	mavlink_msg_comp_filter_params_pack(0,0,&msg, params.tilt_type, params.tilt_offset, params.g_believe);
+	mavlink_msg_filter_params_pack(0,0,&msg, params.tilt_type, params.tilt_offset, params.g_believe, params.madgwick_beta);
 	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
 	mav_send((char*)gmav_send_buf, len);
 
@@ -108,7 +108,8 @@ void mode_imu_init(){
 
 	// Periodic task initialization
 	gtid_imu_raw = timer_register_callback(imu_raw_callback, IMU_RAW_RP_PERIOD, 0, TIMER_MODE_REPEAT);
-	gtid_imu_calibrated = timer_register_callback(imu_calibrated_callback, IMU_RES_RP_PERIOD, 0, TIMER_MODE_REPEAT);
+	gtid_imu_cab = timer_register_callback(imu_cal_callback, IMU_CAL_RP_PERIOD, 0, TIMER_MODE_REPEAT);
+	gtid_imu_rpy = timer_register_callback(imu_rpy_callback, IMU_RPY_RP_PERIOD, 0, TIMER_MODE_REPEAT);
 }
 
 void mode_imu_deinit(){
@@ -117,7 +118,8 @@ void mode_imu_deinit(){
 
 	// Periodic task initialization
 	timer_unregister_callback(gtid_imu_raw);
-	timer_unregister_callback(gtid_imu_calibrated);
+	timer_unregister_callback(gtid_imu_cab);
+	timer_unregister_callback(gtid_imu_rpy);
 }
 
 void on_mode_imu_mavlink_recv(mavlink_message_t *msg){
@@ -169,13 +171,14 @@ void on_mode_imu_mavlink_recv(mavlink_message_t *msg){
 		respond_ok();
 	}
 	break;
-	case MAVLINK_MSG_ID_COMP_FILTER_PARAMS:
+	case MAVLINK_MSG_ID_FILTER_PARAMS:
 	{
-		mavlink_comp_filter_params_t comp_filter_params_msg;
-		mavlink_msg_comp_filter_params_decode(msg,&comp_filter_params_msg);
-		params.tilt_type = comp_filter_params_msg.tilt_type;
-		params.g_believe = comp_filter_params_msg.g_believe;
-		params.tilt_offset = comp_filter_params_msg.tilt_offset;
+		mavlink_filter_params_t filter_params_msg;
+		mavlink_msg_filter_params_decode(msg,&filter_params_msg);
+		params.tilt_type = filter_params_msg.tilt_type;
+		params.g_believe = filter_params_msg.g_believe;
+		params.tilt_offset = filter_params_msg.tilt_offset;
+		params.madgwick_beta = filter_params_msg.madgwick_beta;
 		respond_ok();
 	}
 	break;

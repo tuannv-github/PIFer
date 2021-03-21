@@ -149,11 +149,12 @@
 			<field type="float" name="mag_scale_z"></field>
 		</message>
 
-		<message id="13" name="COMP_FILTER_PARAMS">
-			<description>Complimentary filter parameters. No need a respond message for confimation</description>
+		<message id="13" name="FILTER_PARAMS">
+			<description></description>
 			<field type="uint8_t" name="tilt_type" enum="tilt_type_t">Tilt type</field>
 			<field type="float" name="tilt_offset">Tilt angle offset</field>
 			<field type="float" name="g_believe">Belive in gyroscope</field>
+			<field type="float" name="madgwick_beta"></field>
 		</message>
 
 		<message id="14" name="EVT_GYRO_ACCEL_MAG_RAW">

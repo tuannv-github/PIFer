@@ -18,6 +18,7 @@
 static float roll;
 static float pitch;
 static float gam_raw[9];
+static float gam_cab[9];
 
 TID(gtid_imu_callback);
 
@@ -34,16 +35,17 @@ static void imu_callback(void* ctx){
 	if(isnan(roll)) roll = 0;
 	if(isnan(pitch)) pitch = 0;
 
-	float gx = (gam_raw[3] - params.gx_bias)*M_PI/180.0f;
-	float gy = (gam_raw[4] - params.gy_bias)*M_PI/180.0f;
-	float gz = (gam_raw[5] - params.gz_bias)*M_PI/180.0f;
-	float ax = gam_raw[0];
-	float ay = gam_raw[1];
-	float az = gam_raw[2];
-	float mx = (gam_raw[6] - params.mx_bias)/params.mx_scale;
-	float my = (gam_raw[7] - params.my_bias)/params.my_scale;
-	float mz = (gam_raw[8] - params.mz_bias)/params.mz_scale;
-	madwgick_gam_update(gx, gy, gz, ax, ay, az, mx, my, mz, 0.001f*IMU_PERIOD_MS);
+	gam_cab[0] = (gam_raw[3] - params.gx_bias)*M_PI/180.0f;
+	gam_cab[1] = (gam_raw[4] - params.gy_bias)*M_PI/180.0f;
+	gam_cab[2] = (gam_raw[5] - params.gz_bias)*M_PI/180.0f;
+	gam_cab[3] = gam_raw[0];
+	gam_cab[4] = gam_raw[1];
+	gam_cab[5] = gam_raw[2];
+	gam_cab[6] = (gam_raw[6] - params.mx_bias)/params.mx_scale;
+	gam_cab[7] = (gam_raw[7] - params.my_bias)/params.my_scale;
+	gam_cab[8] = (gam_raw[8] - params.mz_bias)/params.mz_scale;
+	madwgick_gam_update(gam_cab[0], gam_cab[1], gam_cab[2],
+			gam_cab[3], gam_cab[4], gam_cab[5], gam_cab[6], gam_cab[7], gam_cab[8], 0.001f*IMU_PERIOD_MS);
 }
 
 int imu_init(void){
@@ -76,11 +78,8 @@ float imu_get_yaw(void){
 	return 0;
 }
 
-int imu_get_accel_raw(float raw[3]){
-	raw[0] = gam_raw[0];
-	raw[1] = gam_raw[1];
-	raw[2] = gam_raw[2];
-	return 0;
+int imu_get_rpy(float rpy[3]){
+	magwick_get_rpy(rpy);
 }
 
 int imu_get_gyro_raw(float raw[3]){
@@ -90,11 +89,40 @@ int imu_get_gyro_raw(float raw[3]){
 	return 0;
 }
 
+int imu_get_accel_raw(float raw[3]){
+	raw[0] = gam_raw[0];
+	raw[1] = gam_raw[1];
+	raw[2] = gam_raw[2];
+	return 0;
+}
+
 int imu_get_mag_raw(float raw[3]){
 	raw[0] = gam_raw[6];
 	raw[1] = gam_raw[7];
 	raw[2] = gam_raw[8];
 	return 0;
 }
+
+int imu_get_gyro_cab(float raw[3]){
+	raw[0] = gam_cab[0];
+	raw[1] = gam_cab[1];
+	raw[2] = gam_cab[2];
+	return 0;
+}
+
+int imu_get_accel_cab(float raw[3]){
+	raw[0] = gam_cab[3];
+	raw[1] = gam_cab[4];
+	raw[2] = gam_cab[5];
+	return 0;
+}
+
+int imu_get_mag_cab(float raw[3]){
+	raw[0] = gam_cab[6];
+	raw[1] = gam_cab[7];
+	raw[2] = gam_cab[8];
+	return 0;
+}
+
 
 #endif /* USERCODE_IMU_IMU_C_ */
