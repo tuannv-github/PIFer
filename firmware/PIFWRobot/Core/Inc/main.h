@@ -80,10 +80,6 @@ void Error_Handler(void);
 #define BLUE_RESET_GPIO_Port GPIOA
 #define RF_PWR_Pin GPIO_PIN_5
 #define RF_PWR_GPIO_Port GPIOA
-#define ENC_1A_MCU_Pin GPIO_PIN_6
-#define ENC_1A_MCU_GPIO_Port GPIOA
-#define ENC_1B_MCU_Pin GPIO_PIN_7
-#define ENC_1B_MCU_GPIO_Port GPIOA
 #define BTN_Pin GPIO_PIN_0
 #define BTN_GPIO_Port GPIOB
 #define RF_SET_Pin GPIO_PIN_1
@@ -118,10 +114,6 @@ void Error_Handler(void);
 #define NRF24_MISO_GPIO_Port GPIOB
 #define NRF24_MOSI_Pin GPIO_PIN_5
 #define NRF24_MOSI_GPIO_Port GPIOB
-#define ENC_2B_MCU_Pin GPIO_PIN_6
-#define ENC_2B_MCU_GPIO_Port GPIOB
-#define ENC_2A_MCU_Pin GPIO_PIN_7
-#define ENC_2A_MCU_GPIO_Port GPIOB
 #define GY9250_SCL_Pin GPIO_PIN_8
 #define GY9250_SCL_GPIO_Port GPIOB
 #define GY9250_SDA_Pin GPIO_PIN_9

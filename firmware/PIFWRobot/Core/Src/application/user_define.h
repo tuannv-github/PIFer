@@ -32,8 +32,8 @@
 #define MOTOR0_INVERT	// define if you want to change motor direction
 
 // Motor 1 define
-#define MOTOR1_TIMER 	htim2
-#define MOTOR1_CHANNEL 	TIM_CHANNEL_2
+//#define MOTOR1_TIMER 	htim2
+//#define MOTOR1_CHANNEL 	TIM_CHANNEL_2
 #define MOTOR1_ENCODER	htim4
 #define MOTOR1_INVERT	// define if you want to change motor direction
 
@@ -98,5 +98,21 @@
 #define CONST_G 					9.807f
 
 #define ENABLE_NEOPIXEL				0
+
+
+// STEP MOTOR DEFINE
+#define MOTOR1_TIMER	htim3
+#define MOTOR1_CHANNEL	TIM_CHANNEL_1
+#define MOTOR1_DIR_PORT	GPIOC
+#define MOTOR1_DIR_PIN	GPIO_PIN_14
+
+#define MOTOR2_TIMER	htim4
+#define MOTOR2_CHANNEL  TIM_CHANNEL_2
+#define MOTOR2_DIR_PORT	GPIOD
+#define MOTOR2_DIR_PIN	GPIO_PIN_0
+
+#define STEP_PER_REV 200
+#define PULSES_PER_METER 7643
+#define WHEEL_WIDTH 0.16
 
 #endif /* USERCODE_USER_DEFINE_H_ */
