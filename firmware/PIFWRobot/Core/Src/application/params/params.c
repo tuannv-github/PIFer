@@ -65,9 +65,18 @@ params_t params = {
 		.tilt_offset = 0,
 		.g_believe = 0.99,
 
-		.gx_offset = 1,
-		.gy_offset = 2,
-		.gz_offset = 3,
+		.gx_bias = -0.9616763967158748,
+		.gy_bias = 0.6969435718363407,
+		.gz_bias = -0.732405328727236,
+
+		.mx_bias = 4.873015403747559,
+		.mx_scale = 33.21147632598877,
+		.my_bias = 31.487179204821587,
+		.my_scale = 31.936996057629585,
+		.mz_bias = -96.86056137084961,
+		.mz_scale = 30.287670135498047,
+
+		.madgwick_beta = 0.1f,
 };
 
 static uint32_t address = PARAMS_PAGE_ADDRESS;
@@ -117,13 +126,13 @@ void params_save(){
 	write((uint32_t*)(&params.tilt_offset));
 	write((uint32_t*)(&params.g_believe));
 
-	write((uint32_t*)(&params.gx_offset));
-	write((uint32_t*)(&params.gy_offset));
-	write((uint32_t*)(&params.gz_offset));
+	write((uint32_t*)(&params.gx_bias));
+	write((uint32_t*)(&params.gy_bias));
+	write((uint32_t*)(&params.gz_bias));
 
-	write((uint32_t*)(&params.mx_offset));
-	write((uint32_t*)(&params.my_offset));
-	write((uint32_t*)(&params.mz_offset));
+	write((uint32_t*)(&params.mx_bias));
+	write((uint32_t*)(&params.my_bias));
+	write((uint32_t*)(&params.mz_bias));
 
 	write((uint32_t*)(&params.mx_scale));
 	write((uint32_t*)(&params.my_scale));
@@ -140,6 +149,8 @@ void params_save(){
 	write((uint32_t*)(&params.motor0_neg_deadband));
 	write((uint32_t*)(&params.motor1_pos_deadband));
 	write((uint32_t*)(&params.motor1_neg_deadband));
+
+	write((uint32_t*)(&params.madgwick_beta));
 
 	HAL_FLASH_Lock();
 }
@@ -169,13 +180,13 @@ bool params_load(){
 	read((uint32_t*)(&params.tilt_offset));
 	read((uint32_t*)(&params.g_believe));
 
-	read((uint32_t*)(&params.gx_offset));
-	read((uint32_t*)(&params.gy_offset));
-	read((uint32_t*)(&params.gz_offset));
+	read((uint32_t*)(&params.gx_bias));
+	read((uint32_t*)(&params.gy_bias));
+	read((uint32_t*)(&params.gz_bias));
 
-	read((uint32_t*)(&params.mx_offset));
-	read((uint32_t*)(&params.my_offset));
-	read((uint32_t*)(&params.mz_offset));
+	read((uint32_t*)(&params.mx_bias));
+	read((uint32_t*)(&params.my_bias));
+	read((uint32_t*)(&params.mz_bias));
 
 	read((uint32_t*)(&params.mx_scale));
 	read((uint32_t*)(&params.my_scale));
@@ -192,6 +203,8 @@ bool params_load(){
 	read((uint32_t*)(&params.motor0_neg_deadband));
 	read((uint32_t*)(&params.motor1_pos_deadband));
 	read((uint32_t*)(&params.motor1_neg_deadband));
+
+	read((uint32_t*)(&params.madgwick_beta));
 
 	return true;
 }

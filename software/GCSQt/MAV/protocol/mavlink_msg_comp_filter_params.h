@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE COMP_FILTER_PARAMS PACKING
 
-#define MAVLINK_MSG_ID_COMP_FILTER_PARAMS 10
+#define MAVLINK_MSG_ID_COMP_FILTER_PARAMS 12
 
 
 typedef struct __mavlink_comp_filter_params_t {
@@ -12,17 +12,17 @@ typedef struct __mavlink_comp_filter_params_t {
 
 #define MAVLINK_MSG_ID_COMP_FILTER_PARAMS_LEN 9
 #define MAVLINK_MSG_ID_COMP_FILTER_PARAMS_MIN_LEN 9
-#define MAVLINK_MSG_ID_10_LEN 9
-#define MAVLINK_MSG_ID_10_MIN_LEN 9
+#define MAVLINK_MSG_ID_12_LEN 9
+#define MAVLINK_MSG_ID_12_MIN_LEN 9
 
 #define MAVLINK_MSG_ID_COMP_FILTER_PARAMS_CRC 157
-#define MAVLINK_MSG_ID_10_CRC 157
+#define MAVLINK_MSG_ID_12_CRC 157
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_COMP_FILTER_PARAMS { \
-    10, \
+    12, \
     "COMP_FILTER_PARAMS", \
     3, \
     {  { "tilt_type", NULL, MAVLINK_TYPE_UINT8_T, 0, 8, offsetof(mavlink_comp_filter_params_t, tilt_type) }, \

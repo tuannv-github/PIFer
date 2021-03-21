@@ -32,7 +32,7 @@ static void imu_raw_callback(void* ctx){
 	mav_send((char*)gmav_send_buf, len);
 }
 
-static void imu_result_callback(void* ctx){
+static void imu_calibrated_callback(void* ctx){
 	mavlink_message_t msg;
 	uint8_t gmav_send_buf[256];
 	uint16_t len;
@@ -42,9 +42,9 @@ static void imu_result_callback(void* ctx){
 	imu_get_accel_raw(&raw[3]);
 	imu_get_mag_raw(&raw[6]);
 
-	raw[0] -= params.gx_offset;
-	raw[1] -= params.gy_offset;
-	raw[2] -= params.gz_offset;
+	raw[0] -= params.gx_bias;
+	raw[1] -= params.gy_bias;
+	raw[2] -= params.gz_bias;
 
 	mavlink_msg_evt_gyro_accel_mag_calibrated_pack(0, 0, &msg, raw[0], raw[1], raw[2], raw[3], raw[4], raw[5], raw[6], raw[7], raw[8]);
 	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
@@ -76,7 +76,7 @@ static int load_imu_params(){
 	uint8_t gmav_send_buf[256];
 	uint16_t len;
 
-	mavlink_msg_gyro_params_pack(0,0,&msg, params.gx_offset, params.gy_offset, params.gz_offset);
+	mavlink_msg_gyro_params_pack(0,0,&msg, params.gx_bias, params.gy_bias, params.gz_bias);
 	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
 	mav_send((char*)gmav_send_buf, len);
 
@@ -100,7 +100,7 @@ void mode_imu_init(){
 
 	// Periodic task initialization
 	gtid_imu_raw = timer_register_callback(imu_raw_callback, IMU_RAW_RP_PERIOD, 0, TIMER_MODE_REPEAT);
-	gtid_imu_result = timer_register_callback(imu_result_callback, IMU_RES_RP_PERIOD, 0, TIMER_MODE_REPEAT);
+	gtid_imu_result = timer_register_callback(imu_calibrated_callback, IMU_RES_RP_PERIOD, 0, TIMER_MODE_REPEAT);
 }
 
 void mode_imu_deinit(){
@@ -132,9 +132,9 @@ void on_mode_imu_mavlink_recv(mavlink_message_t *msg){
 	{
 		mavlink_gyro_params_t gyro_params_msg;
 		mavlink_msg_gyro_params_decode(msg,&gyro_params_msg);
-		params.gx_offset = gyro_params_msg.gyro_offset_x;
-		params.gy_offset = gyro_params_msg.gyro_offset_y;
-		params.gz_offset = gyro_params_msg.gyro_offset_z;
+		params.gx_bias = gyro_params_msg.gyro_bias_x;
+		params.gy_bias = gyro_params_msg.gyro_bias_y;
+		params.gz_bias = gyro_params_msg.gyro_bias_z;
 		respond_ok();
 	}
 	break;

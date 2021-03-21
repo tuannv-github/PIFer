@@ -8,9 +8,10 @@
 #ifndef APPLICATION_IMU_IMU_H_
 #define APPLICATION_IMU_IMU_H_
 
-#include <application/imu/mpu9250/MPU9250.h>
+#include <application/imu/mpu9250/mpu9250.h>
 #include <application/timer/timer.h>
 #include <stdbool.h>
+
 
 typedef void (*connection_failed_cb_t)(void);
 

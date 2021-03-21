@@ -11,7 +11,7 @@ import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPayload;
         
 /**
- * Gyro calibration parameters. No need a respond message for confimation
+ * 
  */
 public class msg_gyro_params extends MAVLinkMessage {
 
@@ -21,19 +21,19 @@ public class msg_gyro_params extends MAVLinkMessage {
 
       
     /**
-     * Gyro Offset X
+     * 
      */
-    public float gyro_offset_x;
+    public float gyro_bias_x;
       
     /**
-     * Gyro Offset Y
+     * 
      */
-    public float gyro_offset_y;
+    public float gyro_bias_y;
       
     /**
-     * Gyro Offset Z
+     * 
      */
-    public float gyro_offset_z;
+    public float gyro_bias_z;
     
 
     /**
@@ -47,9 +47,9 @@ public class msg_gyro_params extends MAVLinkMessage {
         packet.compid = 190;
         packet.msgid = MAVLINK_MSG_ID_GYRO_PARAMS;
         
-        packet.payload.putFloat(gyro_offset_x);
-        packet.payload.putFloat(gyro_offset_y);
-        packet.payload.putFloat(gyro_offset_z);
+        packet.payload.putFloat(gyro_bias_x);
+        packet.payload.putFloat(gyro_bias_y);
+        packet.payload.putFloat(gyro_bias_z);
         
         if (isMavlink2) {
             
@@ -66,9 +66,9 @@ public class msg_gyro_params extends MAVLinkMessage {
     public void unpack(MAVLinkPayload payload) {
         payload.resetIndex();
         
-        this.gyro_offset_x = payload.getFloat();
-        this.gyro_offset_y = payload.getFloat();
-        this.gyro_offset_z = payload.getFloat();
+        this.gyro_bias_x = payload.getFloat();
+        this.gyro_bias_y = payload.getFloat();
+        this.gyro_bias_z = payload.getFloat();
         
         if (isMavlink2) {
             
@@ -85,27 +85,27 @@ public class msg_gyro_params extends MAVLinkMessage {
     /**
      * Constructor for a new message, initializes msgid and all payload variables
      */
-    public msg_gyro_params( float gyro_offset_x, float gyro_offset_y, float gyro_offset_z) {
+    public msg_gyro_params( float gyro_bias_x, float gyro_bias_y, float gyro_bias_z) {
         this.msgid = MAVLINK_MSG_ID_GYRO_PARAMS;
 
-        this.gyro_offset_x = gyro_offset_x;
-        this.gyro_offset_y = gyro_offset_y;
-        this.gyro_offset_z = gyro_offset_z;
+        this.gyro_bias_x = gyro_bias_x;
+        this.gyro_bias_y = gyro_bias_y;
+        this.gyro_bias_z = gyro_bias_z;
         
     }
     
     /**
      * Constructor for a new message, initializes everything
      */
-    public msg_gyro_params( float gyro_offset_x, float gyro_offset_y, float gyro_offset_z, int sysid, int compid, boolean isMavlink2) {
+    public msg_gyro_params( float gyro_bias_x, float gyro_bias_y, float gyro_bias_z, int sysid, int compid, boolean isMavlink2) {
         this.msgid = MAVLINK_MSG_ID_GYRO_PARAMS;
         this.sysid = sysid;
         this.compid = compid;
         this.isMavlink2 = isMavlink2;
 
-        this.gyro_offset_x = gyro_offset_x;
-        this.gyro_offset_y = gyro_offset_y;
-        this.gyro_offset_z = gyro_offset_z;
+        this.gyro_bias_x = gyro_bias_x;
+        this.gyro_bias_y = gyro_bias_y;
+        this.gyro_bias_z = gyro_bias_z;
         
     }
 
@@ -129,7 +129,7 @@ public class msg_gyro_params extends MAVLinkMessage {
      */
     @Override
     public String toString() {
-        return "MAVLINK_MSG_ID_GYRO_PARAMS - sysid:"+sysid+" compid:"+compid+" gyro_offset_x:"+gyro_offset_x+" gyro_offset_y:"+gyro_offset_y+" gyro_offset_z:"+gyro_offset_z+"";
+        return "MAVLINK_MSG_ID_GYRO_PARAMS - sysid:"+sysid+" compid:"+compid+" gyro_bias_x:"+gyro_bias_x+" gyro_bias_y:"+gyro_bias_y+" gyro_bias_z:"+gyro_bias_z+"";
     }
     
     /**

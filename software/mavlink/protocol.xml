@@ -113,20 +113,37 @@
 		</message>
 
 		<message id="9" name="GYRO_PARAMS">
-			<description>Gyro calibration parameters. No need a respond message for confimation</description>
-			<field type="float" name="gyro_offset_x">Gyro Offset X</field>
-			<field type="float" name="gyro_offset_y">Gyro Offset Y</field>
-			<field type="float" name="gyro_offset_z">Gyro Offset Z</field>
+			<description></description>
+			<field type="float" name="gyro_bias_x"></field>
+			<field type="float" name="gyro_bias_y"></field>
+			<field type="float" name="gyro_bias_z"></field>
 		</message>
 
-		<message id="10" name="COMP_FILTER_PARAMS">
+		<message id="10" name="ACCEL_PARAMS">
+			<description></description>
+			<field type="float" name="accel_bias_x"></field>
+			<field type="float" name="accel_bias_y"></field>
+			<field type="float" name="accel_bias_z"></field>
+		</message>
+
+		<message id="11" name="MAG_PARAMS">
+			<description></description>
+			<field type="float" name="mag_bias_x"></field>
+			<field type="float" name="mag_bias_y"></field>
+			<field type="float" name="mag_bias_z"></field>
+			<field type="float" name="mag_scale_x"></field>
+			<field type="float" name="mag_scale_y"></field>
+			<field type="float" name="mag_scale_z"></field>
+		</message>
+
+		<message id="12" name="COMP_FILTER_PARAMS">
 			<description>Complimentary filter parameters. No need a respond message for confimation</description>
 			<field type="uint8_t" name="tilt_type" enum="tilt_type_t">Tilt type</field>
 			<field type="float" name="tilt_offset">Tilt angle offset</field>
 			<field type="float" name="g_believe">Belive in gyroscope</field>
 		</message>
 
-		<message id="11" name="EVT_GYRO_ACCEL_MAG_RAW">
+		<message id="13" name="EVT_GYRO_ACCEL_MAG_RAW">
 			<description>IMU raw value</description>
 			<field type="float" name="gx">Gyro X</field>
 			<field type="float" name="gy">Gyro Y</field>
@@ -139,7 +156,7 @@
 			<field type="float" name="mz">Mag Z</field>
 		</message>
 
-		<message id="12" name="EVT_GYRO_ACCEL_MAG_CALIBRATED">
+		<message id="14" name="EVT_GYRO_ACCEL_MAG_CALIBRATED">
 			<description>IMU calibrated value</description>
 			<field type="float" name="gx">Gyro X</field>
 			<field type="float" name="gy">Gyro Y</field>

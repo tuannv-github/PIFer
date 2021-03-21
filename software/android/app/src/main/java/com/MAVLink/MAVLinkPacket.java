@@ -289,6 +289,12 @@ public class MAVLinkPacket implements Serializable {
             case msg_gyro_params.MAVLINK_MSG_ID_GYRO_PARAMS:
                 return  new msg_gyro_params(this);
              
+            case msg_accel_params.MAVLINK_MSG_ID_ACCEL_PARAMS:
+                return  new msg_accel_params(this);
+             
+            case msg_mag_params.MAVLINK_MSG_ID_MAG_PARAMS:
+                return  new msg_mag_params(this);
+             
             case msg_comp_filter_params.MAVLINK_MSG_ID_COMP_FILTER_PARAMS:
                 return  new msg_comp_filter_params(this);
              

@@ -13,29 +13,44 @@
 #include <application/user_define.h>
 #include <math.h>
 
+#include "madgwick/madgwick.h"
+
 static float roll;
 static float pitch;
-static float motion_6[9];
+static float gam_raw[9];
 
 TID(gtid_imu_callback);
 
 static void imu_callback(void* ctx){
-	if(mpu9250_get_accel_gyro(&motion_6[0], &motion_6[1], &motion_6[2], &motion_6[3], &motion_6[4], &motion_6[5]) < 0) return;
-	if(mpu9250_get_mag(&motion_6[6], &motion_6[7], &motion_6[8]) < 0) return;
+	if(mpu9250_get_accel_gyro(&gam_raw[0], &gam_raw[1], &gam_raw[2], &gam_raw[3], &gam_raw[4], &gam_raw[5]) < 0) return;
+	if(mpu9250_get_mag(&gam_raw[6], &gam_raw[7], &gam_raw[8]) < 0) return;
 
-	float accel_roll  = atan2(motion_6[1], sqrt(motion_6[0]*motion_6[0] + motion_6[2]*motion_6[2]))*180.f/M_PI;
-	float accel_pitch = atan2(-motion_6[0], sqrt(motion_6[1]*motion_6[1] + motion_6[2]*motion_6[2]))*180.f/M_PI;
-	float roll_rate = (motion_6[3]-params.gx_offset)*0.001f*IMU_PERIOD;
-	float pitch_rate = (motion_6[4]-params.gy_offset)*0.001f*IMU_PERIOD;
+	float accel_roll  = atan2(gam_raw[1], sqrt(gam_raw[0]*gam_raw[0] + gam_raw[2]*gam_raw[2]))*180.f/M_PI;
+	float accel_pitch = atan2(-gam_raw[0], sqrt(gam_raw[1]*gam_raw[1] + gam_raw[2]*gam_raw[2]))*180.f/M_PI;
+	float roll_rate = (gam_raw[3]-params.gx_bias)*0.001f*IMU_PERIOD_MS;
+	float pitch_rate = (gam_raw[4]-params.gy_bias)*0.001f*IMU_PERIOD_MS;
 	roll = params.g_believe*(roll+roll_rate) + (1-params.g_believe)*accel_roll;
 	pitch = params.g_believe*(pitch+pitch_rate) + (1-params.g_believe)*accel_pitch;
 	if(isnan(roll)) roll = 0;
 	if(isnan(pitch)) pitch = 0;
+
+	float gx = (gam_raw[3] - params.gx_bias)*M_PI/180.0f;
+	float gy = (gam_raw[4] - params.gy_bias)*M_PI/180.0f;
+	float gz = (gam_raw[5] - params.gz_bias)*M_PI/180.0f;
+	float ax = gam_raw[0];
+	float ay = gam_raw[1];
+	float az = gam_raw[2];
+	float mx = (gam_raw[6] - params.mx_bias)/params.mx_scale;
+	float my = (gam_raw[7] - params.my_bias)/params.my_scale;
+	float mz = (gam_raw[8] - params.mz_bias)/params.mz_scale;
+	madwgick_gam_update(gx, gy, gz, ax, ay, az, mx, my, mz, 0.001f*IMU_PERIOD_MS);
 }
 
 int imu_init(void){
 	mpu9250_init();
-	gtid_imu_callback = timer_register_callback(imu_callback, IMU_PERIOD, 0, TIMER_MODE_REPEAT);
+	gtid_imu_callback = timer_register_callback(imu_callback, IMU_PERIOD_MS, 0, TIMER_MODE_REPEAT);
+
+	madwgick_init(params.madgwick_beta);
 
 	return true;
 }
@@ -62,23 +77,23 @@ float imu_get_yaw(void){
 }
 
 int imu_get_accel_raw(float raw[3]){
-	raw[0] = motion_6[0];
-	raw[1] = motion_6[1];
-	raw[2] = motion_6[2];
+	raw[0] = gam_raw[0];
+	raw[1] = gam_raw[1];
+	raw[2] = gam_raw[2];
 	return 0;
 }
 
 int imu_get_gyro_raw(float raw[3]){
-	raw[0] = motion_6[3];
-	raw[1] = motion_6[4];
-	raw[2] = motion_6[5];
+	raw[0] = gam_raw[3];
+	raw[1] = gam_raw[4];
+	raw[2] = gam_raw[5];
 	return 0;
 }
 
 int imu_get_mag_raw(float raw[3]){
-	raw[0] = motion_6[6];
-	raw[1] = motion_6[7];
-	raw[2] = motion_6[8];
+	raw[0] = gam_raw[6];
+	raw[1] = gam_raw[7];
+	raw[2] = gam_raw[8];
 	return 0;
 }
 

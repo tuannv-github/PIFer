@@ -19,17 +19,17 @@ typedef struct{
 	float tilt_offset;
 	float g_believe;
 
-	float gx_offset;
-	float gy_offset;
-	float gz_offset;
+	float gx_bias;
+	float gy_bias;
+	float gz_bias;
 
-	int32_t mx_offset;
-	int32_t my_offset;
-	int32_t mz_offset;
+	float mx_bias;
+	float my_bias;
+	float mz_bias;
 
-	int32_t mx_scale;
-	int32_t my_scale;
-	int32_t mz_scale;
+	float mx_scale;
+	float my_scale;
+	float mz_scale;
 
 	bool motor0_invert;
 	bool motor1_invert;
@@ -40,6 +40,8 @@ typedef struct{
 	int16_t motor0_neg_deadband;
 	int16_t motor1_pos_deadband;
 	int16_t motor1_neg_deadband;
+
+	float madgwick_beta;
 
 }params_t;
 

@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE EVT_GYRO_ACCEL_MAG_CALIBRATED PACKING
 
-#define MAVLINK_MSG_ID_EVT_GYRO_ACCEL_MAG_CALIBRATED 12
+#define MAVLINK_MSG_ID_EVT_GYRO_ACCEL_MAG_CALIBRATED 14
 
 
 typedef struct __mavlink_evt_gyro_accel_mag_calibrated_t {
@@ -18,17 +18,17 @@ typedef struct __mavlink_evt_gyro_accel_mag_calibrated_t {
 
 #define MAVLINK_MSG_ID_EVT_GYRO_ACCEL_MAG_CALIBRATED_LEN 36
 #define MAVLINK_MSG_ID_EVT_GYRO_ACCEL_MAG_CALIBRATED_MIN_LEN 36
-#define MAVLINK_MSG_ID_12_LEN 36
-#define MAVLINK_MSG_ID_12_MIN_LEN 36
+#define MAVLINK_MSG_ID_14_LEN 36
+#define MAVLINK_MSG_ID_14_MIN_LEN 36
 
 #define MAVLINK_MSG_ID_EVT_GYRO_ACCEL_MAG_CALIBRATED_CRC 118
-#define MAVLINK_MSG_ID_12_CRC 118
+#define MAVLINK_MSG_ID_14_CRC 118
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_EVT_GYRO_ACCEL_MAG_CALIBRATED { \
-    12, \
+    14, \
     "EVT_GYRO_ACCEL_MAG_CALIBRATED", \
     9, \
     {  { "gx", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_evt_gyro_accel_mag_calibrated_t, gx) }, \
