@@ -21,7 +21,9 @@
 
 #define IMU_MPU6050
 
-#define ROBOT_MODEL_TWO_WHEELS
+// Self-balancing	--> 0
+// Turtle			--> 1
+#define ROBOT_MODEL		1
 //#define ROBOT_MODEL_TANK
 //#define ROBOT_MODEL_OMNI
 
@@ -111,8 +113,10 @@
 #define MOTOR2_DIR_PORT	GPIOD
 #define MOTOR2_DIR_PIN	GPIO_PIN_0
 
-#define STEP_PER_REV 200
-#define PULSES_PER_METER 7643
-#define WHEEL_WIDTH 0.16
+#define STEP_PER_REV 		200
+#define PULSES_PER_METER 	7643
+#define WHEEL_WIDTH 		0.16
+#define	LINEAR_SPEED_MAX	0.30f
+#define ANGULAR_SPEED_MAX	3.0f
 
 #endif /* USERCODE_USER_DEFINE_H_ */

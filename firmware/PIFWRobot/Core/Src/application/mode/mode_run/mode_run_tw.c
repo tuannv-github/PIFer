@@ -9,7 +9,7 @@
 
 #include "mode_run.h"
 
-#ifdef ROBOT_MODEL_TWO_WHEELS
+#if ROBOT_MODEL==0
 
 typedef struct{
 	float vx;

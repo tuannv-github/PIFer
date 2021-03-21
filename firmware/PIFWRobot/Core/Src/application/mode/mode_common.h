@@ -17,5 +17,6 @@
 #include <application/encoder/encoder.h>
 #include <application/mav/mav.h>
 #include <application/motors/motors.h>
+#include <application/motors/stepmotor.h>
 
 #endif /* APPLICATION_MODE_MODE_COMMON_H_ */

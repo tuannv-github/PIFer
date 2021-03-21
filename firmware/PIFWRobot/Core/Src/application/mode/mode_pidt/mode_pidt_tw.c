@@ -7,7 +7,6 @@
 
 #include "mode_pidt.h"
 
-#ifdef ROBOT_MODEL_TWO_WHEELS
 
 typedef struct{
 	float vx;
@@ -262,5 +261,3 @@ void on_mode_pidt_mavlink_recv(mavlink_message_t *msg){
 		break;
 	}
 }
-
-#endif
