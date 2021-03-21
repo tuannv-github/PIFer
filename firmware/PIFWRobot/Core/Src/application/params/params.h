@@ -23,6 +23,10 @@ typedef struct{
 	float gy_bias;
 	float gz_bias;
 
+	float ax_bias;
+	float ay_bias;
+	float az_bias;
+
 	float mx_bias;
 	float my_bias;
 	float mz_bias;

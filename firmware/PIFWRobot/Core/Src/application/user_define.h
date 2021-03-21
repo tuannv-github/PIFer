@@ -17,9 +17,26 @@
 #include "gpio.h"
 
 // Timer callback define
-#define MAX_CALLBACK_FUNC	20
+#define MAX_CALLBACK_FUNC	10
 
-#define IMU_MPU6050
+/* IMU definition */
+#define MPU9250_I2C			hi2c1
+#define MPU9250_I2C_ADDR	(0x68 << 1)
+#define AK8963_I2C_ADDR		(0x0c << 1)
+#define I2C_TIMEOUT_MS		20
+
+//GFS_SEL_250DPS	--> 0
+//GFS_SEL_500DPS	--> 1
+//GFS_SEL_1000DPS	--> 2
+//GFS_SEL_2000DPS	--> 3
+#define GFS_SEL			0
+
+//AFS_SEL_2G		--> 0
+//AFS_SEL_4G		--> 1
+//AFS_SEL_8G		--> 2
+//AFS_SEL_16G		--> 3
+#define ACCEL_FS_SEL	0
+/* End of IMU definition */
 
 // Self-balancing	--> 0
 // Turtle			--> 1
