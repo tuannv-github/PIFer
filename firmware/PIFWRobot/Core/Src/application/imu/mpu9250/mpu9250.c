@@ -1,10 +1,10 @@
 
-#include <application/imu/mpu9250/config.h>
 #include <application/imu/mpu9250/mpu9250.h>
 #include <application/imu/mpu9250/register_map.h>
 #include <string.h>
 #include <i2c.h>
 
+#include <application/user_define.h>
 
 #define GYRO_FS_SEL_250DPS	(0b00 << 3)
 #define GYRO_FS_SEL_500DPS	(0b01 << 3)

@@ -58,14 +58,26 @@ void Mode_imu::mav_recv(mavlink_message_t *msg){
         break;
     case MAVLINK_MSG_ID_GYRO_PARAMS:
         {
-            mavlink_gyro_params_t gyro_params_msg;
-            mavlink_msg_gyro_params_decode(msg,&gyro_params_msg);
-            g_gx_offset = gyro_params_msg.gyro_offset_x;
-            g_gy_offset = gyro_params_msg.gyro_offset_y;
-            g_gz_offset = gyro_params_msg.gyro_offset_z;
+            mavlink_gyro_params_t params_msg;
+            mavlink_msg_gyro_params_decode(msg,&params_msg);
+            g_gx_offset = params_msg.gyro_bias_x;
+            g_gy_offset = params_msg.gyro_bias_y;
+            g_gz_offset = params_msg.gyro_bias_z;
             ui->tb_gx_offset->setText(QString::number(g_gx_offset));
             ui->tb_gy_offset->setText(QString::number(g_gy_offset));
             ui->tb_gz_offset->setText(QString::number(g_gz_offset));
+        }
+        break;
+    case MAVLINK_MSG_ID_MAG_PARAMS:
+        {
+            mavlink_mag_params_t params_msg;
+            mavlink_msg_mag_params_decode(msg,&params_msg);
+            ui->tb_mx_bias->setText(QString::number(params_msg.mag_bias_x));
+            ui->tb_my_bias->setText(QString::number(params_msg.mag_bias_y));
+            ui->tb_mz_bias->setText(QString::number(params_msg.mag_bias_z));
+            ui->tb_mx_scale->setText(QString::number(params_msg.mag_scale_x));
+            ui->tb_my_scale->setText(QString::number(params_msg.mag_scale_y));
+            ui->tb_mz_scale->setText(QString::number(params_msg.mag_scale_z));
         }
         break;
     case MAVLINK_MSG_ID_EVT_TILT:

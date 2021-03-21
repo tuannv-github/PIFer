@@ -130,6 +130,10 @@ void params_save(){
 	write((uint32_t*)(&params.gy_bias));
 	write((uint32_t*)(&params.gz_bias));
 
+	write((uint32_t*)(&params.ax_bias));
+	write((uint32_t*)(&params.ay_bias));
+	write((uint32_t*)(&params.az_bias));
+
 	write((uint32_t*)(&params.mx_bias));
 	write((uint32_t*)(&params.my_bias));
 	write((uint32_t*)(&params.mz_bias));
@@ -183,6 +187,10 @@ bool params_load(){
 	read((uint32_t*)(&params.gx_bias));
 	read((uint32_t*)(&params.gy_bias));
 	read((uint32_t*)(&params.gz_bias));
+
+	read((uint32_t*)(&params.ax_bias));
+	read((uint32_t*)(&params.ay_bias));
+	read((uint32_t*)(&params.az_bias));
 
 	read((uint32_t*)(&params.mx_bias));
 	read((uint32_t*)(&params.my_bias));

@@ -8,7 +8,7 @@
 #include "mode_imu.h"
 
 TID(gtid_imu_raw);
-TID(gtid_imu_result);
+TID(gtid_imu_calibrated);
 
 static void imu_raw_callback(void* ctx){
 	mavlink_message_t msg;
@@ -80,6 +80,14 @@ static int load_imu_params(){
 	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
 	mav_send((char*)gmav_send_buf, len);
 
+	mavlink_msg_accel_params_pack(0,0,&msg, 0, 0, 0);
+	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
+	mav_send((char*)gmav_send_buf, len);
+
+	mavlink_msg_mag_params_pack(0,0,&msg, params.mx_bias, params.my_bias, params.mz_bias, params.mx_scale, params.my_scale, params.mz_scale);
+	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
+	mav_send((char*)gmav_send_buf, len);
+
 	mavlink_msg_comp_filter_params_pack(0,0,&msg, params.tilt_type, params.tilt_offset, params.g_believe);
 	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
 	mav_send((char*)gmav_send_buf, len);
@@ -100,7 +108,7 @@ void mode_imu_init(){
 
 	// Periodic task initialization
 	gtid_imu_raw = timer_register_callback(imu_raw_callback, IMU_RAW_RP_PERIOD, 0, TIMER_MODE_REPEAT);
-	gtid_imu_result = timer_register_callback(imu_calibrated_callback, IMU_RES_RP_PERIOD, 0, TIMER_MODE_REPEAT);
+	gtid_imu_calibrated = timer_register_callback(imu_calibrated_callback, IMU_RES_RP_PERIOD, 0, TIMER_MODE_REPEAT);
 }
 
 void mode_imu_deinit(){
@@ -109,7 +117,7 @@ void mode_imu_deinit(){
 
 	// Periodic task initialization
 	timer_unregister_callback(gtid_imu_raw);
-	timer_unregister_callback(gtid_imu_result);
+	timer_unregister_callback(gtid_imu_calibrated);
 }
 
 void on_mode_imu_mavlink_recv(mavlink_message_t *msg){
@@ -130,11 +138,34 @@ void on_mode_imu_mavlink_recv(mavlink_message_t *msg){
 	break;
 	case MAVLINK_MSG_ID_GYRO_PARAMS:
 	{
-		mavlink_gyro_params_t gyro_params_msg;
-		mavlink_msg_gyro_params_decode(msg,&gyro_params_msg);
-		params.gx_bias = gyro_params_msg.gyro_bias_x;
-		params.gy_bias = gyro_params_msg.gyro_bias_y;
-		params.gz_bias = gyro_params_msg.gyro_bias_z;
+		mavlink_gyro_params_t params_msg;
+		mavlink_msg_gyro_params_decode(msg,&params_msg);
+		params.gx_bias = params_msg.gyro_bias_x;
+		params.gy_bias = params_msg.gyro_bias_y;
+		params.gz_bias = params_msg.gyro_bias_z;
+		respond_ok();
+	}
+	break;
+	case MAVLINK_MSG_ID_ACCEL_PARAMS:
+	{
+		mavlink_accel_params_t params_msg;
+		mavlink_msg_accel_params_decode(msg,&params_msg);
+		params.ax_bias = params_msg.accel_bias_x;
+		params.ay_bias = params_msg.accel_bias_y;
+		params.az_bias = params_msg.accel_bias_z;
+		respond_ok();
+	}
+	break;
+	case MAVLINK_MSG_ID_MAG_PARAMS:
+	{
+		mavlink_mag_params_t params_msg;
+		mavlink_msg_mag_params_decode(msg,&params_msg);
+		params.mx_bias = params_msg.mag_bias_x;
+		params.my_bias = params_msg.mag_bias_y;
+		params.mz_bias = params_msg.mag_bias_z;
+		params.mx_scale = params_msg.mag_scale_x;
+		params.my_scale = params_msg.mag_scale_y;
+		params.mz_scale = params_msg.mag_scale_z;
 		respond_ok();
 	}
 	break;
