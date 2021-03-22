@@ -11,7 +11,7 @@ import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPayload;
         
 /**
- * Control message
+ * Control messeage
  */
 public class msg_control extends MAVLinkMessage {
 
@@ -23,12 +23,12 @@ public class msg_control extends MAVLinkMessage {
     /**
      * 
      */
-    public float left;
+    public int left;
       
     /**
      * 
      */
-    public float right;
+    public int right;
     
 
     /**
@@ -42,8 +42,8 @@ public class msg_control extends MAVLinkMessage {
         packet.compid = 190;
         packet.msgid = MAVLINK_MSG_ID_CONTROL;
         
-        packet.payload.putFloat(left);
-        packet.payload.putFloat(right);
+        packet.payload.putInt(left);
+        packet.payload.putInt(right);
         
         if (isMavlink2) {
             
@@ -60,8 +60,8 @@ public class msg_control extends MAVLinkMessage {
     public void unpack(MAVLinkPayload payload) {
         payload.resetIndex();
         
-        this.left = payload.getFloat();
-        this.right = payload.getFloat();
+        this.left = payload.getInt();
+        this.right = payload.getInt();
         
         if (isMavlink2) {
             
@@ -78,7 +78,7 @@ public class msg_control extends MAVLinkMessage {
     /**
      * Constructor for a new message, initializes msgid and all payload variables
      */
-    public msg_control( float left, float right) {
+    public msg_control( int left, int right) {
         this.msgid = MAVLINK_MSG_ID_CONTROL;
 
         this.left = left;
@@ -89,7 +89,7 @@ public class msg_control extends MAVLinkMessage {
     /**
      * Constructor for a new message, initializes everything
      */
-    public msg_control( float left, float right, int sysid, int compid, boolean isMavlink2) {
+    public msg_control( int left, int right, int sysid, int compid, boolean isMavlink2) {
         this.msgid = MAVLINK_MSG_ID_CONTROL;
         this.sysid = sysid;
         this.compid = compid;

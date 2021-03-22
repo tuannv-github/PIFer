@@ -15,35 +15,40 @@ import com.MAVLink.Messages.MAVLinkPayload;
  */
 public class msg_control_measurement extends MAVLinkMessage {
 
-    public static final int MAVLINK_MSG_ID_CONTROL_MEASUREMENT = 30;
-    public static final int MAVLINK_MSG_LENGTH = 24;
+    public static final int MAVLINK_MSG_ID_CONTROL_MEASUREMENT = 28;
+    public static final int MAVLINK_MSG_LENGTH = 28;
     private static final long serialVersionUID = MAVLINK_MSG_ID_CONTROL_MEASUREMENT;
 
       
     /**
      * 
      */
-    public float left;
+    public int left;
       
     /**
      * 
      */
-    public float right;
+    public int right;
       
     /**
      * 
      */
-    public float rx;
+    public float x;
       
     /**
      * 
      */
-    public float ry;
+    public float y;
       
     /**
      * 
      */
-    public float range;
+    public float z;
+      
+    /**
+     * 
+     */
+    public float r;
       
     /**
      * 
@@ -62,11 +67,12 @@ public class msg_control_measurement extends MAVLinkMessage {
         packet.compid = 190;
         packet.msgid = MAVLINK_MSG_ID_CONTROL_MEASUREMENT;
         
-        packet.payload.putFloat(left);
-        packet.payload.putFloat(right);
-        packet.payload.putFloat(rx);
-        packet.payload.putFloat(ry);
-        packet.payload.putFloat(range);
+        packet.payload.putInt(left);
+        packet.payload.putInt(right);
+        packet.payload.putFloat(x);
+        packet.payload.putFloat(y);
+        packet.payload.putFloat(z);
+        packet.payload.putFloat(r);
         packet.payload.putFloat(yaw);
         
         if (isMavlink2) {
@@ -84,11 +90,12 @@ public class msg_control_measurement extends MAVLinkMessage {
     public void unpack(MAVLinkPayload payload) {
         payload.resetIndex();
         
-        this.left = payload.getFloat();
-        this.right = payload.getFloat();
-        this.rx = payload.getFloat();
-        this.ry = payload.getFloat();
-        this.range = payload.getFloat();
+        this.left = payload.getInt();
+        this.right = payload.getInt();
+        this.x = payload.getFloat();
+        this.y = payload.getFloat();
+        this.z = payload.getFloat();
+        this.r = payload.getFloat();
         this.yaw = payload.getFloat();
         
         if (isMavlink2) {
@@ -106,14 +113,15 @@ public class msg_control_measurement extends MAVLinkMessage {
     /**
      * Constructor for a new message, initializes msgid and all payload variables
      */
-    public msg_control_measurement( float left, float right, float rx, float ry, float range, float yaw) {
+    public msg_control_measurement( int left, int right, float x, float y, float z, float r, float yaw) {
         this.msgid = MAVLINK_MSG_ID_CONTROL_MEASUREMENT;
 
         this.left = left;
         this.right = right;
-        this.rx = rx;
-        this.ry = ry;
-        this.range = range;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.r = r;
         this.yaw = yaw;
         
     }
@@ -121,7 +129,7 @@ public class msg_control_measurement extends MAVLinkMessage {
     /**
      * Constructor for a new message, initializes everything
      */
-    public msg_control_measurement( float left, float right, float rx, float ry, float range, float yaw, int sysid, int compid, boolean isMavlink2) {
+    public msg_control_measurement( int left, int right, float x, float y, float z, float r, float yaw, int sysid, int compid, boolean isMavlink2) {
         this.msgid = MAVLINK_MSG_ID_CONTROL_MEASUREMENT;
         this.sysid = sysid;
         this.compid = compid;
@@ -129,9 +137,10 @@ public class msg_control_measurement extends MAVLinkMessage {
 
         this.left = left;
         this.right = right;
-        this.rx = rx;
-        this.ry = ry;
-        this.range = range;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.r = r;
         this.yaw = yaw;
         
     }
@@ -150,13 +159,13 @@ public class msg_control_measurement extends MAVLinkMessage {
         unpack(mavLinkPacket.payload);
     }
 
-                
+                  
     /**
      * Returns a string with the MSG name and data
      */
     @Override
     public String toString() {
-        return "MAVLINK_MSG_ID_CONTROL_MEASUREMENT - sysid:"+sysid+" compid:"+compid+" left:"+left+" right:"+right+" rx:"+rx+" ry:"+ry+" range:"+range+" yaw:"+yaw+"";
+        return "MAVLINK_MSG_ID_CONTROL_MEASUREMENT - sysid:"+sysid+" compid:"+compid+" left:"+left+" right:"+right+" x:"+x+" y:"+y+" z:"+z+" r:"+r+" yaw:"+yaw+"";
     }
     
     /**

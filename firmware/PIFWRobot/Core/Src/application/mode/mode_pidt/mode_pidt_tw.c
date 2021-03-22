@@ -18,7 +18,6 @@ typedef struct{
 }cmd_velocity_t;
 
 static cmd_velocity_t gcmd_velocity;
-static mavlink_message_t msg;
 static float tilt_setpoint;
 
 TID(gtid_tilt_controller);
@@ -71,24 +70,18 @@ static void vel_controller_callback(void* ctx){
 }
 
 static int load_params(){
-	// Load parameters from non-volatile memory
-	params_load();
+	static mavlink_message_t msg;
 
-	// Send parameters to GCS
-	uint8_t gmav_send_buf[256];
-	uint16_t len;
+	params_load(); // Load parameters from non-volatile memory
 
 	mavlink_msg_pid_params_pack(0,0,&msg,PID_TILT,params.pid[0].KP,params.pid[0].KI,params.pid[0].KD);
-	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
-	mav_send((char*)gmav_send_buf, len);
+	mav_send_msg(&msg);
 
 	mavlink_msg_pid_params_pack(0,0,&msg,PID_VEL,params.pid[1].KP,params.pid[1].KI,params.pid[1].KD);
-	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
-	mav_send((char*)gmav_send_buf, len);
+	mav_send_msg(&msg);
 
 	mavlink_msg_pid_params_pack(0,0,&msg,PID_POS,params.pid[2].KP,params.pid[2].KI,params.pid[2].KD);
-	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
-	mav_send((char*)gmav_send_buf, len);
+	mav_send_msg(&msg);
 
 	pid_reset(&params.pid[0]);
 	pid_reset(&params.pid[1]);
@@ -127,7 +120,7 @@ static int write_param(mavlink_message_t *msg){
 
 static void tilt_report_callback(void *ctx){
 	mavlink_message_t msg;
-	uint8_t mav_send_buf[256];
+
 	float tilt;
 	switch(params.tilt_type){
 	case ROLL:
@@ -141,43 +134,38 @@ static void tilt_report_callback(void *ctx){
 	}
 	tilt -= params.tilt_offset;
 	mavlink_msg_evt_tilt_cal_pack(0,0,&msg,tilt);
-	uint16_t len = mavlink_msg_to_send_buffer(mav_send_buf, &msg);
-	mav_send((char*)mav_send_buf, len);
+	mav_send_msg(&msg);
 }
 
 static void pid_report_callback(void *ctx){
-	mavlink_message_t pid_report_msg;
-	uint8_t gmav_send_buf[256];
+	mavlink_message_t msg;
 
-	mavlink_msg_pid_report_pack(0,0,&pid_report_msg,PID_TILT,
+	mavlink_msg_pid_report_pack(0,0,&msg,PID_TILT,
 			params.pid[0].sp,
 			params.pid[0].fb,
 			params.pid[0].P_Part,
 			params.pid[0].I_Part,
 			params.pid[0].D_Part,
 			params.pid[0].U);
-	uint16_t len = mavlink_msg_to_send_buffer(gmav_send_buf, &pid_report_msg);
-	mav_send((char*)gmav_send_buf, len);
+	mav_send_msg(&msg);
 
-	mavlink_msg_pid_report_pack(0,0,&pid_report_msg,PID_VEL,
+	mavlink_msg_pid_report_pack(0,0,&msg,PID_VEL,
 			params.pid[1].sp,
 			params.pid[1].fb,
 			params.pid[1].P_Part,
 			params.pid[1].I_Part,
 			params.pid[1].D_Part,
 			params.pid[1].U);
-	len = mavlink_msg_to_send_buffer(gmav_send_buf, &pid_report_msg);
-	mav_send((char*)gmav_send_buf, len);
+	mav_send_msg(&msg);
 
-	mavlink_msg_pid_report_pack(0,0,&pid_report_msg,PID_POS,
+	mavlink_msg_pid_report_pack(0,0,&msg,PID_POS,
 			params.pid[2].sp,
 			params.pid[2].fb,
 			params.pid[2].P_Part,
 			params.pid[2].I_Part,
 			params.pid[2].D_Part,
 			params.pid[2].U);
-	len = mavlink_msg_to_send_buffer(gmav_send_buf, &pid_report_msg);
-	mav_send((char*)gmav_send_buf, len);
+	mav_send_msg(&msg);
 }
 
 

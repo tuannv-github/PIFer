@@ -11,15 +11,13 @@ timer_id_t gtimerid_speed_report;
 
 #if MOTOR_TYPE==0
 static void speed_report_callback(void* ctx){
-	mavlink_message_t speed_msg;
-	uint8_t gmav_send_buf[256];
+	mavlink_message_t msg;
 
 	int32_t motor0_enc = enc_read(MOTOR_0);
 	int32_t motor1_enc = enc_read(MOTOR_1);
 
-	mavlink_msg_motor_speed_pack(0,0,&speed_msg,motor0_enc,motor1_enc);
-	uint16_t len = mavlink_msg_to_send_buffer(gmav_send_buf, &speed_msg);
-	mav_send((char*)gmav_send_buf, len);
+	mavlink_msg_motor_speed_pack(0,0,&msg,motor0_enc,motor1_enc);
+	mav_send_msg(&msg);
 }
 #endif
 
@@ -78,8 +76,7 @@ static int hw_params(mavlink_message_t *msg){
 static int load_params(){
 	params_load();
 
-	mavlink_message_t hw_msg;
-	uint8_t gmav_send_buf[256];
+	mavlink_message_t msg;
 
 #if MOTOR_TYPE==0
 	motor_type_t motor_type = MOTOR_TYPE_DC;
@@ -93,10 +90,9 @@ static int load_params(){
 	bool_t encoder1_invert = params.encoder1_invert == true ? MAV_TRUE : MAV_FALSE;
 	bool_t encoder_ex = params.encoder_exchange == true ? MAV_TRUE : MAV_FALSE;
 
-	mavlink_msg_hw_params_pack(0,0,&hw_msg, motor_type, motor0_invert,motor1_invert,encoder0_invert,encoder1_invert,encoder_ex,
+	mavlink_msg_hw_params_pack(0,0,&msg, motor_type, motor0_invert,motor1_invert,encoder0_invert,encoder1_invert,encoder_ex,
 			params.motor0_pos_deadband, params.motor0_neg_deadband, params.motor1_pos_deadband, params.motor1_neg_deadband);
-	uint16_t len = mavlink_msg_to_send_buffer(gmav_send_buf, &hw_msg);
-	mav_send((char*)gmav_send_buf, len);
+	mav_send_msg(&msg);
 
 	return 0;
 }

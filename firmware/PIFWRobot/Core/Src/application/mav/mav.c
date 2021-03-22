@@ -63,12 +63,16 @@ void mav_send(char *data, uint16_t len){
 	uart_send(&uart_drv[2], data, len);
 }
 
+void mav_send_msg(mavlink_message_t *msg){
+	uint8_t mav_send_buf[64];
+	uint16_t len = mavlink_msg_to_send_buffer(mav_send_buf, msg);
+	mav_send((char*)mav_send_buf, len);
+}
+
 void respond_ok(void){
 	mavlink_message_t msg;
-	char gmav_send_buf[255];
 	mavlink_msg_respond_pack(0,0,&msg,RESPOND_OK);
-	uint16_t len = mavlink_msg_to_send_buffer((uint8_t*)gmav_send_buf, &msg);
-	mav_send(gmav_send_buf, len);
+	mav_send_msg(&msg);
 }
 
 void respond_error(void){

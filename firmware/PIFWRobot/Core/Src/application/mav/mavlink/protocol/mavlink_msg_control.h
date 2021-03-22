@@ -5,8 +5,8 @@
 
 
 typedef struct __mavlink_control_t {
- float left; /*<  */
- float right; /*<  */
+ int32_t left; /*<  */
+ int32_t right; /*<  */
 } mavlink_control_t;
 
 #define MAVLINK_MSG_ID_CONTROL_LEN 8
@@ -14,8 +14,8 @@ typedef struct __mavlink_control_t {
 #define MAVLINK_MSG_ID_28_LEN 8
 #define MAVLINK_MSG_ID_28_MIN_LEN 8
 
-#define MAVLINK_MSG_ID_CONTROL_CRC 103
-#define MAVLINK_MSG_ID_28_CRC 103
+#define MAVLINK_MSG_ID_CONTROL_CRC 164
+#define MAVLINK_MSG_ID_28_CRC 164
 
 
 
@@ -24,16 +24,16 @@ typedef struct __mavlink_control_t {
     28, \
     "CONTROL", \
     2, \
-    {  { "left", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_control_t, left) }, \
-         { "right", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_control_t, right) }, \
+    {  { "left", NULL, MAVLINK_TYPE_INT32_T, 0, 0, offsetof(mavlink_control_t, left) }, \
+         { "right", NULL, MAVLINK_TYPE_INT32_T, 0, 4, offsetof(mavlink_control_t, right) }, \
          } \
 }
 #else
 #define MAVLINK_MESSAGE_INFO_CONTROL { \
     "CONTROL", \
     2, \
-    {  { "left", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_control_t, left) }, \
-         { "right", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_control_t, right) }, \
+    {  { "left", NULL, MAVLINK_TYPE_INT32_T, 0, 0, offsetof(mavlink_control_t, left) }, \
+         { "right", NULL, MAVLINK_TYPE_INT32_T, 0, 4, offsetof(mavlink_control_t, right) }, \
          } \
 }
 #endif
@@ -49,12 +49,12 @@ typedef struct __mavlink_control_t {
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_control_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               float left, float right)
+                               int32_t left, int32_t right)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_CONTROL_LEN];
-    _mav_put_float(buf, 0, left);
-    _mav_put_float(buf, 4, right);
+    _mav_put_int32_t(buf, 0, left);
+    _mav_put_int32_t(buf, 4, right);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_CONTROL_LEN);
 #else
@@ -81,12 +81,12 @@ static inline uint16_t mavlink_msg_control_pack(uint8_t system_id, uint8_t compo
  */
 static inline uint16_t mavlink_msg_control_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   float left,float right)
+                                   int32_t left,int32_t right)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_CONTROL_LEN];
-    _mav_put_float(buf, 0, left);
-    _mav_put_float(buf, 4, right);
+    _mav_put_int32_t(buf, 0, left);
+    _mav_put_int32_t(buf, 4, right);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_CONTROL_LEN);
 #else
@@ -137,12 +137,12 @@ static inline uint16_t mavlink_msg_control_encode_chan(uint8_t system_id, uint8_
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_control_send(mavlink_channel_t chan, float left, float right)
+static inline void mavlink_msg_control_send(mavlink_channel_t chan, int32_t left, int32_t right)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_CONTROL_LEN];
-    _mav_put_float(buf, 0, left);
-    _mav_put_float(buf, 4, right);
+    _mav_put_int32_t(buf, 0, left);
+    _mav_put_int32_t(buf, 4, right);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_CONTROL, buf, MAVLINK_MSG_ID_CONTROL_MIN_LEN, MAVLINK_MSG_ID_CONTROL_LEN, MAVLINK_MSG_ID_CONTROL_CRC);
 #else
@@ -176,12 +176,12 @@ static inline void mavlink_msg_control_send_struct(mavlink_channel_t chan, const
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_control_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  float left, float right)
+static inline void mavlink_msg_control_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  int32_t left, int32_t right)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
-    _mav_put_float(buf, 0, left);
-    _mav_put_float(buf, 4, right);
+    _mav_put_int32_t(buf, 0, left);
+    _mav_put_int32_t(buf, 4, right);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_CONTROL, buf, MAVLINK_MSG_ID_CONTROL_MIN_LEN, MAVLINK_MSG_ID_CONTROL_LEN, MAVLINK_MSG_ID_CONTROL_CRC);
 #else
@@ -204,9 +204,9 @@ static inline void mavlink_msg_control_send_buf(mavlink_message_t *msgbuf, mavli
  *
  * @return  
  */
-static inline float mavlink_msg_control_get_left(const mavlink_message_t* msg)
+static inline int32_t mavlink_msg_control_get_left(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_float(msg,  0);
+    return _MAV_RETURN_int32_t(msg,  0);
 }
 
 /**
@@ -214,9 +214,9 @@ static inline float mavlink_msg_control_get_left(const mavlink_message_t* msg)
  *
  * @return  
  */
-static inline float mavlink_msg_control_get_right(const mavlink_message_t* msg)
+static inline int32_t mavlink_msg_control_get_right(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_float(msg,  4);
+    return _MAV_RETURN_int32_t(msg,  4);
 }
 
 /**

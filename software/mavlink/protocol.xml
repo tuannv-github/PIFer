@@ -291,26 +291,17 @@
 		</message>
 
 		<message id="28" name="CONTROL">
-			<description>Control message</description>
-			<field type="float" name="left"/>
-			<field type="float" name="right"/>
+			<description>Control messeage</description>
+			<field type="int32_t" name="left"/>
+			<field type="int32_t" name="right"/>
 		</message>
 
 		<message id="29" name="MEASUREMENT">
-			<description>Measurement message</description>
-			<field type="float" name="rx"/>
-			<field type="float" name="ry"/>
-			<field type="float" name="range"/>
-			<field type="float" name="yaw"/>
-		</message>
-
-		<message id="30" name="CONTROL_MEASUREMENT">
-			<description>Control and measurement message</description>
-			<field type="float" name="left"/>
-			<field type="float" name="right"/>
-			<field type="float" name="rx"/>
-			<field type="float" name="ry"/>
-			<field type="float" name="range"/>
+			<description>Measument messeage</description>
+			<field type="float" name="x"/>
+			<field type="float" name="y"/>
+			<field type="float" name="z"/>
+			<field type="float" name="r"/>
 			<field type="float" name="yaw"/>
 		</message>
 	</messages>

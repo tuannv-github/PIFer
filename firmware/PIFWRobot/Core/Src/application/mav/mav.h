@@ -18,6 +18,7 @@ void mav_init();
 
 // Send mavlink packet
 void mav_send(char *data, uint16_t len);
+void mav_send_msg(mavlink_message_t *msg);
 
 // Receive mavlink packet
 void mav_set_on_mav_recv(on_mav_recv_t on_mav_recv);

@@ -11,29 +11,34 @@ import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPayload;
         
 /**
- * Measurement message
+ * Measument messeage
  */
 public class msg_measurement extends MAVLinkMessage {
 
     public static final int MAVLINK_MSG_ID_MEASUREMENT = 29;
-    public static final int MAVLINK_MSG_LENGTH = 16;
+    public static final int MAVLINK_MSG_LENGTH = 20;
     private static final long serialVersionUID = MAVLINK_MSG_ID_MEASUREMENT;
 
       
     /**
      * 
      */
-    public float rx;
+    public float x;
       
     /**
      * 
      */
-    public float ry;
+    public float y;
       
     /**
      * 
      */
-    public float range;
+    public float z;
+      
+    /**
+     * 
+     */
+    public float r;
       
     /**
      * 
@@ -52,9 +57,10 @@ public class msg_measurement extends MAVLinkMessage {
         packet.compid = 190;
         packet.msgid = MAVLINK_MSG_ID_MEASUREMENT;
         
-        packet.payload.putFloat(rx);
-        packet.payload.putFloat(ry);
-        packet.payload.putFloat(range);
+        packet.payload.putFloat(x);
+        packet.payload.putFloat(y);
+        packet.payload.putFloat(z);
+        packet.payload.putFloat(r);
         packet.payload.putFloat(yaw);
         
         if (isMavlink2) {
@@ -72,9 +78,10 @@ public class msg_measurement extends MAVLinkMessage {
     public void unpack(MAVLinkPayload payload) {
         payload.resetIndex();
         
-        this.rx = payload.getFloat();
-        this.ry = payload.getFloat();
-        this.range = payload.getFloat();
+        this.x = payload.getFloat();
+        this.y = payload.getFloat();
+        this.z = payload.getFloat();
+        this.r = payload.getFloat();
         this.yaw = payload.getFloat();
         
         if (isMavlink2) {
@@ -92,12 +99,13 @@ public class msg_measurement extends MAVLinkMessage {
     /**
      * Constructor for a new message, initializes msgid and all payload variables
      */
-    public msg_measurement( float rx, float ry, float range, float yaw) {
+    public msg_measurement( float x, float y, float z, float r, float yaw) {
         this.msgid = MAVLINK_MSG_ID_MEASUREMENT;
 
-        this.rx = rx;
-        this.ry = ry;
-        this.range = range;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.r = r;
         this.yaw = yaw;
         
     }
@@ -105,15 +113,16 @@ public class msg_measurement extends MAVLinkMessage {
     /**
      * Constructor for a new message, initializes everything
      */
-    public msg_measurement( float rx, float ry, float range, float yaw, int sysid, int compid, boolean isMavlink2) {
+    public msg_measurement( float x, float y, float z, float r, float yaw, int sysid, int compid, boolean isMavlink2) {
         this.msgid = MAVLINK_MSG_ID_MEASUREMENT;
         this.sysid = sysid;
         this.compid = compid;
         this.isMavlink2 = isMavlink2;
 
-        this.rx = rx;
-        this.ry = ry;
-        this.range = range;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.r = r;
         this.yaw = yaw;
         
     }
@@ -132,13 +141,13 @@ public class msg_measurement extends MAVLinkMessage {
         unpack(mavLinkPacket.payload);
     }
 
-            
+              
     /**
      * Returns a string with the MSG name and data
      */
     @Override
     public String toString() {
-        return "MAVLINK_MSG_ID_MEASUREMENT - sysid:"+sysid+" compid:"+compid+" rx:"+rx+" ry:"+ry+" range:"+range+" yaw:"+yaw+"";
+        return "MAVLINK_MSG_ID_MEASUREMENT - sysid:"+sysid+" compid:"+compid+" x:"+x+" y:"+y+" z:"+z+" r:"+r+" yaw:"+yaw+"";
     }
     
     /**

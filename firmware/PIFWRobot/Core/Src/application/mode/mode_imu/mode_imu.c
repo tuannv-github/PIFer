@@ -13,8 +13,6 @@ TID(gtid_imu_rpy);
 
 static void imu_raw_callback(void* ctx){
 	mavlink_message_t msg;
-	uint8_t gmav_send_buf[256];
-	uint16_t len;
 	float raw[9];
 
 	imu_get_gyro_raw(raw);
@@ -22,8 +20,7 @@ static void imu_raw_callback(void* ctx){
 	imu_get_mag_raw(&raw[6]);
 
 	mavlink_msg_evt_gyro_accel_mag_raw_pack(0, 0, &msg, raw[0], raw[1], raw[2], raw[3], raw[4], raw[5], raw[6], raw[7], raw[8]);
-	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
-	mav_send((char*)gmav_send_buf, len);
+	mav_send_msg(&msg);
 
 	float tilt;
 	switch(params.tilt_type){
@@ -37,14 +34,11 @@ static void imu_raw_callback(void* ctx){
 		tilt = 0;
 	}
 	mavlink_msg_evt_tilt_raw_pack(0,0,&msg,tilt);
-	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
-	mav_send((char*)gmav_send_buf, len);
+	mav_send_msg(&msg);
 }
 
 static void imu_cal_callback(void* ctx){
 	mavlink_message_t msg;
-	uint8_t gmav_send_buf[256];
-	uint16_t len;
 	float raw[9];
 
 	imu_get_gyro_cal(raw);
@@ -52,8 +46,7 @@ static void imu_cal_callback(void* ctx){
 	imu_get_mag_cal(&raw[6]);
 
 	mavlink_msg_evt_gyro_accel_mag_calibrated_pack(0, 0, &msg, raw[0], raw[1], raw[2], raw[3], raw[4], raw[5], raw[6], raw[7], raw[8]);
-	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
-	mav_send((char*)gmav_send_buf, len);
+	mav_send_msg(&msg);
 
 	float tilt;
 	switch(params.tilt_type){
@@ -68,18 +61,15 @@ static void imu_cal_callback(void* ctx){
 	}
 	tilt -= params.tilt_offset;
 	mavlink_msg_evt_tilt_cal_pack(0,0,&msg,tilt);
-	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
-	mav_send((char*)gmav_send_buf, len);
+	mav_send_msg(&msg);
 }
 
 static void imu_rpy_callback(void* ctx){
-	mavlink_message_t msg;
-	uint8_t gmav_send_buf[256];
+	mavlink_message_t msg;;
 	float rpy[3];
 	imu_get_rpy(rpy);
 	mavlink_msg_evt_rpy_pack(0,0,&msg,rpy[0],rpy[1],rpy[2]);
-	uint16_t len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
-	mav_send((char*)gmav_send_buf, len);
+	mav_send_msg(&msg);
 }
 
 static int load_imu_params(){
@@ -88,24 +78,18 @@ static int load_imu_params(){
 
 	// Send parameters to GCS
 	mavlink_message_t msg;
-	uint8_t gmav_send_buf[256];
-	uint16_t len;
 
 	mavlink_msg_gyro_params_pack(0,0,&msg, params.gx_bias, params.gy_bias, params.gz_bias);
-	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
-	mav_send((char*)gmav_send_buf, len);
+	mav_send_msg(&msg);
 
 	mavlink_msg_accel_params_pack(0,0,&msg, params.ax_bias, params.ay_bias, params.az_bias);
-	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
-	mav_send((char*)gmav_send_buf, len);
+	mav_send_msg(&msg);
 
 	mavlink_msg_mag_params_pack(0,0,&msg, params.mx_bias, params.my_bias, params.mz_bias, params.mx_scale, params.my_scale, params.mz_scale);
-	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
-	mav_send((char*)gmav_send_buf, len);
+	mav_send_msg(&msg);
 
 	mavlink_msg_filter_params_pack(0,0,&msg, params.tilt_type, params.tilt_offset, params.g_believe, params.complementary_gain, params.madgwick_beta);
-	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
-	mav_send((char*)gmav_send_buf, len);
+	mav_send_msg(&msg);
 
 	return 0;
 }

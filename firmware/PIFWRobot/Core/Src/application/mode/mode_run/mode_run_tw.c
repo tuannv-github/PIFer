@@ -68,9 +68,10 @@ static void vel_controller_callback(void *ctx){
 	tilt_setpoint = pid_compute(&params.pid[1], gcmd_velocity.vx*VELOC_COEFF, direction, 0.001f*VEL_CONTROLLER_PERIOD);
 }
 
-static void tilt_report_callback(void *ctx){
+static void mode_run_report_callback(void *ctx){
+
 	mavlink_message_t msg;
-	uint8_t mav_send_buf[64];
+
 	float tilt;
 	switch(params.tilt_type){
 	case ROLL:
@@ -84,8 +85,17 @@ static void tilt_report_callback(void *ctx){
 	}
 	tilt -= params.tilt_offset;
 	mavlink_msg_evt_tilt_cal_pack(0,0,&msg,tilt);
-	uint16_t len = mavlink_msg_to_send_buffer(mav_send_buf, &msg);
-	mav_send((char*)mav_send_buf, len);
+	mav_send_msg(&msg);
+
+	float rpy[3];
+	imu_get_rpy(rpy);
+	mavlink_msg_evt_rpy_pack(0,0,&msg,rpy[0],rpy[1],rpy[2]);
+	mav_send_msg(&msg);
+
+	int32_t l = enc_read_acc(MOTOR_0);
+	int32_t r = enc_read_acc(MOTOR_1);
+	mavlink_msg_control_pack(0, 0, &msg, l, r);
+	mav_send_msg(&msg);
 }
 
 void mode_run_init(){
@@ -109,7 +119,7 @@ void mode_run_init(){
 	// Periodic task initialization
 	gtid_tilt_controller = timer_register_callback(tilt_controller_callback, TILT_CONTROLLER_PERIOD, 0, TIMER_MODE_REPEAT);
 	gtid_vel_controller = timer_register_callback(vel_controller_callback, VEL_CONTROLLER_PERIOD, 0, TIMER_MODE_REPEAT);
-	gtid_imu_tilt = timer_register_callback(tilt_report_callback, TILT_REPORT_PERIOD, 0, TIMER_MODE_REPEAT);
+	gtid_imu_tilt = timer_register_callback(mode_run_report_callback, MODE_RUN_REPORT_PERIOD, 0, TIMER_MODE_REPEAT);
 }
 
 void mode_run_deinit(){
@@ -169,9 +179,14 @@ void on_mode_run_mavlink_recv(mavlink_message_t *msg){
 		break;
 	case MAVLINK_MSG_ID_DISTANCE:
 		{
-			uint8_t mav_send_buf[64];
-			uint16_t len = mavlink_msg_to_send_buffer(mav_send_buf, msg);
-			mav_send((char*)mav_send_buf, len);
+			float rpy[3];
+			mavlink_distance_t distance;
+
+			imu_get_rpy(rpy);
+			mavlink_msg_distance_decode(msg, &distance);
+
+			mavlink_msg_measurement_pack(0, 0, msg, distance.x, distance.y, distance.z, distance.r, rpy[2]);
+			mav_send_msg(msg);
 		}
 		break;
 	}

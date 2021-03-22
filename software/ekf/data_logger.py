@@ -32,7 +32,7 @@ class TAG:
                 byte = serial.read()
                 msg = mav.parse_char(byte)
                 if msg is not None:
-                    if msg.id == MAVLINK_MSG_ID_DISTANCE:
+                    if msg.id == MAVLINK_MSG_ID_DISTANCE or msg.id == MAVLINK_MSG_ID_EVT_RPY:
                         print(msg.to_json())
             except:
                 pass

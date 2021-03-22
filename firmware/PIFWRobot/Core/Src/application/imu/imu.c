@@ -22,20 +22,25 @@ static float pitch;
 static float gam_raw[9];
 static float gam_cab[9];
 
-TID(gtid_imu_callback);
+TID(gtid_tilt_callback);
+TID(gtid_rpy_callback);
 
-static void imu_callback(void* ctx){
+static void tilt_callback(void* ctx){
 	if(mpu9250_get_accel_gyro(&gam_raw[0], &gam_raw[1], &gam_raw[2], &gam_raw[3], &gam_raw[4], &gam_raw[5]) < 0) return;
-	if(mpu9250_get_mag(&gam_raw[6], &gam_raw[7], &gam_raw[8]) < 0) return;
 
 	float accel_roll  = atan2(gam_raw[1], sqrt(gam_raw[0]*gam_raw[0] + gam_raw[2]*gam_raw[2]))*180.f/M_PI;
 	float accel_pitch = atan2(-gam_raw[0], sqrt(gam_raw[1]*gam_raw[1] + gam_raw[2]*gam_raw[2]))*180.f/M_PI;
-	float roll_rate = (gam_raw[3]-params.gx_bias)*0.001f*IMU_PERIOD_MS;
-	float pitch_rate = (gam_raw[4]-params.gy_bias)*0.001f*IMU_PERIOD_MS;
+	float roll_rate = (gam_raw[3]-params.gx_bias)*0.001f*TILT_PERIOD_MS;
+	float pitch_rate = (gam_raw[4]-params.gy_bias)*0.001f*TILT_PERIOD_MS;
 	roll = params.g_believe*(roll+roll_rate) + (1-params.g_believe)*accel_roll;
 	pitch = params.g_believe*(pitch+pitch_rate) + (1-params.g_believe)*accel_pitch;
 	if(isnan(roll)) roll = 0;
 	if(isnan(pitch)) pitch = 0;
+}
+
+static void rpy_callback(void* ctx){
+	if(mpu9250_get_accel_gyro(&gam_raw[0], &gam_raw[1], &gam_raw[2], &gam_raw[3], &gam_raw[4], &gam_raw[5]) < 0) return;
+	if(mpu9250_get_mag(&gam_raw[6], &gam_raw[7], &gam_raw[8]) < 0) return;
 
 	gam_cab[0] = (gam_raw[3] - params.gx_bias)*M_PI/180.0f;
 	gam_cab[1] = (gam_raw[4] - params.gy_bias)*M_PI/180.0f;
@@ -48,21 +53,25 @@ static void imu_callback(void* ctx){
 	gam_cab[8] = (gam_raw[8] - params.mz_bias)/params.mz_scale;
 
 	complementary_update(gam_cab[0], gam_cab[1], gam_cab[2],
-							gam_cab[3], gam_cab[4], gam_cab[5], gam_cab[6], gam_cab[7], gam_cab[8], 0.001f*IMU_PERIOD_MS);
+							gam_cab[3], gam_cab[4], gam_cab[5], gam_cab[6], gam_cab[7], gam_cab[8], 0.001f*RPY_PERIOD_MS);
 }
+
 
 int imu_init(void){
 	mpu9250_init();
-	gtid_imu_callback = timer_register_callback(imu_callback, IMU_PERIOD_MS, 0, TIMER_MODE_REPEAT);
+
+	gtid_tilt_callback = timer_register_callback(tilt_callback, TILT_PERIOD_MS, 0, TIMER_MODE_REPEAT);
+	gtid_rpy_callback = timer_register_callback(rpy_callback, RPY_PERIOD_MS, 0, TIMER_MODE_REPEAT);
 
 	complementary_init();
 
-	return true;
+	return 0;
 }
 
 int imu_deinit(void){
-	timer_unregister_callback(gtid_imu_callback);
-	return true;
+	timer_unregister_callback(gtid_tilt_callback);
+	timer_unregister_callback(gtid_rpy_callback);
+	return 0;
 }
 
 int imu_test_connection(){
