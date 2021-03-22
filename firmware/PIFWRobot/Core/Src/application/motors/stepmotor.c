@@ -7,6 +7,8 @@
 #include <application/motors/stepmotor.h>
 #include "math.h"
 
+#if MOTOR_TYPE==1
+
 void stepmotor_init()
 {
 	HAL_TIM_PWM_Start(&MOTOR0_TIMER, MOTOR0_CHANNEL);
@@ -70,4 +72,6 @@ void stepmotor_vw(float v, float w)
 	stepmotor_speed(MOTOR_0, v0);
 	stepmotor_speed(MOTOR_1, v1);
 }
+
+#endif
 

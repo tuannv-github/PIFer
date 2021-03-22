@@ -18,10 +18,10 @@
 
 // Self-balancing-DC	--> 0
 // Turtle-Step			--> 1
-#define ROBOT_MODEL		1
+#define ROBOT_MODEL		0
 
 // Timer callback define
-#define MAX_CALLBACK_FUNC	10
+#define MAX_CALLBACK_FUNC	15
 
 /* IMU definition */
 #define MPU9250_I2C			hi2c1
@@ -44,13 +44,17 @@
 
 // DC				--> 0
 // STEP				--> 1
+#if ROBOT_MODEL==0
+#define MOTOR_TYPE		0
+#elif ROBOT_MODEL==1
 #define MOTOR_TYPE		1
+#endif
 
 // Motor 0 define
 #if MOTOR_TYPE == 0
-	#define MOTOR0_TIMER 	htim2
-	#define MOTOR0_CHANNEL 	TIM_CHANNEL_1
-	#define MOTOR0_ENCODER	htim3
+	#define MOTOR0_TIMER 		htim2
+	#define MOTOR0_CHANNEL 		TIM_CHANNEL_1
+	#define MOTOR0_ENCODER		htim3
 #elif MOTOR_TYPE==1
 	#define MOTOR0_TIMER		htim3
 	#define MOTOR0_CHANNEL		TIM_CHANNEL_1
@@ -61,8 +65,8 @@
 // Motor 1 define
 #if MOTOR_TYPE == 0
 	#define MOTOR1_TIMER 		htim2
-	#define MOTOR1_CHANNEL 	TIM_CHANNEL_2
-	#define MOTOR1_ENCODER	htim4
+	#define MOTOR1_CHANNEL 		TIM_CHANNEL_2
+	#define MOTOR1_ENCODER		htim4
 #elif MOTOR_TYPE==1
 	#define MOTOR1_TIMER		htim4
 	#define MOTOR1_CHANNEL  	TIM_CHANNEL_2
@@ -103,7 +107,7 @@
 #define SOU_PERIOD			100
 
 // Mavlink
-#define MAV_BUFF_SIZE 		512
+#define MAV_BUFF_SIZE 		128
 #define MAVLINK_CB_PERIOD	15	// Mavlink read message callback
 
 // Parameters define

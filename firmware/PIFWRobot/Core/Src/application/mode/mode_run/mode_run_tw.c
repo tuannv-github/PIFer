@@ -26,10 +26,6 @@ TID(gtid_imu_tilt);
 static cmd_velocity_t gcmd_velocity;
 static float tilt_setpoint;
 
-static uint32_t g_left = 0;
-static uint32_t g_right = 0;
-static uint32_t g_yaw = 0;
-
 static void tilt_controller_callback(void* ctx){
 	float tilt;
 	switch(params.tilt_type){
@@ -87,7 +83,7 @@ static void tilt_report_callback(void *ctx){
 		tilt = 0;
 	}
 	tilt -= params.tilt_offset;
-	mavlink_msg_evt_tilt_pack(0,0,&msg,tilt);
+	mavlink_msg_evt_tilt_cal_pack(0,0,&msg,tilt);
 	uint16_t len = mavlink_msg_to_send_buffer(mav_send_buf, &msg);
 	mav_send((char*)mav_send_buf, len);
 }
@@ -169,18 +165,6 @@ void on_mode_run_mavlink_recv(mavlink_message_t *msg){
 			}
 			neopixel_app_self_balancing_set(gcmd_velocity.vx*4.0f, gcmd_velocity.omega*4.0f);
 #endif
-		}
-		break;
-	case MAVLINK_MSG_ID_DISTANCE:
-		{
-			mavlink_distance_t distance;
-			mavlink_msg_distance_decode(msg, &distance);
-
-			mavlink_message_t cm_msg_mav;
-			uint8_t mav_send_buf[64];
-//			mavlink_msg_control_measurement_pack(0, 0, &cm_msg_mav, left, right, rx, ry, range, yaw);
-			uint16_t len = mavlink_msg_to_send_buffer(mav_send_buf, &cm_msg_mav);
-			mav_send((char*)mav_send_buf, len);
 		}
 		break;
 	}

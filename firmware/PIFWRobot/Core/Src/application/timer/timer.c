@@ -27,7 +27,7 @@ timer_id_t timer_register_callback(timer_callback_func_t timer_callback_func, ui
 			return i;
 		}
 	}
-	return -1;
+	return TID_INVALID;
 }
 
 timer_id_t timer_unregister_callback(timer_id_t id){

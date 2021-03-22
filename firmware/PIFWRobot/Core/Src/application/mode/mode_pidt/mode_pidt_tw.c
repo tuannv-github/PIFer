@@ -140,7 +140,7 @@ static void tilt_report_callback(void *ctx){
 		tilt = 0;
 	}
 	tilt -= params.tilt_offset;
-	mavlink_msg_evt_tilt_pack(0,0,&msg,tilt);
+	mavlink_msg_evt_tilt_cal_pack(0,0,&msg,tilt);
 	uint16_t len = mavlink_msg_to_send_buffer(mav_send_buf, &msg);
 	mav_send((char*)mav_send_buf, len);
 }

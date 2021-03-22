@@ -46,7 +46,7 @@ public:
         Mode_run->resize(640, 272);
         groupBox_11 = new QGroupBox(Mode_run);
         groupBox_11->setObjectName(QString::fromUtf8("groupBox_11"));
-        groupBox_11->setGeometry(QRect(10, 40, 471, 51));
+        groupBox_11->setGeometry(QRect(10, 40, 481, 51));
         label_47 = new QLabel(groupBox_11);
         label_47->setObjectName(QString::fromUtf8("label_47"));
         label_47->setGeometry(QRect(10, 20, 31, 16));
@@ -67,7 +67,7 @@ public:
         label_79->setGeometry(QRect(350, 20, 31, 16));
         tb_tilt_cal = new QLineEdit(groupBox_11);
         tb_tilt_cal->setObjectName(QString::fromUtf8("tb_tilt_cal"));
-        tb_tilt_cal->setGeometry(QRect(370, 20, 91, 20));
+        tb_tilt_cal->setGeometry(QRect(380, 20, 91, 20));
         tb_tilt_cal->setReadOnly(true);
         btn_change_mode_run = new QPushButton(Mode_run);
         btn_change_mode_run->setObjectName(QString::fromUtf8("btn_change_mode_run"));
@@ -108,7 +108,7 @@ public:
     void retranslateUi(QWidget *Mode_run)
     {
         Mode_run->setWindowTitle(QApplication::translate("Mode_run", "Form", nullptr));
-        groupBox_11->setTitle(QApplication::translate("Mode_run", "Roll Pitch Yaw", nullptr));
+        groupBox_11->setTitle(QApplication::translate("Mode_run", "Attitude", nullptr));
         label_47->setText(QApplication::translate("Mode_run", "RPY:", nullptr));
         txtBoxRoll->setText(QApplication::translate("Mode_run", "NR", nullptr));
         txtBoxPitch->setText(QApplication::translate("Mode_run", "NR", nullptr));

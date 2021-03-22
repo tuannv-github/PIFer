@@ -33,30 +33,14 @@ static uart_drv_t uart_drv[] = {
 void mavlink_callback(void* ctx){
 	uint16_t mavbuf_len;
 
-	mavbuf_len = MAV_BUFF_SIZE;
-	uart_recv(&uart_drv[0], mavbuf, &mavbuf_len);
-	for(uint16_t i = 0; i < mavbuf_len; i++){
-		uint8_t msg_received = mavlink_parse_char(MAVLINK_COMM_0, mavbuf[i], &msg, &status);
-		if(msg_received == 1 && gon_mav_recv!=0){
-			gon_mav_recv(&msg);
-		}
-	}
-
-	mavbuf_len = MAV_BUFF_SIZE;
-	uart_recv(&uart_drv[1], mavbuf, &mavbuf_len);
-	for(uint16_t i = 0; i < mavbuf_len; i++){
-		uint8_t msg_received = mavlink_parse_char(MAVLINK_COMM_1, mavbuf[i], &msg, &status);
-		if(msg_received == 1 && gon_mav_recv!=0){
-			gon_mav_recv(&msg);
-		}
-	}
-
-	mavbuf_len = MAV_BUFF_SIZE;
-	uart_recv(&uart_drv[2], mavbuf, &mavbuf_len);
-	for(uint16_t i = 0; i < mavbuf_len; i++){
-		uint8_t msg_received = mavlink_parse_char(MAVLINK_COMM_1, mavbuf[i], &msg, &status);
-		if(msg_received == 1 && gon_mav_recv!=0){
-			gon_mav_recv(&msg);
+	for(uint8_t drv_idx=0; drv_idx<sizeof(uart_drv)/sizeof(uart_drv_t); drv_idx++){
+		mavbuf_len = MAV_BUFF_SIZE;
+		uart_recv(&uart_drv[drv_idx], mavbuf, &mavbuf_len);
+		for(uint16_t i = 0; i < mavbuf_len; i++){
+			uint8_t msg_received = mavlink_parse_char(MAVLINK_COMM_0+drv_idx, mavbuf[i], &msg, &status);
+			if(msg_received == 1 && gon_mav_recv!=0){
+				gon_mav_recv(&msg);
+			}
 		}
 	}
 }
@@ -65,6 +49,7 @@ void mav_init(){
 	uart_init(&uart_drv[0]);
 	uart_init(&uart_drv[1]);
 	uart_init(&uart_drv[2]);
+
 	timer_register_callback(mavlink_callback, MAVLINK_CB_PERIOD, 0, TIMER_MODE_REPEAT);
 }
 

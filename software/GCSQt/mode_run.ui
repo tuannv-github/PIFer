@@ -18,12 +18,12 @@
     <rect>
      <x>10</x>
      <y>40</y>
-     <width>471</width>
+     <width>481</width>
      <height>51</height>
     </rect>
    </property>
    <property name="title">
-    <string>Roll Pitch Yaw</string>
+    <string>Attitude</string>
    </property>
    <widget class="QLabel" name="label_47">
     <property name="geometry">
@@ -102,7 +102,7 @@
    <widget class="QLineEdit" name="tb_tilt_cal">
     <property name="geometry">
      <rect>
-      <x>370</x>
+      <x>380</x>
       <y>20</y>
       <width>91</width>
       <height>20</height>
