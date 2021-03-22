@@ -167,6 +167,13 @@ void on_mode_run_mavlink_recv(mavlink_message_t *msg){
 #endif
 		}
 		break;
+	case MAVLINK_MSG_ID_DISTANCE:
+		{
+			uint8_t mav_send_buf[64];
+			uint16_t len = mavlink_msg_to_send_buffer(mav_send_buf, msg);
+			mav_send((char*)mav_send_buf, len);
+		}
+		break;
 	}
 }
 
