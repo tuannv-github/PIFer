@@ -8,7 +8,7 @@
 #include "mode_imu.h"
 
 TID(gtid_imu_raw);
-TID(gtid_imu_cab);
+TID(gtid_imu_cal);
 TID(gtid_imu_rpy);
 
 static void imu_raw_callback(void* ctx){
@@ -32,9 +32,9 @@ static void imu_cal_callback(void* ctx){
 	uint16_t len;
 	float raw[9];
 
-	imu_get_gyro_cab(raw);
-	imu_get_accel_cab(&raw[3]);
-	imu_get_mag_cab(&raw[6]);
+	imu_get_gyro_cal(raw);
+	imu_get_accel_cal(&raw[3]);
+	imu_get_mag_cal(&raw[6]);
 
 	mavlink_msg_evt_gyro_accel_mag_calibrated_pack(0, 0, &msg, raw[0], raw[1], raw[2], raw[3], raw[4], raw[5], raw[6], raw[7], raw[8]);
 	len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
@@ -108,7 +108,7 @@ void mode_imu_init(){
 
 	// Periodic task initialization
 	gtid_imu_raw = timer_register_callback(imu_raw_callback, IMU_RAW_RP_PERIOD, 0, TIMER_MODE_REPEAT);
-	gtid_imu_cab = timer_register_callback(imu_cal_callback, IMU_CAL_RP_PERIOD, 0, TIMER_MODE_REPEAT);
+	gtid_imu_cal = timer_register_callback(imu_cal_callback, IMU_CAL_RP_PERIOD, 0, TIMER_MODE_REPEAT);
 	gtid_imu_rpy = timer_register_callback(imu_rpy_callback, IMU_RPY_RP_PERIOD, 0, TIMER_MODE_REPEAT);
 }
 
@@ -118,7 +118,7 @@ void mode_imu_deinit(){
 
 	// Periodic task initialization
 	timer_unregister_callback(gtid_imu_raw);
-	timer_unregister_callback(gtid_imu_cab);
+	timer_unregister_callback(gtid_imu_cal);
 	timer_unregister_callback(gtid_imu_rpy);
 }
 

@@ -21,9 +21,9 @@ ax_bias = -0.04373004872311828
 ay_bias = -0.014944331437211982
 az_bias = -0.016872704853110654
 
-# r_roll = np.load(DATASET_FOLDER + 'roll.npy')
-# r_pitch = np.load(DATASET_FOLDER + 'pitch.npy')
-# r_yaw = np.load(DATASET_FOLDER + 'yaw.npy')
+r_roll = np.load(DATASET_FOLDER + 'roll.npy')
+r_pitch = np.load(DATASET_FOLDER + 'pitch.npy')
+r_yaw = np.load(DATASET_FOLDER + 'yaw.npy')
 
 gx = np.load(DATASET_FOLDER + 'gx.npy')
 gy = np.load(DATASET_FOLDER + 'gy.npy')
@@ -51,8 +51,8 @@ a = np.array([ax, ay, az]).T
 m = np.array([mx, my, mz]).T
 
 # ahrs = Complementary(gyr=g, acc=a, mag=m, gain=0.02, frequency=1000/45)
-# ahrs = Madgwick(gyr=g, acc=a, mag=m, frequency=1000/45)
-ahrs = Mahony(gyr=g, acc=a, mag=m, frequency=1000/45)
+ahrs = Madgwick(gyr=g, acc=a, mag=m, frequency=1000/45)
+# ahrs = Mahony(gyr=g, acc=a, mag=m, frequency=1000/45)
 
 print(ahrs.Q)
 
@@ -61,11 +61,12 @@ pitch = []
 yaw = []
 for q in ahrs.Q:
     r,p,y = quaternion_to_euler(q[1],q[2],q[3],q[0])
-    roll.append(r)
-    pitch.append(p)
-    yaw.append(y)
+    roll.append(r*180/pi)
+    pitch.append(p*180/pi)
+    yaw.append(y*180/pi)
 
 x = np.linspace(0, len(gx), len(gx))
+rx = np.linspace(0, len(r_roll), len(r_roll))
 
 fig, (ax0,ax1,ax2)  = plt.subplots(3)
 ax0.plot(x, gx, label='gx')
@@ -84,19 +85,22 @@ ax2.plot(x, mz, label='mz')
 ax2.legend()
 
 fig, (ax0,ax1,ax2)  = plt.subplots(3)
-# ax0.plot(x, r_roll, label='reference roll')
+ax0.plot(rx, r_roll, label='reference roll')
 ax0.plot(x, roll, label='roll')
-ax0.set_ylim([-pi-0.1, pi+0.1])
+# ax0.set_ylim([-pi-0.1, pi+0.1])
+ax0.set_ylim([-190, 190])
 ax0.legend()
 
-# ax1.plot(x, r_pitch, label='reference pitch')
+ax1.plot(rx, r_pitch, label='reference pitch')
 ax1.plot(x, pitch, label='pitch')
-ax1.set_ylim([-pi-0.1, pi+0.1])
+# ax1.set_ylim([-pi-0.1, pi+0.1])
+ax1.set_ylim([-190, 190])
 ax1.legend()
 
-# ax2.plot(x, r_yaw, label='reference yaw')
+ax2.plot(rx, r_yaw, label='reference yaw')
 ax2.plot(x, yaw, label='yaw')
-ax2.set_ylim([-pi-0.1, pi+0.1])
+# ax2.set_ylim([-pi-0.1, pi+0.1])
+ax2.set_ylim([-190, 190])
 ax2.legend()
 
 plt.show()

@@ -103,21 +103,21 @@ int imu_get_mag_raw(float raw[3]){
 	return 0;
 }
 
-int imu_get_gyro_cab(float raw[3]){
+int imu_get_gyro_cal(float raw[3]){
 	raw[0] = gam_cab[0];
 	raw[1] = gam_cab[1];
 	raw[2] = gam_cab[2];
 	return 0;
 }
 
-int imu_get_accel_cab(float raw[3]){
+int imu_get_accel_cal(float raw[3]){
 	raw[0] = gam_cab[3];
 	raw[1] = gam_cab[4];
 	raw[2] = gam_cab[5];
 	return 0;
 }
 
-int imu_get_mag_cab(float raw[3]){
+int imu_get_mag_cal(float raw[3]){
 	raw[0] = gam_cab[6];
 	raw[1] = gam_cab[7];
 	raw[2] = gam_cab[8];

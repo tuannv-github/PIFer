@@ -23,6 +23,9 @@ class TAG:
         self.mx=[]
         self.my=[]
         self.mz=[]
+        self.roll=[]
+        self.pitch=[]
+        self.yaw=[]
         try:
             os.mkdir(self.DATASET_FOLDER)
         except:
@@ -64,7 +67,7 @@ class TAG:
                 byte = serial.read()
                 msg = mav.parse_char(byte)
                 if msg is not None:
-                    if msg.id == MAVLINK_MSG_ID_EVT_GYRO_ACCEL_MAG_RAW:
+                    if msg.id == MAVLINK_MSG_ID_EVT_GYRO_ACCEL_MAG_CALIBRATED:
                         self.gx.append(msg.gx)
                         self.gy.append(msg.gy)
                         self.gz.append(msg.gz)
@@ -74,6 +77,11 @@ class TAG:
                         self.mx.append(msg.mx)
                         self.my.append(msg.my)
                         self.mz.append(msg.mz)
+                        print(msg.to_json())
+                    elif msg.id == MAVLINK_MSG_ID_EVT_RPY:
+                        self.roll.append(msg.roll)
+                        self.pitch.append(msg.pitch)
+                        self.yaw.append(msg.yaw)
                         print(msg.to_json())
             except:
                 pass
@@ -99,6 +107,13 @@ class TAG:
         np.save(self.DATASET_FOLDER + 'mx.npy', mx)
         np.save(self.DATASET_FOLDER + 'my.npy', my)
         np.save(self.DATASET_FOLDER + 'mz.npy', mz)
+
+        roll = np.array(self.roll)
+        pitch = np.array(self.pitch)
+        yaw = np.array(self.yaw)
+        np.save(self.DATASET_FOLDER + 'roll.npy', roll)
+        np.save(self.DATASET_FOLDER + 'pitch.npy', pitch)
+        np.save(self.DATASET_FOLDER + 'yaw.npy', yaw)
 
         self.stop = True
 

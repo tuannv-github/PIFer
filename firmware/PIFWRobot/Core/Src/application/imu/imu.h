@@ -28,8 +28,8 @@ int imu_get_gyro_raw(float raw[3]);
 int imu_get_accel_raw(float raw[3]);
 int imu_get_mag_raw(float raw[3]);
 
-int imu_get_gyro_cab(float raw[3]);
-int imu_get_accel_cab(float raw[3]);
-int imu_get_mag_cab(float raw[3]);
+int imu_get_gyro_cal(float raw[3]);
+int imu_get_accel_cal(float raw[3]);
+int imu_get_mag_cal(float raw[3]);
 
 #endif /* APPLICATION_IMU_IMU_H_ */
