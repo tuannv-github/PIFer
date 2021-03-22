@@ -16,24 +16,29 @@ import com.MAVLink.Messages.MAVLinkPayload;
 public class msg_distance extends MAVLinkMessage {
 
     public static final int MAVLINK_MSG_ID_DISTANCE = 24;
-    public static final int MAVLINK_MSG_LENGTH = 8;
+    public static final int MAVLINK_MSG_LENGTH = 16;
     private static final long serialVersionUID = MAVLINK_MSG_ID_DISTANCE;
 
       
     /**
      * 
      */
-    public float distance;
+    public float x;
       
     /**
      * 
      */
-    public int uwb_address;
+    public float y;
       
     /**
      * 
      */
-    public int anchor;
+    public float z;
+      
+    /**
+     * 
+     */
+    public float r;
     
 
     /**
@@ -47,9 +52,10 @@ public class msg_distance extends MAVLinkMessage {
         packet.compid = 190;
         packet.msgid = MAVLINK_MSG_ID_DISTANCE;
         
-        packet.payload.putFloat(distance);
-        packet.payload.putUnsignedShort(uwb_address);
-        packet.payload.putUnsignedShort(anchor);
+        packet.payload.putFloat(x);
+        packet.payload.putFloat(y);
+        packet.payload.putFloat(z);
+        packet.payload.putFloat(r);
         
         if (isMavlink2) {
             
@@ -66,9 +72,10 @@ public class msg_distance extends MAVLinkMessage {
     public void unpack(MAVLinkPayload payload) {
         payload.resetIndex();
         
-        this.distance = payload.getFloat();
-        this.uwb_address = payload.getUnsignedShort();
-        this.anchor = payload.getUnsignedShort();
+        this.x = payload.getFloat();
+        this.y = payload.getFloat();
+        this.z = payload.getFloat();
+        this.r = payload.getFloat();
         
         if (isMavlink2) {
             
@@ -85,27 +92,29 @@ public class msg_distance extends MAVLinkMessage {
     /**
      * Constructor for a new message, initializes msgid and all payload variables
      */
-    public msg_distance( float distance, int uwb_address, int anchor) {
+    public msg_distance( float x, float y, float z, float r) {
         this.msgid = MAVLINK_MSG_ID_DISTANCE;
 
-        this.distance = distance;
-        this.uwb_address = uwb_address;
-        this.anchor = anchor;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.r = r;
         
     }
     
     /**
      * Constructor for a new message, initializes everything
      */
-    public msg_distance( float distance, int uwb_address, int anchor, int sysid, int compid, boolean isMavlink2) {
+    public msg_distance( float x, float y, float z, float r, int sysid, int compid, boolean isMavlink2) {
         this.msgid = MAVLINK_MSG_ID_DISTANCE;
         this.sysid = sysid;
         this.compid = compid;
         this.isMavlink2 = isMavlink2;
 
-        this.distance = distance;
-        this.uwb_address = uwb_address;
-        this.anchor = anchor;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.r = r;
         
     }
 
@@ -123,13 +132,13 @@ public class msg_distance extends MAVLinkMessage {
         unpack(mavLinkPacket.payload);
     }
 
-          
+            
     /**
      * Returns a string with the MSG name and data
      */
     @Override
     public String toString() {
-        return "MAVLINK_MSG_ID_DISTANCE - sysid:"+sysid+" compid:"+compid+" distance:"+distance+" uwb_address:"+uwb_address+" anchor:"+anchor+"";
+        return "MAVLINK_MSG_ID_DISTANCE - sysid:"+sysid+" compid:"+compid+" x:"+x+" y:"+y+" z:"+z+" r:"+r+"";
     }
     
     /**

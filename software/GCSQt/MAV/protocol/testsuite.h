@@ -1393,13 +1393,14 @@ static void mavlink_test_distance(uint8_t system_id, uint8_t component_id, mavli
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
         uint16_t i;
     mavlink_distance_t packet_in = {
-        17.0,17443,17547
+        17.0,45.0,73.0,101.0
     };
     mavlink_distance_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
-        packet1.distance = packet_in.distance;
-        packet1.uwb_address = packet_in.uwb_address;
-        packet1.anchor = packet_in.anchor;
+        packet1.x = packet_in.x;
+        packet1.y = packet_in.y;
+        packet1.z = packet_in.z;
+        packet1.r = packet_in.r;
         
         
 #ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
@@ -1414,12 +1415,12 @@ static void mavlink_test_distance(uint8_t system_id, uint8_t component_id, mavli
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_distance_pack(system_id, component_id, &msg , packet1.uwb_address , packet1.anchor , packet1.distance );
+    mavlink_msg_distance_pack(system_id, component_id, &msg , packet1.x , packet1.y , packet1.z , packet1.r );
     mavlink_msg_distance_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_distance_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.uwb_address , packet1.anchor , packet1.distance );
+    mavlink_msg_distance_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.x , packet1.y , packet1.z , packet1.r );
     mavlink_msg_distance_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -1432,7 +1433,7 @@ static void mavlink_test_distance(uint8_t system_id, uint8_t component_id, mavli
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_distance_send(MAVLINK_COMM_1 , packet1.uwb_address , packet1.anchor , packet1.distance );
+    mavlink_msg_distance_send(MAVLINK_COMM_1 , packet1.x , packet1.y , packet1.z , packet1.r );
     mavlink_msg_distance_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 }

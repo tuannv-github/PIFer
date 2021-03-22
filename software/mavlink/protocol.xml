@@ -243,9 +243,10 @@
 
 		<message id="24" name="DISTANCE">
 			<description>Distance message</description>
-			<field type="uint16_t" name="uwb_address"/>
-			<field type="uint16_t" name="anchor"/>
-			<field type="float" name="distance"/>
+			<field type="float" name="x"/>
+			<field type="float" name="y"/>
+			<field type="float" name="z"/>
+			<field type="float" name="r"/>
 		</message>
 
 		<message id="25" name="TOF">
