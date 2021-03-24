@@ -7,8 +7,8 @@ import os
 
 from mavlink import *
 
-PORT = "/dev/ttyUSB1"
-# PORT = "COM9"
+# PORT = "/dev/ttyUSB0"
+PORT = "COM9"
 
 BAUD = 57600
 # BAUD = 115200
@@ -32,7 +32,7 @@ class TAG:
                 byte = serial.read()
                 msg = mav.parse_char(byte)
                 if msg is not None:
-                    if msg.id == MAVLINK_MSG_ID_DISTANCE or msg.id == MAVLINK_MSG_ID_EVT_RPY:
+                    if msg.id == MAVLINK_MSG_ID_MEASUREMENT or msg.id == MAVLINK_MSG_ID_EVT_RPY:
                         print(msg.to_json())
             except:
                 pass

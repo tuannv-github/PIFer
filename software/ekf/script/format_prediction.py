@@ -19,11 +19,11 @@ for line in input.readlines():
         y = (y*1000) + 2000
         w = (w)
         print((x,y,w))
-        output.write("F " + str(x) + " " + str(y) + " " + str(w) + "\r\n")
+        output.write("F " + str(x) + " " + str(y) + " " + str(w) + "\n")
     elif char[0] == 'E':
         cov = char[1:]
         cov = [float(c)*10**5 for c in cov]
         cov = np.array([cov[:3],cov[3:6],cov[6:]])
         elipse = get_error_ellipse(cov)
         print(elipse)
-        output.write("E " + str(elipse[0]) + " " + str(elipse[1]) + " " + str(elipse[2]) +  " " + str(cov[2][2]) + "\r\n")
+        output.write("E " + str(elipse[0]) + " " + str(elipse[1]) + " " + str(elipse[2]) +  " " + str(cov[2][2]) + "\n")

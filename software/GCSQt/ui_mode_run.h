@@ -14,6 +14,7 @@
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPlainTextEdit>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QWidget>
 
@@ -38,12 +39,17 @@ public:
     QLineEdit *txtBoxVY;
     QLineEdit *txtb_pidt_w;
     QPushButton *btn_control_enable;
+    QPushButton *btn_log;
+    QGroupBox *groupBox;
+    QPlainTextEdit *pteControl;
+    QGroupBox *groupBox_2;
+    QPlainTextEdit *pteMeasurement;
 
     void setupUi(QWidget *Mode_run)
     {
         if (Mode_run->objectName().isEmpty())
             Mode_run->setObjectName(QString::fromUtf8("Mode_run"));
-        Mode_run->resize(640, 272);
+        Mode_run->resize(640, 522);
         groupBox_11 = new QGroupBox(Mode_run);
         groupBox_11->setObjectName(QString::fromUtf8("groupBox_11"));
         groupBox_11->setGeometry(QRect(10, 40, 481, 51));
@@ -99,6 +105,21 @@ public:
         btn_control_enable = new QPushButton(Mode_run);
         btn_control_enable->setObjectName(QString::fromUtf8("btn_control_enable"));
         btn_control_enable->setGeometry(QRect(120, 10, 101, 23));
+        btn_log = new QPushButton(Mode_run);
+        btn_log->setObjectName(QString::fromUtf8("btn_log"));
+        btn_log->setGeometry(QRect(240, 10, 101, 23));
+        groupBox = new QGroupBox(Mode_run);
+        groupBox->setObjectName(QString::fromUtf8("groupBox"));
+        groupBox->setGeometry(QRect(10, 150, 301, 361));
+        pteControl = new QPlainTextEdit(groupBox);
+        pteControl->setObjectName(QString::fromUtf8("pteControl"));
+        pteControl->setGeometry(QRect(10, 20, 281, 331));
+        groupBox_2 = new QGroupBox(Mode_run);
+        groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
+        groupBox_2->setGeometry(QRect(320, 150, 311, 361));
+        pteMeasurement = new QPlainTextEdit(groupBox_2);
+        pteMeasurement->setObjectName(QString::fromUtf8("pteMeasurement"));
+        pteMeasurement->setGeometry(QRect(10, 20, 291, 331));
 
         retranslateUi(Mode_run);
 
@@ -124,6 +145,9 @@ public:
         txtBoxVY->setText(QApplication::translate("Mode_run", "0", nullptr));
         txtb_pidt_w->setText(QApplication::translate("Mode_run", "0", nullptr));
         btn_control_enable->setText(QApplication::translate("Mode_run", "Disabled", nullptr));
+        btn_log->setText(QApplication::translate("Mode_run", "Log", nullptr));
+        groupBox->setTitle(QApplication::translate("Mode_run", "Control", nullptr));
+        groupBox_2->setTitle(QApplication::translate("Mode_run", "Measurement", nullptr));
     } // retranslateUi
 
 };

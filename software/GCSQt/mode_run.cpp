@@ -8,10 +8,12 @@ Mode_run::Mode_run(QWidget *parent) :
     ui->setupUi(this);
     g_controller_timer = new QTimer(this);
     connect(g_controller_timer, SIGNAL(timeout()), this, SLOT(remote_controll_cmd()));
+    g_logging = false;
 }
 
 Mode_run::~Mode_run()
 {
+    delete g_controller_timer;
     delete ui;
 }
 
@@ -39,6 +41,26 @@ void Mode_run::mav_recv(mavlink_message_t *msg){
         mavlink_msg_evt_tilt_raw_decode(msg,&tilt_msg);
         ui->tb_tilt_cal->setText(QString::number(tilt_msg.tilt));
         break;
+    case MAVLINK_MSG_ID_CONTROL:
+        if(g_logging){
+            mavlink_control_t control;
+            mavlink_msg_control_decode(msg, &control);
+            QString line;
+            line = "C " + QString::number(control.left) + " " + QString::number(control.right) + "\n";
+            g_file_control_measurement.write(line.toStdString().c_str());
+            ui->pteControl->appendHtml(line);
+        }
+        break;
+    case MAVLINK_MSG_ID_MEASUREMENT:
+        if(g_logging){
+            mavlink_measurement_t measurement;
+            mavlink_msg_measurement_decode(msg, &measurement);
+            QString line;
+            line =  "M " + QString::number(measurement.x) + " " + QString::number(measurement.y) + " " + QString::number(measurement.z)
+                    + " " + QString::number(measurement.r) + " " + QString::number(measurement.yaw) + "\n";
+            g_file_control_measurement.write(line.toStdString().c_str());
+            ui->pteMeasurement->appendHtml(line);
+        }
     }
 }
 
@@ -78,5 +100,25 @@ void Mode_run::update_joystick(axis_t axis, double value){
         break;
     case AXIS_1:
         ui->txtb_pidt_vx->setText(QString::number(value));
+    }
+}
+
+void Mode_run::on_btn_log_clicked()
+{
+    if(g_logging){
+        g_logging = false;
+        ui->btn_log->setText("Log");
+        if(g_file_control_measurement.isOpen()){
+            g_file_control_measurement.close();
+        }
+    }
+    else{
+        g_file_control_measurement.setFileName("control_measurement.txt");
+        if(g_file_control_measurement.open(QIODevice::WriteOnly | QIODevice::Text)){
+            g_logging = true;
+            ui->btn_log->setText("Logging");
+            ui->pteMeasurement->clear();
+            ui->pteControl->clear();
+        }
     }
 }

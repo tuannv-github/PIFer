@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QTimer>
 #include <QtWidgets/QStatusBar>
+#include <QFile>
 
 #include <MAV/protocol/mavlink.h>
 #include <mode_common.h>
@@ -29,10 +30,15 @@ private slots:
     void on_btn_control_enable_clicked();
     void on_btn_change_mode_run_clicked();
 
+    void on_btn_log_clicked();
+
 private:
     Ui::Mode_run *ui;
     QTimer *g_controller_timer;
     bool g_control_enable;
+    bool g_logging;
+
+    QFile g_file_control_measurement;
 };
 
 #endif // MODE_RUN_H
