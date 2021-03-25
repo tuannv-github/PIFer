@@ -5,7 +5,6 @@
 #include <QTimer>
 #include <QtWidgets/QStatusBar>
 
-#include <MAV/protocol/mavlink.h>
 #include <mode_common.h>
 
 namespace Ui {
@@ -17,11 +16,12 @@ class Mode_pidt_tw : public Mode_common
     Q_OBJECT
 
 public:
-    explicit Mode_pidt_tw(QWidget *parent = nullptr);
+    explicit Mode_pidt_tw(QWidget *parent = nullptr, CommonObject *co = nullptr);
     ~Mode_pidt_tw();
 
     void mav_recv(mavlink_message_t *msg) override;
-    void update_joystick(axis_t axis, double value) override;
+    void update_joystick(int axis, double value) override;
+    void select() override;
 
 private slots:
     void mode_pidt_load_timeout();

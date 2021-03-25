@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui serialport network gamepad printsupport
+QT       += core gui serialport network gamepad printsupport opengl datavisualization
 UI_DIR = $$PWD
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -26,52 +26,80 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+    QCustomPlot/qcustomplot.cpp \
+    QPlot3D/QPlot3D.cpp \
     com.cpp \
     com_gui.cpp \
+    commonobject.cpp \
     led_indicator.cpp \
     main.cpp \
     mainwindow.cpp \
-    appmain.cpp \
     mode_common.cpp \
     mode_hw_tw.cpp \
     mode_imu.cpp \
     mode_pidt_ta.cpp \
     mode_pidt_tw.cpp \
     mode_run.cpp \
-    qcustomplot/qcustomplot.cpp
 
 HEADERS += \
-    MAV/checksum.h \
-    MAV/mavlink_conversions.h \
-    MAV/mavlink_helpers.h \
-    MAV/mavlink_types.h \
-    MAV/protocol.h \
-    MAV/protocol/mavlink.h \
-    MAV/protocol/mavlink_msg_cmd_change_mode.h \
-    MAV/protocol/mavlink_msg_cmd_encoder_invert.h \
-    MAV/protocol/mavlink_msg_cmd_hw.h \
-    MAV/protocol/mavlink_msg_cmd_motor_invert.h \
-    MAV/protocol/mavlink_msg_cmd_params.h \
-    MAV/protocol/mavlink_msg_cmd_velocity.h \
-    MAV/protocol/mavlink_msg_evt_accel_raw.h \
-    MAV/protocol/mavlink_msg_evt_gyro_raw.h \
-    MAV/protocol/mavlink_msg_evt_imu_raw.h \
-    MAV/protocol/mavlink_msg_evt_mag_raw.h \
-    MAV/protocol/mavlink_msg_evt_rpy.h \
-    MAV/protocol/mavlink_msg_evt_sensor.h \
-    MAV/protocol/mavlink_msg_evt_tilt.h \
-    MAV/protocol/mavlink_msg_hw_params.h \
-    MAV/protocol/mavlink_msg_imu_calibration_params.h \
-    MAV/protocol/mavlink_msg_imu_params.h \
-    MAV/protocol/mavlink_msg_motor_speed.h \
-    MAV/protocol/mavlink_msg_pid_params.h \
-    MAV/protocol/mavlink_msg_pid_report.h \
-    MAV/protocol/mavlink_msg_respond.h \
-    MAV/protocol/protocol.h \
-    MAV/protocol/testsuite.h \
-    MAV/protocol/version.h \
+    MAVLink/checksum.h \
+    MAVLink/mavlink_conversions.h \
+    MAVLink/mavlink_helpers.h \
+    MAVLink/mavlink_types.h \
+    MAVLink/protocol.h \
+    MAVLink/protocol/mavlink.h \
+    MAVLink/protocol/mavlink_msg_accel_params.h \
+    MAVLink/protocol/mavlink_msg_ble_mesh.h \
+    MAVLink/protocol/mavlink_msg_blink.h \
+    MAVLink/protocol/mavlink_msg_cmd_change_mode.h \
+    MAVLink/protocol/mavlink_msg_cmd_encoder_invert.h \
+    MAVLink/protocol/mavlink_msg_cmd_hw.h \
+    MAVLink/protocol/mavlink_msg_cmd_motor_invert.h \
+    MAVLink/protocol/mavlink_msg_cmd_params.h \
+    MAVLink/protocol/mavlink_msg_cmd_velocity.h \
+    MAVLink/protocol/mavlink_msg_comp_filter_params.h \
+    MAVLink/protocol/mavlink_msg_control.h \
+    MAVLink/protocol/mavlink_msg_control_measurement.h \
+    MAVLink/protocol/mavlink_msg_distance.h \
+    MAVLink/protocol/mavlink_msg_evt_accel_raw.h \
+    MAVLink/protocol/mavlink_msg_evt_calibrated_gyro_raw.h \
+    MAVLink/protocol/mavlink_msg_evt_gyro_accel_mag_calibrated.h \
+    MAVLink/protocol/mavlink_msg_evt_gyro_accel_mag_raw.h \
+    MAVLink/protocol/mavlink_msg_evt_gyro_raw.h \
+    MAVLink/protocol/mavlink_msg_evt_imu_raw.h \
+    MAVLink/protocol/mavlink_msg_evt_mag_raw.h \
+    MAVLink/protocol/mavlink_msg_evt_rpy.h \
+    MAVLink/protocol/mavlink_msg_evt_sensor.h \
+    MAVLink/protocol/mavlink_msg_evt_tilt.h \
+    MAVLink/protocol/mavlink_msg_evt_tilt_cal.h \
+    MAVLink/protocol/mavlink_msg_evt_tilt_raw.h \
+    MAVLink/protocol/mavlink_msg_filter_params.h \
+    MAVLink/protocol/mavlink_msg_gyro_params.h \
+    MAVLink/protocol/mavlink_msg_hw_params.h \
+    MAVLink/protocol/mavlink_msg_imu_calibration_params.h \
+    MAVLink/protocol/mavlink_msg_imu_params.h \
+    MAVLink/protocol/mavlink_msg_location.h \
+    MAVLink/protocol/mavlink_msg_location_reduced.h \
+    MAVLink/protocol/mavlink_msg_mag_params.h \
+    MAVLink/protocol/mavlink_msg_measurement.h \
+    MAVLink/protocol/mavlink_msg_motor_speed.h \
+    MAVLink/protocol/mavlink_msg_motor_speed_step.h \
+    MAVLink/protocol/mavlink_msg_onoff.h \
+    MAVLink/protocol/mavlink_msg_pid_params.h \
+    MAVLink/protocol/mavlink_msg_pid_report.h \
+    MAVLink/protocol/mavlink_msg_respond.h \
+    MAVLink/protocol/mavlink_msg_slot.h \
+    MAVLink/protocol/mavlink_msg_tag.h \
+    MAVLink/protocol/mavlink_msg_tof.h \
+    MAVLink/protocol/protocol.h \
+    MAVLink/protocol/testsuite.h \
+    MAVLink/protocol/version.h \
+    QCustomPlot/qcustomplot.h \
+    QPlot3D/QPlot3D.h \
+    QPlot3D/QPlot3D.h \
     com.h \
     com_gui.h \
+    commonobject.h \
     led_indicator.h \
     mainwindow.h \
     mainwindow.h \

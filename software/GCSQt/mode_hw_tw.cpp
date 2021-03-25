@@ -1,19 +1,23 @@
 #include "mode_hw_tw.h"
 #include "ui_mode_hw_tw.h"
 
-Mode_hw_tw::Mode_hw_tw(QWidget *parent) :
-    Mode_common(parent),
+Mode_hw_tw::Mode_hw_tw(QWidget *parent, CommonObject *co) :
+    Mode_common(parent, co),
     ui(new Ui::Mode_hw_tw)
 {
     ui->setupUi(this);
-
-    g_mode_name = "hardware";
+    g_mode_name = "Mode hardware";
 }
 
 Mode_hw_tw::~Mode_hw_tw()
 {
     delete ui;
 }
+
+void Mode_hw_tw::select(){
+//   clear_drawing_area();
+}
+
 
 void Mode_hw_tw::mav_recv(mavlink_message_t *msg){
     switch(msg->msgid) {

@@ -1,11 +1,13 @@
 #include "mode_pidt_tw.h"
 #include "ui_mode_pidt_tw.h"
 
-Mode_pidt_tw::Mode_pidt_tw(QWidget *parent) :
-    Mode_common(parent),
+Mode_pidt_tw::Mode_pidt_tw(QWidget *parent, CommonObject *co) :
+    Mode_common(parent, co),
     ui(new Ui::Mode_pidt_tw)
 {
     ui->setupUi(this);
+    g_mode_name = "Mode PID tuning";
+
     g_controller_timer = new QTimer(this);
     connect(g_controller_timer, SIGNAL(timeout()), this, SLOT(remote_control_pidt()));
 
@@ -16,11 +18,33 @@ Mode_pidt_tw::Mode_pidt_tw(QWidget *parent) :
     pid_tilt = QVector<QVector<double>>(5);
     pid_vel = QVector<QVector<double>>(5);
     pid_pos = QVector<QVector<double>>(5);
+
+    g_custom_plot.append(new QCustomPlot());
+    g_custom_plot.append(new QCustomPlot());
+    g_custom_plot.append(new QCustomPlot());
+    g_custom_plot.append(new QCustomPlot());
+    g_custom_plot.append(new QCustomPlot());
+    g_custom_plot.append(new QCustomPlot());
+    for(int i=0; i<g_custom_plot.size(); i++){
+        for(int j=0; j<5; j++){
+            g_custom_plot[i]->addGraph();
+            g_custom_plot[i]->graph(j)->setPen(QPen(QColor(qSin(j*1+1.2)*80+80, qSin(j*0.3+0)*80+80, qSin(j*0.3+1.5)*80+80), 2));
+        }
+    }
+
+
 }
 
 Mode_pidt_tw::~Mode_pidt_tw()
 {
     delete ui;
+}
+
+void Mode_pidt_tw::select(){
+   clear_drawing_area();
+   for (auto &custom_plot : g_custom_plot){
+        g_co->drawing_area->addWidget(custom_plot, g_custom_plot.indexOf(custom_plot)/2, g_custom_plot.indexOf(custom_plot)%2);
+   }
 }
 
 void Mode_pidt_tw::mav_recv(mavlink_message_t *msg){
@@ -110,8 +134,8 @@ void Mode_pidt_tw::pid_report_recv(mavlink_message_t *msg){
         pid_tilt[4].append(static_cast<double>(pid_report_msg.U));
         truncate_matrix(pid_tilt);
 
-        pid_plot(tilt_cnt, pid_tilt_sp_fb, g_q_custom_plot[0]);
-        pid_plot(tilt_cnt, pid_tilt, g_q_custom_plot[1]);
+        pid_plot(tilt_cnt, pid_tilt_sp_fb, g_co->getCustomPlot()[0]);
+        pid_plot(tilt_cnt, pid_tilt, g_co->getCustomPlot()[1]);
 
         tilt_cnt++;
         break;
@@ -128,8 +152,8 @@ void Mode_pidt_tw::pid_report_recv(mavlink_message_t *msg){
         pid_vel[4].append(static_cast<double>(pid_report_msg.U));
         truncate_matrix(pid_vel);
 
-        pid_plot(vel_cnt, pid_vel_sp_fb, g_q_custom_plot[2]);
-        pid_plot(vel_cnt, pid_vel, g_q_custom_plot[3]);
+        pid_plot(vel_cnt, pid_vel_sp_fb, g_co->getCustomPlot()[2]);
+        pid_plot(vel_cnt, pid_vel, g_co->getCustomPlot()[3]);
 
         vel_cnt++;
         break;
@@ -146,8 +170,8 @@ void Mode_pidt_tw::pid_report_recv(mavlink_message_t *msg){
         pid_pos[4].append(static_cast<double>(pid_report_msg.U));
         truncate_matrix(pid_pos);
 
-        pid_plot(pos_cnt,pid_pos_sp_fb, g_q_custom_plot[4]);
-        pid_plot(pos_cnt,pid_pos, g_q_custom_plot[5]);
+        pid_plot(pos_cnt,pid_pos_sp_fb, g_co->getCustomPlot()[4]);
+        pid_plot(pos_cnt,pid_pos, g_co->getCustomPlot()[5]);
 
         pos_cnt++;
         break;
@@ -312,12 +336,12 @@ void Mode_pidt_tw::on_btn_change_mode_pidt_clicked()
     emit mode_change(MODE_PIDT_TW);
 }
 
-void Mode_pidt_tw::update_joystick(axis_t axis, double value){
+void Mode_pidt_tw::update_joystick(int axis, double value){
     switch (axis){
-    case AXIS_0:
+    case 0:
         ui->txtb_pidt_w->setText(QString::number(value));
         break;
-    case AXIS_1:
+    case 1:
         ui->txtb_pidt_vx->setText(QString::number(value));
     }
 }

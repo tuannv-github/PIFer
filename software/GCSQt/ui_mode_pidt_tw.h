@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mode_pidt_tw.ui'
 **
-** Created by: Qt User Interface Compiler version 5.15.0
+** Created by: Qt User Interface Compiler version 5.12.10
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -296,44 +296,44 @@ public:
 
     void retranslateUi(QWidget *Mode_pidt_tw)
     {
-        Mode_pidt_tw->setWindowTitle(QCoreApplication::translate("Mode_pidt_tw", "Form", nullptr));
-        btn_change_mode_pidt->setText(QCoreApplication::translate("Mode_pidt_tw", "Mode PIDT", nullptr));
-        groupBox_13->setTitle(QCoreApplication::translate("Mode_pidt_tw", "Velocity Control", nullptr));
-        label_55->setText(QCoreApplication::translate("Mode_pidt_tw", "KP:", nullptr));
-        label_80->setText(QCoreApplication::translate("Mode_pidt_tw", "KI:", nullptr));
-        label_81->setText(QCoreApplication::translate("Mode_pidt_tw", "KD:", nullptr));
-        label_82->setText(QCoreApplication::translate("Mode_pidt_tw", "Step:", nullptr));
-        label_83->setText(QCoreApplication::translate("Mode_pidt_tw", "Step:", nullptr));
-        label_84->setText(QCoreApplication::translate("Mode_pidt_tw", "Step:", nullptr));
-        btn_mode_pidt_write_params_pidt_vel->setText(QCoreApplication::translate("Mode_pidt_tw", "Write", nullptr));
-        groupBox_17->setTitle(QCoreApplication::translate("Mode_pidt_tw", "Tilt Control", nullptr));
-        label_85->setText(QCoreApplication::translate("Mode_pidt_tw", "KP:", nullptr));
-        label_86->setText(QCoreApplication::translate("Mode_pidt_tw", "KI:", nullptr));
-        label_87->setText(QCoreApplication::translate("Mode_pidt_tw", "KD:", nullptr));
-        label_88->setText(QCoreApplication::translate("Mode_pidt_tw", "Step:", nullptr));
-        label_89->setText(QCoreApplication::translate("Mode_pidt_tw", "Step:", nullptr));
-        label_90->setText(QCoreApplication::translate("Mode_pidt_tw", "Step:", nullptr));
-        btn_mode_pidt_write_params_pidt_tilt->setText(QCoreApplication::translate("Mode_pidt_tw", "Write", nullptr));
-        cb_vel_pos_pidt->setItemText(0, QCoreApplication::translate("Mode_pidt_tw", "Velocity Control", nullptr));
-        cb_vel_pos_pidt->setItemText(1, QCoreApplication::translate("Mode_pidt_tw", "Position Control", nullptr));
+        Mode_pidt_tw->setWindowTitle(QApplication::translate("Mode_pidt_tw", "Form", nullptr));
+        btn_change_mode_pidt->setText(QApplication::translate("Mode_pidt_tw", "Mode PIDT", nullptr));
+        groupBox_13->setTitle(QApplication::translate("Mode_pidt_tw", "Velocity Control", nullptr));
+        label_55->setText(QApplication::translate("Mode_pidt_tw", "KP:", nullptr));
+        label_80->setText(QApplication::translate("Mode_pidt_tw", "KI:", nullptr));
+        label_81->setText(QApplication::translate("Mode_pidt_tw", "KD:", nullptr));
+        label_82->setText(QApplication::translate("Mode_pidt_tw", "Step:", nullptr));
+        label_83->setText(QApplication::translate("Mode_pidt_tw", "Step:", nullptr));
+        label_84->setText(QApplication::translate("Mode_pidt_tw", "Step:", nullptr));
+        btn_mode_pidt_write_params_pidt_vel->setText(QApplication::translate("Mode_pidt_tw", "Write", nullptr));
+        groupBox_17->setTitle(QApplication::translate("Mode_pidt_tw", "Tilt Control", nullptr));
+        label_85->setText(QApplication::translate("Mode_pidt_tw", "KP:", nullptr));
+        label_86->setText(QApplication::translate("Mode_pidt_tw", "KI:", nullptr));
+        label_87->setText(QApplication::translate("Mode_pidt_tw", "KD:", nullptr));
+        label_88->setText(QApplication::translate("Mode_pidt_tw", "Step:", nullptr));
+        label_89->setText(QApplication::translate("Mode_pidt_tw", "Step:", nullptr));
+        label_90->setText(QApplication::translate("Mode_pidt_tw", "Step:", nullptr));
+        btn_mode_pidt_write_params_pidt_tilt->setText(QApplication::translate("Mode_pidt_tw", "Write", nullptr));
+        cb_vel_pos_pidt->setItemText(0, QApplication::translate("Mode_pidt_tw", "Velocity Control", nullptr));
+        cb_vel_pos_pidt->setItemText(1, QApplication::translate("Mode_pidt_tw", "Position Control", nullptr));
 
-        groupBox_18->setTitle(QCoreApplication::translate("Mode_pidt_tw", "Position Control", nullptr));
-        label_91->setText(QCoreApplication::translate("Mode_pidt_tw", "KP:", nullptr));
-        label_92->setText(QCoreApplication::translate("Mode_pidt_tw", "KI:", nullptr));
-        label_93->setText(QCoreApplication::translate("Mode_pidt_tw", "KD:", nullptr));
-        label_94->setText(QCoreApplication::translate("Mode_pidt_tw", "Step:", nullptr));
-        label_95->setText(QCoreApplication::translate("Mode_pidt_tw", "Step:", nullptr));
-        label_96->setText(QCoreApplication::translate("Mode_pidt_tw", "Step:", nullptr));
-        btn_mode_pidt_write_params_pidt_pos->setText(QCoreApplication::translate("Mode_pidt_tw", "Write", nullptr));
-        btn_mode_pidt_save_params->setText(QCoreApplication::translate("Mode_pidt_tw", "Save", nullptr));
-        btn_mode_pidt_load_params->setText(QCoreApplication::translate("Mode_pidt_tw", "Load", nullptr));
-        btn_mode_pidt_write_params->setText(QCoreApplication::translate("Mode_pidt_tw", "Write", nullptr));
-        groupBox_4->setTitle(QCoreApplication::translate("Mode_pidt_tw", "Control", nullptr));
-        label_34->setText(QCoreApplication::translate("Mode_pidt_tw", "VX:", nullptr));
-        txtb_pidt_vx->setText(QCoreApplication::translate("Mode_pidt_tw", "0", nullptr));
-        label_35->setText(QCoreApplication::translate("Mode_pidt_tw", "W:", nullptr));
-        txtb_pidt_w->setText(QCoreApplication::translate("Mode_pidt_tw", "0", nullptr));
-        btn_control_enable->setText(QCoreApplication::translate("Mode_pidt_tw", "Disabled", nullptr));
+        groupBox_18->setTitle(QApplication::translate("Mode_pidt_tw", "Position Control", nullptr));
+        label_91->setText(QApplication::translate("Mode_pidt_tw", "KP:", nullptr));
+        label_92->setText(QApplication::translate("Mode_pidt_tw", "KI:", nullptr));
+        label_93->setText(QApplication::translate("Mode_pidt_tw", "KD:", nullptr));
+        label_94->setText(QApplication::translate("Mode_pidt_tw", "Step:", nullptr));
+        label_95->setText(QApplication::translate("Mode_pidt_tw", "Step:", nullptr));
+        label_96->setText(QApplication::translate("Mode_pidt_tw", "Step:", nullptr));
+        btn_mode_pidt_write_params_pidt_pos->setText(QApplication::translate("Mode_pidt_tw", "Write", nullptr));
+        btn_mode_pidt_save_params->setText(QApplication::translate("Mode_pidt_tw", "Save", nullptr));
+        btn_mode_pidt_load_params->setText(QApplication::translate("Mode_pidt_tw", "Load", nullptr));
+        btn_mode_pidt_write_params->setText(QApplication::translate("Mode_pidt_tw", "Write", nullptr));
+        groupBox_4->setTitle(QApplication::translate("Mode_pidt_tw", "Control", nullptr));
+        label_34->setText(QApplication::translate("Mode_pidt_tw", "VX:", nullptr));
+        txtb_pidt_vx->setText(QApplication::translate("Mode_pidt_tw", "0", nullptr));
+        label_35->setText(QApplication::translate("Mode_pidt_tw", "W:", nullptr));
+        txtb_pidt_w->setText(QApplication::translate("Mode_pidt_tw", "0", nullptr));
+        btn_control_enable->setText(QApplication::translate("Mode_pidt_tw", "Disabled", nullptr));
     } // retranslateUi
 
 };

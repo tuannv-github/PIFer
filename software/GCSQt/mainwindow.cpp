@@ -19,19 +19,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(g_qjs,SIGNAL(axisChanged(const int, const int, const qreal)),this,SLOT(js_axis_change(const int, const int, const qreal)));
 
     // Prepare plotter
-    g_q_custom_plot.append(ui->plot_0);
-    g_q_custom_plot.append(ui->plot_1);
-    g_q_custom_plot.append(ui->plot_2);
-    g_q_custom_plot.append(ui->plot_3);
-    g_q_custom_plot.append(ui->plot_4);
-    g_q_custom_plot.append(ui->plot_5);
 
-    for(int i=0; i<g_q_custom_plot.size(); i++){
-        for(int j=0; j<5; j++){
-            g_q_custom_plot[i]->addGraph();
-            g_q_custom_plot[i]->graph(j)->setPen(QPen(QColor(qSin(j*1+1.2)*80+80, qSin(j*0.3+0)*80+80, qSin(j*0.3+1.5)*80+80), 2));
-        }
-    }
+
 
     // Com
     g_com_gui = new Com_gui();
@@ -41,54 +30,26 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->wg_com->set_com_gui(g_com_gui);
     ui->wg_com->set_led_indicator(g_led_indicator);
 
-    // Run mode
-    g_mode_run = new Mode_run();
-    g_mode_run->set_status_bar(ui->statusBar);
-    g_mode_run->set_plotter(g_q_custom_plot);
+    g_co.setStatusBar(ui->statusBar);
+    g_co.setDrawingArea(ui->glDrawer);
 
-    // Imu mode
-    g_mode_imu = new Mode_imu();
-    g_mode_imu->set_status_bar(ui->statusBar);
-    g_mode_imu->set_plotter(g_q_custom_plot);
+    g_mode.append(new Mode_run(this, &g_co));
+    g_mode.append(new Mode_hw_tw(this, &g_co));
+    g_mode.append(new Mode_imu(this, &g_co));
+    g_mode.append(new Mode_pidt_tw(this, &g_co));
+    g_mode.append(new Mode_pidt_ta(this, &g_co));
 
-    // PID mode of tw robot
-    g_mode_pidt_tw = new Mode_pidt_tw();
-    g_mode_pidt_tw->set_status_bar(ui->statusBar);
-    g_mode_pidt_tw->set_plotter(g_q_custom_plot);
+    for (Mode_common* &mode : g_mode){
+        ui->Maintab->addTab(mode, mode->getName());
+        // Mode change
+        connect(mode,SIGNAL(mode_change(rmode_t)),this,SLOT(app_command_change_mode(rmode_t)));
+        // Message forwarding: mode -> main -> com
+        connect(mode,SIGNAL(mav_send(QByteArray)),this,SLOT(app_main_message_forward(QByteArray)));
+    }
+    connect(ui->Maintab, SIGNAL(currentChanged(int)), this, SLOT(onCurrentChanged(int)));
+    g_mode[0]->select();
 
-    // PID mode of ta robot
-    g_mode_pidt_ta = new Mode_pidt_ta();
-    g_mode_pidt_ta->set_status_bar(ui->statusBar);
-    g_mode_pidt_ta->set_plotter(g_q_custom_plot);
-
-    // Hardware mode
-    g_mode_hw_tw = new Mode_hw_tw();
-    g_mode_hw_tw->set_status_bar(ui->statusBar);
-    g_mode_hw_tw->set_plotter(g_q_custom_plot);
-
-    // Add mode tab
-    ui->Maintab->addTab(g_mode_run,"Mode Run");
-    ui->Maintab->addTab(g_mode_imu,"Mode IMU");
-    ui->Maintab->addTab(g_mode_hw_tw,"Mode HW");
-    ui->Maintab->addTab(g_mode_pidt_tw,"Mode PIDT TW");
-    ui->Maintab->addTab(g_mode_pidt_ta,"Mode PIDT TA");
-    ui->Maintab->addTab(g_com_gui,"Com");
-
-    // Mode change
-    connect(g_mode_run,SIGNAL(mode_change(rmode_t)),this,SLOT(app_command_change_mode(rmode_t)));
-    connect(g_mode_imu,SIGNAL(mode_change(rmode_t)),this,SLOT(app_command_change_mode(rmode_t)));
-    connect(g_mode_hw_tw,SIGNAL(mode_change(rmode_t)),this,SLOT(app_command_change_mode(rmode_t)));
-    connect(g_mode_pidt_tw,SIGNAL(mode_change(rmode_t)),this,SLOT(app_command_change_mode(rmode_t)));
-    connect(g_mode_pidt_ta,SIGNAL(mode_change(rmode_t)),this,SLOT(app_command_change_mode(rmode_t)));
-
-    // Message forwarding: mode -> main -> com
-    connect(g_mode_run,SIGNAL(mav_send(QByteArray)),this,SLOT(app_main_message_forward(QByteArray)));
-    connect(g_mode_hw_tw,SIGNAL(mav_send(QByteArray)),this,SLOT(app_main_message_forward(QByteArray)));
-    connect(g_mode_imu,SIGNAL(mav_send(QByteArray)),this,SLOT(app_main_message_forward(QByteArray)));
-    connect(g_mode_pidt_tw,SIGNAL(mav_send(QByteArray)),this,SLOT(app_main_message_forward(QByteArray)));
-    connect(g_mode_pidt_ta,SIGNAL(mav_send(QByteArray)),this,SLOT(app_main_message_forward(QByteArray)));
-
-    app_main_init();
+    g_current_mode = MODE_RUN;
 }
 
 MainWindow::~MainWindow()
@@ -131,14 +92,95 @@ void MainWindow::com_connection_evt(Com::com_evt_t evt){
 
 void MainWindow::js_axis_change(const int js, const int axis, const qreal value){
     Q_UNUSED(js)
-    if(axis == 0){
-        g_mode_pidt_tw->update_joystick(Mode_common::AXIS_0, -value);
-        g_mode_pidt_ta->update_joystick(Mode_common::AXIS_0, -value);
-        g_mode_run->update_joystick(Mode_common::AXIS_0, -value);
+    for (Mode_common* &mode : g_mode){
+        mode->update_joystick(axis, -value);
     }
-    else if(axis == 1){
-        g_mode_pidt_tw->update_joystick(Mode_common::AXIS_1, -value);
-        g_mode_pidt_ta->update_joystick(Mode_common::AXIS_1, -value);
-        g_mode_run->update_joystick(Mode_common::AXIS_1, -value);
+}
+
+void MainWindow::app_main_on_data_recv(QByteArray bytes){
+    for(uint16_t i = 0; i < bytes.size(); i++){
+        uint8_t msg_received = mavlink_parse_char(MAVLINK_COMM_0, static_cast<uint8_t>(bytes[i]), &msg, &status);
+        if(msg_received == 1){
+            if(msg.msgid == MAVLINK_MSG_ID_RESPOND && g_is_changing_mode){
+                g_is_changing_mode = false;
+                mavlink_respond_t evt_respond;
+                mavlink_msg_respond_decode(&msg, &evt_respond);
+                if(evt_respond.respond == RESPOND_OK){
+                    g_change_mode_success = true;
+                    show_status("Succeed to change mode",1000);
+                    switch (g_change_to_mode) {
+                    case MODE_RUN:
+                        g_current_mode = MODE_RUN;
+                        break;
+                    case MODE_IMU:
+                        g_current_mode = MODE_IMU;
+                        break;
+                    case MODE_PIDT_TW:
+                        g_current_mode = MODE_PIDT_TW;
+                        break;
+                    case MODE_PIDT_TA:
+                        g_current_mode = MODE_PIDT_TA;
+                        break;
+                    case MODE_HW:
+                        g_current_mode = MODE_HW;
+                        break;
+                    default:
+                        break;
+                    }
+                }
+                qDebug() << "Mode: " << g_current_mode;
+            }
+            else{
+                switch (g_current_mode) {
+                case MODE_RUN:
+                    g_mode_run->mav_recv(&msg);
+                    break;
+                case MODE_IMU:
+                    g_mode_imu->mav_recv(&msg);
+                    break;
+                case MODE_PIDT_TW:
+                    g_mode_pidt_tw->mav_recv(&msg);
+                    break;
+                case MODE_PIDT_TA:
+                    g_mode_pidt_ta->mav_recv(&msg);
+                    break;
+                case MODE_HW:
+                    g_mode_hw_tw->mav_recv(&msg);
+                    break;
+                default:
+                    break;
+                }
+            }
+        }
     }
+}
+
+void MainWindow::app_main_message_forward(QByteArray bytes){
+    g_com_gui->send(bytes);
+}
+
+void MainWindow::app_command_change_mode_timeout(){
+    g_is_changing_mode = false;
+    if(!g_change_mode_success){
+        show_status("Unable to change mode",1000);
+    }
+}
+
+void MainWindow::app_command_change_mode(rmode_t mode){
+    g_is_changing_mode = true;
+    g_change_to_mode = mode;
+    g_change_mode_success = false;
+
+    mavlink_message_t msg;
+    uint8_t gmav_send_buf[255];
+    mavlink_msg_cmd_change_mode_pack(0,0,&msg, mode);
+    uint16_t len = mavlink_msg_to_send_buffer(gmav_send_buf, &msg);
+
+    show_status("Changing mode",1000);
+    ui->wg_com->send(gmav_send_buf,len);
+    QTimer::singleShot(1000, this, SLOT(app_command_change_mode_timeout()));
+}
+
+void MainWindow::onCurrentChanged(int index){
+    g_mode[index]->select();
 }

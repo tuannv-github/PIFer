@@ -14,10 +14,11 @@ class Mode_hw_tw : public Mode_common
     Q_OBJECT
 
 public:
-    explicit Mode_hw_tw(QWidget *parent = nullptr);
+    explicit Mode_hw_tw(QWidget *parent = nullptr, CommonObject *co = nullptr);
     ~Mode_hw_tw() override;
 
     void mav_recv(mavlink_message_t *msg) override;
+    void select() override;
 
 private slots:
     void on_btn_change_mode_hw_clicked();

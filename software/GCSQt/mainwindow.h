@@ -6,10 +6,10 @@
 #include <QTimer>
 #include <QtGamepad/QGamepad>
 
-#include "MAV/protocol/mavlink.h"
+#include "MAVLink/protocol/mavlink.h"
 #include "led_indicator.h"
 #include <QJoysticks.h>
-#include <qcustomplot/qcustomplot.h>
+#include <QCustomPlot/qcustomplot.h>
 
 #include <com.h>
 #include <mode_run.h>
@@ -32,7 +32,7 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-private slots:
+public slots:
 
     // Com
     void app_main_on_data_recv(QByteArray bytes);
@@ -44,6 +44,7 @@ private slots:
     // Mode
     void app_command_change_mode(rmode_t mode);
     void app_command_change_mode_timeout();
+    void onCurrentChanged(int index);
 
     // Mode messgage forward
     void app_main_message_forward(QByteArray bytes);
@@ -54,8 +55,9 @@ private:
     QJoysticks *g_qjs;
     Com_gui *g_com_gui;
     Led_indicator *g_led_indicator;
-    QVector<QCustomPlot*> g_q_custom_plot;
+    CommonObject g_co;
 
+    QVector<Mode_common*> g_mode;
     Mode_run *g_mode_run;
     Mode_imu *g_mode_imu;
     Mode_pidt_tw *g_mode_pidt_tw;
@@ -72,7 +74,6 @@ private:
     mavlink_status_t  status;
 
     void show_status(QString qstr, int timeout);
-    void app_main_init();
 };
 
 #endif // MAINWINDOW_H

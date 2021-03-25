@@ -1,20 +1,72 @@
 #include "mode_run.h"
 #include "ui_mode_run.h"
 
-Mode_run::Mode_run(QWidget *parent) :
-    Mode_common(parent),
+Mode_run::Mode_run(QWidget *parent, CommonObject *co) :
+    Mode_common(parent, co),
     ui(new Ui::Mode_run)
 {
     ui->setupUi(this);
+    g_mode_name = "Mode run";
+
     g_controller_timer = new QTimer(this);
     connect(g_controller_timer, SIGNAL(timeout()), this, SLOT(remote_controll_cmd()));
     g_logging = false;
+
+    g_3d_scatter = new Q3DScatter();
+    g_input_handler = new Q3DInputHandler();
+    g_3d_container = QWidget::createWindowContainer(g_3d_scatter);
+    g_3d_scatter->setActiveInputHandler(g_input_handler);
+
+    g_3d_scatter->scene()->activeCamera()->setZoomLevel(150.0f);
+    g_3d_scatter->scene()->activeCamera()->setCameraPreset( Q3DCamera::CameraPresetBehindBelow);
+
+    QScatter3DSeries *series = new QScatter3DSeries;
+    QScatterDataArray data;
+    data << QVector3D(0.0f, 0.0f, 3.0f) << QVector3D(13.2f, 0.0f, 3.0f) << QVector3D(13.2f, 3.6f, 3.0f) << QVector3D(0.0f, 3.6f, 3.0f);
+    series->setItemSize(0.2);
+    series->dataProxy()->addItems(data);
+    g_3d_scatter->addSeries(series);
+
+    data.clear();
+    series = new QScatter3DSeries;
+    data << QVector3D(0.0f, 0.0f, 0.0f) << QVector3D(13.2f, 0.0f, 0.0f) << QVector3D(13.2f, 3.6f, 0.0f) << QVector3D(0.0f, 3.6f, 0.0f);
+    series->dataProxy()->addItems(data);
+    series->setBaseColor(QColor(0,255,0));
+    series->setItemSize(0.01);
+    g_3d_scatter->addSeries(series);
+
+//    data.clear();
+//    series = new QScatter3DSeries;
+//    data << QVector3D(2.0f, 2.0f, 0.0f);
+//    series->dataProxy()->addItems(data);
+//    series->setBaseColor(QColor(255,0,0));
+//    series->setItemSize(0.1);
+//    g_3d_scatter->addSeries(series);
+
+    g_plot_3d = new QPlot3D();
+    QCurve3D *skeleton = new QCurve3D();
+    skeleton->addData(0,0,0);
+    skeleton->addData(QVector3D(13.2,0,0));
+    skeleton->addData(QVector3D(13.2,3.6,0));
+    skeleton->addData(QVector3D(0,3.6,0));
+    skeleton->addData(QVector3D(0,0,3));
+    skeleton->addData(QVector3D(13.2,0,3));
+    skeleton->addData(QVector3D(13.2,3.6,3));
+    skeleton->addData(QVector3D(0,3.6,3));
+    skeleton->setColor(Qt::green);
+    g_plot_3d->addCurve(skeleton);
 }
 
 Mode_run::~Mode_run()
 {
     delete g_controller_timer;
     delete ui;
+}
+
+void Mode_run::select(){
+   clear_drawing_area();
+   g_co->drawing_area->addWidget(g_3d_container);
+//   g_co->drawing_area->addWidget(g_plot_3d);
 }
 
 void Mode_run::mav_recv(mavlink_message_t *msg){
@@ -93,12 +145,12 @@ void Mode_run::on_btn_change_mode_run_clicked()
     emit mode_change(MODE_RUN);
 }
 
-void Mode_run::update_joystick(axis_t axis, double value){
+void Mode_run::update_joystick(int axis, double value){
     switch (axis){
-    case AXIS_0:
+    case 0:
         ui->txtb_pidt_w->setText(QString::number(value));
         break;
-    case AXIS_1:
+    case 1:
         ui->txtb_pidt_vx->setText(QString::number(value));
     }
 }

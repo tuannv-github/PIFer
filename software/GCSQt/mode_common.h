@@ -3,31 +3,31 @@
 
 #include <QTimer>
 #include <QtWidgets/QStatusBar>
-
-#include <MAV/protocol/mavlink.h>
-#include <qcustomplot/qcustomplot.h>
+#include <MAVLink/protocol/mavlink.h>
+#include <QCustomPlot/qcustomplot.h>
+#include <Q3DScatter>
+#include <Q3DInputHandler>
+#include <commonobject.h>
+#include <Q3DInputHandler>
+#include <QPlot3D/QPlot3D.h>
 
 #define PID_VECTOR_LEN  40
+
+using namespace QtDataVisualization;
 
 class Mode_common : public QWidget
 {
     Q_OBJECT
 
 public:
-    Mode_common(QWidget *parent);
+    Mode_common(QWidget *parent, CommonObject *co);
     virtual ~Mode_common();
 
-    typedef enum{
-        AXIS_0,
-        AXIS_1,
-    }axis_t;
-
     virtual void mav_recv(mavlink_message_t *msg);
-    virtual void update_joystick(axis_t axis, double value);
+    virtual void update_joystick(int axis, double value);
+    virtual void select();
 
-    void set_status_bar(QStatusBar *q_status_bar);
-    void set_plotter(QVector<QCustomPlot*> q_custom_plot);
-
+    QString getName();
 protected:
 
     typedef enum{
@@ -38,7 +38,13 @@ protected:
 
     bool g_does_st_successfullly = true;
     QString g_mode_name = "";
-    QVector<QCustomPlot*> g_q_custom_plot;
+    CommonObject *g_co;
+
+    QVector<QCustomPlot*> g_custom_plot;
+    Q3DScatter *g_3d_scatter;
+    Q3DInputHandler *g_input_handler;
+    QWidget *g_3d_container;
+    QPlot3D *g_plot_3d;
 
     void show_status(QString q_str, int timeout);
 
@@ -55,6 +61,8 @@ protected:
     double vector_min(QVector<double> q_vector);
     double vector_max(QVector<double> q_vector);
 
+    void clear_drawing_area() ;
+
 signals:
     void mav_send(QByteArray ba);
     void mode_change(rmode_t mode);
@@ -64,8 +72,6 @@ protected slots:
     void write_timeout();
     void save_timeout();
 
-private:
-    QStatusBar *g_q_status_bar = nullptr;
 };
 
 #endif // MODE_COMMON_H

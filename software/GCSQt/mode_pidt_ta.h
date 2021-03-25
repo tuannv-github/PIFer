@@ -14,11 +14,12 @@ class Mode_pidt_ta : public Mode_common
     Q_OBJECT
 
 public:
-    explicit Mode_pidt_ta(QWidget *parent = nullptr);
+    explicit Mode_pidt_ta(QWidget *parent = nullptr, CommonObject *co = nullptr);
     ~Mode_pidt_ta() override;
 
     void mav_recv(mavlink_message_t *msg) override;
-    void update_joystick(axis_t axis, double value) override;
+    void update_joystick(int axis, double value) override;
+    void select() override;
 
 private slots:
     void on_btn_change_mode_pidt_clicked();
@@ -33,7 +34,6 @@ private slots:
     void on_btn_control_enable_clicked();
 
     void remote_control_pidt();
-    void on_btn_change_mode_pidt_ta_clicked();
 
 private:
     Ui::Mode_pidt_ta *ui;

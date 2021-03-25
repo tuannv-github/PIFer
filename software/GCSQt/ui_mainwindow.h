@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QGridLayout>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QStatusBar>
@@ -18,7 +19,6 @@
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
 #include "com.h"
-#include "qcustomplot/qcustomplot.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -27,13 +27,9 @@ class Ui_MainWindow
 public:
     QWidget *centralWidget;
     QTabWidget *Maintab;
-    QCustomPlot *plot_0;
-    QCustomPlot *plot_2;
-    QCustomPlot *plot_4;
-    QCustomPlot *plot_1;
-    QCustomPlot *plot_5;
-    QCustomPlot *plot_3;
     Com *wg_com;
+    QWidget *gridLayoutWidget;
+    QGridLayout *glDrawer;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -47,32 +43,22 @@ public:
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         Maintab = new QTabWidget(centralWidget);
         Maintab->setObjectName(QString::fromUtf8("Maintab"));
-        Maintab->setGeometry(QRect(10, 80, 651, 541));
-        plot_0 = new QCustomPlot(centralWidget);
-        plot_0->setObjectName(QString::fromUtf8("plot_0"));
-        plot_0->setGeometry(QRect(670, 10, 361, 201));
-        plot_2 = new QCustomPlot(centralWidget);
-        plot_2->setObjectName(QString::fromUtf8("plot_2"));
-        plot_2->setGeometry(QRect(670, 220, 361, 191));
-        plot_4 = new QCustomPlot(centralWidget);
-        plot_4->setObjectName(QString::fromUtf8("plot_4"));
-        plot_4->setGeometry(QRect(670, 420, 361, 201));
-        plot_1 = new QCustomPlot(centralWidget);
-        plot_1->setObjectName(QString::fromUtf8("plot_1"));
-        plot_1->setGeometry(QRect(1040, 10, 361, 201));
-        plot_5 = new QCustomPlot(centralWidget);
-        plot_5->setObjectName(QString::fromUtf8("plot_5"));
-        plot_5->setGeometry(QRect(1040, 420, 361, 201));
-        plot_3 = new QCustomPlot(centralWidget);
-        plot_3->setObjectName(QString::fromUtf8("plot_3"));
-        plot_3->setGeometry(QRect(1040, 220, 361, 191));
+        Maintab->setGeometry(QRect(10, 100, 651, 521));
         wg_com = new Com(centralWidget);
         wg_com->setObjectName(QString::fromUtf8("wg_com"));
-        wg_com->setGeometry(QRect(10, 0, 651, 80));
+        wg_com->setGeometry(QRect(10, 0, 651, 91));
+        gridLayoutWidget = new QWidget(centralWidget);
+        gridLayoutWidget->setObjectName(QString::fromUtf8("gridLayoutWidget"));
+        gridLayoutWidget->setGeometry(QRect(670, 10, 731, 611));
+        glDrawer = new QGridLayout(gridLayoutWidget);
+        glDrawer->setSpacing(6);
+        glDrawer->setContentsMargins(11, 11, 11, 11);
+        glDrawer->setObjectName(QString::fromUtf8("glDrawer"));
+        glDrawer->setContentsMargins(0, 0, 0, 0);
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1410, 21));
+        menuBar->setGeometry(QRect(0, 0, 1410, 22));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));

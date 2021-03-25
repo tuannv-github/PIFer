@@ -1,9 +1,12 @@
 #include "mode_imu.h"
 #include "ui_mode_imu.h"
 
-Mode_imu::Mode_imu(QWidget *parent) : Mode_common(parent), ui(new Ui::Mode_imu)
+Mode_imu::Mode_imu(QWidget *parent, CommonObject *co)
+    : Mode_common(parent, co), ui(new Ui::Mode_imu)
 {
     ui->setupUi(this);
+    g_mode_name = "Mode IMU";
+
     ui->cb_tilt->addItem("ROLL");
     ui->cb_tilt->addItem("PITCH");
 }
@@ -11,6 +14,10 @@ Mode_imu::Mode_imu(QWidget *parent) : Mode_common(parent), ui(new Ui::Mode_imu)
 Mode_imu::~Mode_imu()
 {
     delete ui;
+}
+
+void Mode_imu::select(){
+//   clear_drawing_area();
 }
 
 void Mode_imu::mav_recv(mavlink_message_t *msg){

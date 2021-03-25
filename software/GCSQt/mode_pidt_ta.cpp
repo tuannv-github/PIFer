@@ -1,12 +1,12 @@
 #include "mode_pidt_ta.h"
 #include "ui_mode_pidt_ta.h"
 
-Mode_pidt_ta::Mode_pidt_ta(QWidget *parent) :
-    Mode_common(parent),
+Mode_pidt_ta::Mode_pidt_ta(QWidget *parent, CommonObject *co) :
+    Mode_common(parent, co),
     ui(new Ui::Mode_pidt_ta)
 {
     ui->setupUi(this);
-    g_mode_name = "PIDT";
+    g_mode_name = "PID Tunning";
     g_controller_timer = new QTimer(this);
     connect(g_controller_timer, SIGNAL(timeout()), this, SLOT(remote_control_pidt()));
     g_control_enable = false;
@@ -15,6 +15,10 @@ Mode_pidt_ta::Mode_pidt_ta(QWidget *parent) :
 Mode_pidt_ta::~Mode_pidt_ta()
 {
     delete ui;
+}
+
+void Mode_pidt_ta::select(){
+//   clear_drawing_area();
 }
 
 void Mode_pidt_ta::mav_recv(mavlink_message_t *msg){
@@ -191,12 +195,12 @@ void Mode_pidt_ta::on_btn_set_speed1_clicked()
     show_status("Set wheel speed",1000);
 }
 
-void Mode_pidt_ta::update_joystick(axis_t axis, double value){
+void Mode_pidt_ta::update_joystick(int axis, double value){
     switch (axis){
-    case AXIS_0:
+    case 0:
         ui->txtb_pidt_w->setText(QString::number(value));
         break;
-    case AXIS_1:
+    case 1:
         ui->txtb_pidt_vx->setText(QString::number(value));
     }
 }
@@ -229,9 +233,4 @@ void Mode_pidt_ta::remote_control_pidt(){
     mavlink_msg_cmd_velocity_pack(0,0,&msg,VX,OMEGA);
     uint16_t len = mavlink_msg_to_send_buffer(mav_send_buf, &msg);
     emit mav_send(QByteArray::fromRawData(reinterpret_cast<char*>(mav_send_buf),len));
-}
-
-void Mode_pidt_ta::on_btn_change_mode_pidt_ta_clicked()
-{
-
 }

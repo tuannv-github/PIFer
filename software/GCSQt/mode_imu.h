@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QtWidgets/QStatusBar>
 
-#include <MAV/protocol/mavlink.h>
+#include <MAVLink/protocol/mavlink.h>
 #include <mode_common.h>
 
 namespace Ui {
@@ -18,10 +18,11 @@ class Mode_imu : public Mode_common
     Q_OBJECT
 
 public:
-    explicit Mode_imu(QWidget *parent = nullptr);
+    explicit Mode_imu(QWidget *parent = nullptr, CommonObject *co = nullptr);
     ~Mode_imu();
 
     void mav_recv(mavlink_message_t *msg) override;
+    void select() override;
 
 private slots:
     void on_btn_mode_imu_load_params_clicked();

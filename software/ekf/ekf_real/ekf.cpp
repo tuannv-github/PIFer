@@ -120,6 +120,7 @@ void ekf_correct(ekf_t *ekf, ekf_measurement_t *m){
     float innovation[2];
     innovation[0] = m->range - ekf->h[0];
     innovation[1] = m->yaw - ekf->h[1];
+    printf("range: %f %f\r\n", m->range, ekf->h[0]);
     printf("yaw: %f %f\r\n", m->yaw, ekf->h[1]);
     innovation[1] = fmod(innovation[1] + M_PI, 2*M_PI) - M_PI;
     printf("innovation: %f %f\r\n", innovation[0], innovation[1]);
@@ -158,6 +159,8 @@ void ekf_correct(ekf_t *ekf, ekf_measurement_t *m){
     ekf->cov[2][0] = T[2][0]*ekf->cov[0][0] + T[2][1]*ekf->cov[1][0] + T[2][2]*ekf->cov[2][0];
     ekf->cov[2][1] = T[2][0]*ekf->cov[0][1] + T[2][1]*ekf->cov[1][1] + T[2][2]*ekf->cov[2][1];
     ekf->cov[2][2] = T[2][0]*ekf->cov[0][2] + T[2][1]*ekf->cov[1][2] + T[2][2]*ekf->cov[2][2];
+
+    printf("---\n");
 }
 
 void ekf_g(ekf_t *ekf, ekf_control_t *c){
@@ -187,7 +190,7 @@ void ekf_dg_dstate(ekf_t *ekf, ekf_control_t *c){
         ekf->G[0][2] = -c->l*sin(ekf->theta);
         ekf->G[1][2] =  c->l*cos(ekf->theta);
     }
-    printf("G: %f %f %f %f %f %f\r\n", ekf->G[0][0], ekf->G[0][1], ekf->G[1][0], ekf->G[1][1], ekf->G[2][0], ekf->G[2][1]);
+    // printf("G: %f %f %f %f %f %f\r\n", ekf->G[0][0], ekf->G[0][1], ekf->G[1][0], ekf->G[1][1], ekf->G[2][0], ekf->G[2][1]);
 }
 
 void ekf_dg_dcontrol(ekf_t *ekf, ekf_control_t *c){
@@ -198,7 +201,7 @@ void ekf_dg_dcontrol(ekf_t *ekf, ekf_control_t *c){
         float theta_ = ekf->theta + rml/w;
         float rpl = c->r + c->l;
         
-        printf("-->: %f %f %f %f\r\n", rml, rml2, theta_, rpl);
+        // printf("-->: %f %f %f %f\r\n", rml, rml2, theta_, rpl);
 
         ekf->V[0][0] = w*c->r*(sin(theta_)-sin(ekf->theta))/rml2 - rpl*cos(theta_)/(2*rml);
         ekf->V[1][0] = w*c->r*(-cos(theta_)+cos(ekf->theta))/rml2 - rpl*sin(theta_)/(2*rml);
@@ -217,7 +220,7 @@ void ekf_dg_dcontrol(ekf_t *ekf, ekf_control_t *c){
         ekf->V[1][1] = 0.5f*(c->l/w*cos(ekf->theta) + sin(ekf->theta));
         ekf->V[2][1] = 1.0f/w;
     }
-    printf("V: %f %f %f %f %f %f\r\n", ekf->V[0][0], ekf->V[0][1], ekf->V[1][0], ekf->V[1][1], ekf->V[2][0], ekf->V[2][1]);
+    // printf("V: %f %f %f %f %f %f\r\n", ekf->V[0][0], ekf->V[0][1], ekf->V[1][0], ekf->V[1][1], ekf->V[2][0], ekf->V[2][1]);
 }
 
 void ekf_h(ekf_t *ekf, ekf_measurement_t *m){

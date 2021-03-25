@@ -1,8 +1,8 @@
 #include "mode_common.h"
 
-Mode_common::Mode_common(QWidget *parent) : QWidget(parent)
+Mode_common::Mode_common(QWidget *parent, CommonObject *co) : QWidget(parent)
 {
-
+    g_co = co;
 }
 
 Mode_common::~Mode_common()
@@ -15,13 +15,9 @@ void Mode_common::mav_recv(mavlink_message_t *msg){
     show_status("Mav receive is not implement yet", 1000);
 }
 
-void Mode_common::set_status_bar(QStatusBar *q_status_bar){
-    g_q_status_bar = q_status_bar;
-}
-
 void Mode_common::show_status(QString q_str, int timeout){
-    if(g_q_status_bar != nullptr){
-        g_q_status_bar->showMessage(q_str,timeout);
+    if(g_co->getStatusBar() != nullptr){
+        g_co->getStatusBar()->showMessage(q_str,timeout);
     }
 }
 
@@ -107,12 +103,7 @@ void Mode_common::failed(){
     g_does_st_successfullly = false;
 }
 
-
-void Mode_common::set_plotter(QVector<QCustomPlot*> q_custom_plot){
-    g_q_custom_plot = q_custom_plot;
-}
-
-void Mode_common::update_joystick(axis_t axis, double value){
+void Mode_common::update_joystick(int axis, double value){
     Q_UNUSED(axis)
     Q_UNUSED(value)
 }
@@ -137,3 +128,16 @@ double Mode_common::vector_max(QVector<double> q_vector){
     return *std::max_element(q_vector.constBegin(), q_vector.constEnd());
 }
 
+QString Mode_common::getName(){
+    return g_mode_name;
+}
+
+void Mode_common::select(){
+}
+
+void Mode_common::clear_drawing_area() {
+    while ( QLayoutItem* item = g_co->drawing_area->takeAt( 0 ) )
+    {
+        item->widget()->setParent(NULL);
+    }
+}
