@@ -85,10 +85,10 @@ int main(){
             ekf_measurement_t m;
             m.rx = stof(components[1]);
             m.ry = stof(components[2]);
-            if (abs(m.rx) < 1 && abs(m.ry) < 1) continue;
+            if (fabs(m.rx) < 1 && fabs(m.ry) < 1) continue;
             m.range = sqrt(stof(components[4])*stof(components[4]) - 3*3);
             m.yaw = stof(components[5])/180*M_PI;
-            printf("m: %f %f %f %f\n", m.rx, m.ry, m.range, m.yaw);
+            // printf("m: %f %f %f %f\n", m.rx, m.ry, m.range, m.yaw);
             ekf_correct(&ekf, &m);
             file_correction << "F " << ekf.x*300+500 << " " << ekf.y*300+3000 << " " << ekf.theta << endl;
             // cnt++;

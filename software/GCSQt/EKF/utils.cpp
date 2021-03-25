@@ -36,10 +36,6 @@ void trilaterate(sphere_t sphere[3], trilateration_result_t *trilateration_resul
     float r2 = sphere[2].r;
 
     /* Transform to standard coordinate */
-    float a0tx = 0;
-    float a0ty = 0;
-    float a0tz = 0;
-
     float a1tx = a1x - a0x;
     float a1ty = a1y - a0y;
     float a1tz = a1z - a0z;

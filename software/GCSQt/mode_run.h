@@ -5,7 +5,7 @@
 #include <QTimer>
 #include <QtWidgets/QStatusBar>
 #include <QFile>
-
+#include <EKF/ekf.h>
 #include <mode_common.h>
 
 namespace Ui {
@@ -32,11 +32,23 @@ private slots:
 
     void on_btn_log_clicked();
 
+    void on_btn_cm_clicked();
+
+    void on_btn_run_ekf_clicked();
+
+    void on_hs_ekf_state_sliderMoved(int position);
+
 private:
     Ui::Mode_run *ui;
     QTimer *g_controller_timer;
     bool g_control_enable;
     bool g_logging;
+    ekf_t g_ekf;
+    ekf_params_t g_ekf_params;
+    QVector<ekf_state_t> g_trajectory;
+
+    QScatter3DSeries *g_qs3s_trajectory;
+    QScatter3DSeries *g_state;
 
     QFile g_file_control_measurement;
 };

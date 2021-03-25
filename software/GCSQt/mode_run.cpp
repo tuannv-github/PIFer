@@ -1,12 +1,16 @@
 #include "mode_run.h"
 #include "ui_mode_run.h"
 
+#include <EKF/ekf.h>
+#include <EKF/utils.h>
+
 Mode_run::Mode_run(QWidget *parent, CommonObject *co) :
     Mode_common(parent, co),
     ui(new Ui::Mode_run)
 {
     ui->setupUi(this);
     g_mode_name = "Mode run";
+    g_control_enable = false;
 
     g_controller_timer = new QTimer(this);
     connect(g_controller_timer, SIGNAL(timeout()), this, SLOT(remote_controll_cmd()));
@@ -35,14 +39,6 @@ Mode_run::Mode_run(QWidget *parent, CommonObject *co) :
     series->setItemSize(0.01);
     g_3d_scatter->addSeries(series);
 
-//    data.clear();
-//    series = new QScatter3DSeries;
-//    data << QVector3D(2.0f, 2.0f, 0.0f);
-//    series->dataProxy()->addItems(data);
-//    series->setBaseColor(QColor(255,0,0));
-//    series->setItemSize(0.1);
-//    g_3d_scatter->addSeries(series);
-
     g_plot_3d = new QPlot3D();
     QCurve3D *skeleton = new QCurve3D();
     skeleton->addData(0,0,0);
@@ -55,6 +51,16 @@ Mode_run::Mode_run(QWidget *parent, CommonObject *co) :
     skeleton->addData(QVector3D(0,3.6,3));
     skeleton->setColor(Qt::green);
     g_plot_3d->addCurve(skeleton);
+
+    g_qs3s_trajectory = new QScatter3DSeries();
+    g_qs3s_trajectory->setItemSize(0.02);
+    g_qs3s_trajectory->setBaseColor(QColor(0,0,255));
+    g_3d_scatter->addSeries(g_qs3s_trajectory);
+
+    g_state = new QScatter3DSeries();
+    g_state->setItemSize(0.1);
+    g_state->setBaseColor(QColor(255,0,0));
+    g_3d_scatter->addSeries(g_state);
 }
 
 Mode_run::~Mode_run()
@@ -66,7 +72,7 @@ Mode_run::~Mode_run()
 void Mode_run::select(){
    clear_drawing_area();
    g_co->drawing_area->addWidget(g_3d_container);
-//   g_co->drawing_area->addWidget(g_plot_3d);
+   // g_co->drawing_area->addWidget(g_plot_3d);
 }
 
 void Mode_run::mav_recv(mavlink_message_t *msg){
@@ -173,4 +179,138 @@ void Mode_run::on_btn_log_clicked()
             ui->pteControl->clear();
         }
     }
+}
+
+void Mode_run::on_btn_cm_clicked()
+{
+    QString file_name = QFileDialog::getOpenFileName(this, "Open file");
+    ui->tb_cm->setText(file_name);
+}
+
+void Mode_run::on_btn_run_ekf_clicked()
+{
+    QFile in(ui->tb_cm->text());
+    QFile out("correction.txt");
+    if (!in.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+    if (!out.open(QIODevice::WriteOnly | QIODevice::Text))
+        return;
+
+    sphere_t spheres[3];
+    uint8_t sphere_idx = 0;
+    float yaw = 0;
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        QStringList sl = line.split(" ");
+        if(sl.at(0) == "M"){
+            qDebug() << sl << endl;
+            spheres[sphere_idx].x = sl.at(1).toFloat();
+            spheres[sphere_idx].y = sl.at(2).toFloat();
+            spheres[sphere_idx].z = 3;
+            spheres[sphere_idx].r = sl.at(4).toFloat();
+            yaw = sl.at(5).toFloat()/180*M_PI;
+            sphere_idx++;
+            if(sphere_idx == 3) break;
+        }
+    }
+
+    trilateration_result_t trilateration_result;
+    trilaterate(spheres, &trilateration_result);
+    ui->tb_initial_state_x->setText(QString::number(trilateration_result.PA.x));
+    ui->tb_initial_state_y->setText(QString::number(trilateration_result.PA.y));
+    ui->tb_initial_state_z->setText(QString::number(yaw));
+
+    g_ekf_params.robot_width = ui->tb_pm_w->text().toFloat();
+    g_ekf_params.control_motion_factor = ui->tb_pm_cmf->text().toFloat();
+    g_ekf_params.control_turn_factor = ui->tb_pm_ctf->text().toFloat();
+    g_ekf_params.tag_cart_x = ui->tb_pm_tcx->text().toFloat();
+    g_ekf_params.tag_cart_y = ui->tb_pm_tcy->text().toFloat();
+    g_ekf_params.measurement_distance_stddev = ui->tb_pm_mds->text().toFloat();
+    g_ekf_params.measurement_angle_stddev = ui->tb_pm_mas->text().toFloat()/180*M_PI;
+
+    g_ekf_params.pule_per_revolution = ui->tb_pm_ppr->text().toFloat();
+    g_ekf_params.wheel_diameter = ui->tb_pm_wd->text().toFloat();
+
+
+    g_ekf.x = trilateration_result.PA.x;
+    g_ekf.y = trilateration_result.PA.y;
+    g_ekf.theta = 90.0f/180.0f*M_PI;
+
+    g_ekf.cov[0][1] = g_ekf.cov[0][2] = 0.0f;
+    g_ekf.cov[1][0] = g_ekf.cov[1][2] = 0.0f;
+    g_ekf.cov[2][0] = g_ekf.cov[2][1] = 0.0f;
+
+    g_ekf.cov[0][0] = 0.1;
+    g_ekf.cov[1][1] = 0.1;
+    g_ekf.cov[2][2] = (50.0 / 180.0 * M_PI);
+
+    g_ekf.cov[0][0] = g_ekf.cov[0][0]*g_ekf.cov[0][0];
+    g_ekf.cov[1][1] = g_ekf.cov[1][1]*g_ekf.cov[1][1];
+    g_ekf.cov[2][2] = g_ekf.cov[2][2]*g_ekf.cov[2][2];
+
+    ekf_init(&g_ekf, &g_ekf_params);
+
+    QScatterDataArray data;
+    g_trajectory.clear();
+
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        QStringList sl = line.split(" ");
+        if(sl.at(0) == "C"){
+            ekf_control_t c;
+            float l = -sl.at(1).toFloat();
+            float r = -sl.at(2).toFloat();
+            c.l = l/g_ekf_params.pule_per_revolution*(M_PI*g_ekf_params.wheel_diameter);
+            c.r = r/g_ekf_params.pule_per_revolution*(M_PI*g_ekf_params.wheel_diameter);
+            ekf_predict(&g_ekf, &c);
+            data << QVector3D(g_ekf.x, g_ekf.y, 0.0f);
+            ekf_state_t ekf_state = {
+                .x = g_ekf.x,
+                .y = g_ekf.y,
+                .w = g_ekf.theta,
+            };
+            g_trajectory.append(ekf_state);
+        }
+        else if (sl.at(0) == "M"){
+            ekf_measurement_t m;
+            m.rx = sl.at(1).toFloat();
+            m.ry = sl.at(2).toFloat();
+            if(fabs(m.rx) < 1 && fabs(m.ry) < 1) continue;
+            m.range = sl.at(4).toFloat();
+            m.range = sqrt(m.range*m.range-3.0f*3.0f);
+            m.yaw = sl.at(5).toFloat()/180*M_PI - (-0.525876);
+            ekf_correct(&g_ekf, &m);
+            QTextStream stream(&out);
+            stream << "F " << g_ekf.x*300+500 << " " << g_ekf.y*300+3000 << " " << g_ekf.theta << endl;
+            data << QVector3D(g_ekf.x, g_ekf.y, 0.0f);
+            ekf_state_t ekf_state = {
+                .x = g_ekf.x,
+                .y = g_ekf.y,
+                .w = g_ekf.theta,
+            };
+            g_trajectory.append(ekf_state);
+        }
+    }
+
+    g_qs3s_trajectory->dataProxy()->deleteLater();
+    g_qs3s_trajectory->setDataProxy(new QScatterDataProxy());
+    g_qs3s_trajectory->dataProxy()->addItems(data);
+
+    ui->hs_ekf_state->setMaximum(g_trajectory.size()-1);
+    ui->lb_total_state->setText(QString::number(g_trajectory.size()));
+
+    in.close();
+    out.close();
+}
+
+void Mode_run::on_hs_ekf_state_sliderMoved(int position)
+{
+    ui->lb_curren_state->setText(QString::number(position));
+    if(g_trajectory.size() == 0) return;
+
+    QScatterDataArray data;
+    data << QVector3D(g_trajectory[position].x, g_trajectory[position].y, 0.0f);
+    g_state->dataProxy()->deleteLater();
+    g_state->setDataProxy(new QScatterDataProxy());
+    g_state->dataProxy()->addItems(data);
 }

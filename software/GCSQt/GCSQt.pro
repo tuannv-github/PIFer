@@ -26,6 +26,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+    EKF/ekf.cpp \
+    EKF/utils.cpp \
     QCustomPlot/qcustomplot.cpp \
     QPlot3D/QPlot3D.cpp \
     com.cpp \
@@ -42,6 +44,7 @@ SOURCES += \
     mode_run.cpp \
 
 HEADERS += \
+    EKF/ekf.h \
     MAVLink/checksum.h \
     MAVLink/mavlink_conversions.h \
     MAVLink/mavlink_helpers.h \

@@ -18,10 +18,6 @@ MainWindow::MainWindow(QWidget *parent) :
     g_qjs->setVirtualJoystickRange(1);
     connect(g_qjs,SIGNAL(axisChanged(const int, const int, const qreal)),this,SLOT(js_axis_change(const int, const int, const qreal)));
 
-    // Prepare plotter
-
-
-
     // Com
     g_com_gui = new Com_gui();
     // Message forwarding: com -> main -> mode
@@ -37,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     g_mode.append(new Mode_hw_tw(this, &g_co));
     g_mode.append(new Mode_imu(this, &g_co));
     g_mode.append(new Mode_pidt_tw(this, &g_co));
-    g_mode.append(new Mode_pidt_ta(this, &g_co));
+    //g_mode.append(new Mode_pidt_ta(this, &g_co));
 
     for (Mode_common* &mode : g_mode){
         ui->Maintab->addTab(mode, mode->getName());
