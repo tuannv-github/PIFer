@@ -19,7 +19,7 @@
      <x>10</x>
      <y>40</y>
      <width>321</width>
-     <height>61</height>
+     <height>91</height>
     </rect>
    </property>
    <property name="title">
@@ -43,7 +43,7 @@
      <rect>
       <x>50</x>
       <y>30</y>
-      <width>51</width>
+      <width>81</width>
       <height>20</height>
      </rect>
     </property>
@@ -57,9 +57,9 @@
    <widget class="QLineEdit" name="txtBoxPitch">
     <property name="geometry">
      <rect>
-      <x>110</x>
+      <x>140</x>
       <y>30</y>
-      <width>51</width>
+      <width>81</width>
       <height>20</height>
      </rect>
     </property>
@@ -73,9 +73,9 @@
    <widget class="QLineEdit" name="txtBoxYaw">
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>230</x>
       <y>30</y>
-      <width>51</width>
+      <width>81</width>
       <height>20</height>
      </rect>
     </property>
@@ -89,8 +89,8 @@
    <widget class="QLabel" name="label_79">
     <property name="geometry">
      <rect>
-      <x>230</x>
-      <y>30</y>
+      <x>10</x>
+      <y>60</y>
       <width>31</width>
       <height>16</height>
      </rect>
@@ -102,9 +102,9 @@
    <widget class="QLineEdit" name="tb_tilt_cal">
     <property name="geometry">
      <rect>
-      <x>260</x>
-      <y>30</y>
-      <width>51</width>
+      <x>50</x>
+      <y>60</y>
+      <width>81</width>
       <height>20</height>
      </rect>
     </property>
@@ -133,7 +133,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>100</y>
+     <y>130</y>
      <width>321</width>
      <height>61</height>
     </rect>
@@ -159,7 +159,7 @@
      <rect>
       <x>40</x>
       <y>30</y>
-      <width>51</width>
+      <width>121</width>
       <height>20</height>
      </rect>
     </property>
@@ -170,54 +170,25 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="label_62">
-    <property name="geometry">
-     <rect>
-      <x>100</x>
-      <y>30</y>
-      <width>31</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>VY:</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_63">
     <property name="geometry">
      <rect>
-      <x>190</x>
+      <x>170</x>
       <y>30</y>
       <width>61</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>OMEGA:</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="txtBoxVY">
-    <property name="geometry">
-     <rect>
-      <x>130</x>
-      <y>30</y>
-      <width>51</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>0</string>
-    </property>
-    <property name="readOnly">
-     <bool>true</bool>
+     <string>W:</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="txtb_pidt_w">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>190</x>
       <y>30</y>
-      <width>51</width>
+      <width>121</width>
       <height>20</height>
      </rect>
     </property>
@@ -259,9 +230,9 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>200</y>
-     <width>301</width>
-     <height>251</height>
+     <y>230</y>
+     <width>311</width>
+     <height>221</height>
     </rect>
    </property>
    <property name="title">
@@ -272,8 +243,8 @@
      <rect>
       <x>0</x>
       <y>20</y>
-      <width>301</width>
-      <height>231</height>
+      <width>311</width>
+      <height>201</height>
      </rect>
     </property>
    </widget>
@@ -282,9 +253,9 @@
    <property name="geometry">
     <rect>
      <x>330</x>
-     <y>200</y>
+     <y>230</y>
      <width>311</width>
-     <height>251</height>
+     <height>221</height>
     </rect>
    </property>
    <property name="title">
@@ -296,7 +267,7 @@
       <x>0</x>
       <y>20</y>
       <width>311</width>
-      <height>231</height>
+      <height>201</height>
      </rect>
     </property>
    </widget>
@@ -333,10 +304,10 @@
   <widget class="QPushButton" name="btn_run_ekf">
    <property name="geometry">
     <rect>
-     <x>410</x>
-     <y>170</y>
-     <width>101</width>
-     <height>21</height>
+     <x>450</x>
+     <y>200</y>
+     <width>70</width>
+     <height>23</height>
     </rect>
    </property>
    <property name="text">
@@ -401,7 +372,7 @@
      <x>340</x>
      <y>40</y>
      <width>301</width>
-     <height>121</height>
+     <height>151</height>
     </rect>
    </property>
    <property name="title">
@@ -446,7 +417,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>0.001</string>
+     <string>0.1</string>
     </property>
     <property name="readOnly">
      <bool>false</bool>
@@ -488,7 +459,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>0.001</string>
+     <string>0.2</string>
     </property>
     <property name="readOnly">
      <bool>false</bool>
@@ -498,13 +469,13 @@
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>60</y>
+      <y>70</y>
       <width>51</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string>0.0</string>
+     <string>0.02</string>
     </property>
     <property name="readOnly">
      <bool>false</bool>
@@ -514,7 +485,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>60</y>
+      <y>70</y>
       <width>31</width>
       <height>16</height>
      </rect>
@@ -527,7 +498,7 @@
     <property name="geometry">
      <rect>
       <x>110</x>
-      <y>60</y>
+      <y>70</y>
       <width>31</width>
       <height>16</height>
      </rect>
@@ -540,7 +511,7 @@
     <property name="geometry">
      <rect>
       <x>150</x>
-      <y>60</y>
+      <y>70</y>
       <width>51</width>
       <height>20</height>
      </rect>
@@ -556,7 +527,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>90</y>
+      <y>110</y>
       <width>31</width>
       <height>16</height>
      </rect>
@@ -569,13 +540,13 @@
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>90</y>
+      <y>110</y>
       <width>51</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string>0.2</string>
+     <string>0.1</string>
     </property>
     <property name="readOnly">
      <bool>false</bool>
@@ -585,7 +556,7 @@
     <property name="geometry">
      <rect>
       <x>150</x>
-      <y>90</y>
+      <y>110</y>
       <width>51</width>
       <height>20</height>
      </rect>
@@ -601,7 +572,7 @@
     <property name="geometry">
      <rect>
       <x>110</x>
-      <y>90</y>
+      <y>110</y>
       <width>31</width>
       <height>16</height>
      </rect>
@@ -614,7 +585,7 @@
     <property name="geometry">
      <rect>
       <x>240</x>
-      <y>60</y>
+      <y>70</y>
       <width>51</width>
       <height>20</height>
      </rect>
@@ -630,7 +601,7 @@
     <property name="geometry">
      <rect>
       <x>210</x>
-      <y>60</y>
+      <y>70</y>
       <width>31</width>
       <height>16</height>
      </rect>
@@ -643,7 +614,7 @@
     <property name="geometry">
      <rect>
       <x>240</x>
-      <y>90</y>
+      <y>110</y>
       <width>51</width>
       <height>20</height>
      </rect>
@@ -659,7 +630,7 @@
     <property name="geometry">
      <rect>
       <x>210</x>
-      <y>90</y>
+      <y>110</y>
       <width>31</width>
       <height>16</height>
      </rect>
@@ -669,27 +640,27 @@
     </property>
    </widget>
   </widget>
-  <widget class="QLineEdit" name="tb_initial_state_z">
+  <widget class="QLineEdit" name="tb_initial_state_w">
    <property name="geometry">
     <rect>
-     <x>310</x>
-     <y>170</y>
-     <width>81</width>
+     <x>270</x>
+     <y>200</y>
+     <width>91</width>
      <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string/>
+    <string>0</string>
    </property>
    <property name="readOnly">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
   </widget>
   <widget class="QLabel" name="label_55">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>170</y>
+     <x>10</x>
+     <y>200</y>
      <width>91</width>
      <height>16</height>
     </rect>
@@ -701,47 +672,77 @@
   <widget class="QLineEdit" name="tb_initial_state_y">
    <property name="geometry">
     <rect>
-     <x>210</x>
-     <y>170</y>
+     <x>180</x>
+     <y>200</y>
      <width>81</width>
      <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string/>
+    <string>0</string>
    </property>
    <property name="readOnly">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
   </widget>
   <widget class="QLineEdit" name="tb_initial_state_x">
    <property name="geometry">
     <rect>
-     <x>110</x>
-     <y>170</y>
+     <x>90</x>
+     <y>200</y>
      <width>81</width>
      <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string/>
+    <string>0</string>
    </property>
    <property name="readOnly">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
   </widget>
-  <widget class="QPushButton" name="btn_reset_ekf">
+  <widget class="QPushButton" name="btn_init_ekf">
    <property name="geometry">
     <rect>
-     <x>530</x>
-     <y>170</y>
-     <width>101</width>
-     <height>21</height>
+     <x>370</x>
+     <y>200</y>
+     <width>70</width>
+     <height>23</height>
     </rect>
    </property>
    <property name="text">
-    <string>Reset EKF</string>
+    <string>Init EKF</string>
    </property>
+  </widget>
+  <widget class="QComboBox" name="cb_ekf_mode">
+   <property name="geometry">
+    <rect>
+     <x>530</x>
+     <y>200</y>
+     <width>111</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>Real time</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>From file</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>RT predict</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>File predict</string>
+    </property>
+   </item>
   </widget>
   <zorder>groupBox_11</zorder>
   <zorder>btn_change_mode_run</zorder>
@@ -758,11 +759,12 @@
   <zorder>lb_total_state</zorder>
   <zorder>groupBox_13</zorder>
   <zorder>btn_run_ekf</zorder>
-  <zorder>tb_initial_state_z</zorder>
+  <zorder>tb_initial_state_w</zorder>
   <zorder>label_55</zorder>
   <zorder>tb_initial_state_y</zorder>
   <zorder>tb_initial_state_x</zorder>
-  <zorder>btn_reset_ekf</zorder>
+  <zorder>btn_init_ekf</zorder>
+  <zorder>cb_ekf_mode</zorder>
  </widget>
  <resources/>
  <connections/>

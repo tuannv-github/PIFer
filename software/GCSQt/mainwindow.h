@@ -58,11 +58,6 @@ private:
     CommonObject g_co;
 
     QVector<Mode_common*> g_mode;
-    Mode_run *g_mode_run;
-    Mode_imu *g_mode_imu;
-    Mode_pidt_tw *g_mode_pidt_tw;
-    Mode_pidt_ta *g_mode_pidt_ta;
-    Mode_hw_tw *g_mode_hw_tw;
 
     bool g_is_changing_mode = false;
     rmode_t g_change_to_mode = MODE_RUN;

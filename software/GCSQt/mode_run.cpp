@@ -61,6 +61,13 @@ Mode_run::Mode_run(QWidget *parent, CommonObject *co) :
     g_state->setItemSize(0.1);
     g_state->setBaseColor(QColor(255,0,0));
     g_3d_scatter->addSeries(g_state);
+
+    g_ekf_initing = false;
+    g_ekf_running = false;
+
+    QSettings settings;
+    ui->cb_ekf_mode->setCurrentIndex(settings.value("ekf_mode", 0).toInt());
+    g_ekf_mode = (ekf_mode_t)ui->cb_ekf_mode->currentIndex();
 }
 
 Mode_run::~Mode_run()
@@ -100,24 +107,80 @@ void Mode_run::mav_recv(mavlink_message_t *msg){
         ui->tb_tilt_cal->setText(QString::number(tilt_msg.tilt));
         break;
     case MAVLINK_MSG_ID_CONTROL:
-        if(g_logging){
-            mavlink_control_t control;
-            mavlink_msg_control_decode(msg, &control);
-            QString line;
-            line = "C " + QString::number(control.left) + " " + QString::number(control.right) + "\n";
-            g_file_control_measurement.write(line.toStdString().c_str());
-            ui->pteControl->appendHtml(line);
+    {
+        mavlink_control_t control;
+        mavlink_msg_control_decode(msg, &control);
+        QString line;
+        line = "C " + QString::number(control.left) + " " + QString::number(control.right) + "\n";
+        ui->pteControl->appendHtml(line);
+        if(g_logging) g_file_control_measurement.write(line.toStdString().c_str());
+
+        if(g_ekf_running == true){
+
+            ekf_control_t c;
+
+            float l = -control.left;
+            float r = -control.right;
+            c.l = l/g_ekf_params.pule_per_revolution*(M_PI*g_ekf_params.wheel_diameter);
+            c.r = r/g_ekf_params.pule_per_revolution*(M_PI*g_ekf_params.wheel_diameter);
+            ekf_predict(&g_ekf, &c);
+
+            QScatterDataArray data;
+            data << QVector3D(g_ekf.x, g_ekf.y, 0.0f);
+            g_state->dataProxy()->deleteLater();
+            g_state->setDataProxy(new QScatterDataProxy());
+            g_state->dataProxy()->addItems(data);
+            g_qs3s_trajectory->dataProxy()->addItems(data);
         }
+    }
         break;
     case MAVLINK_MSG_ID_MEASUREMENT:
-        if(g_logging){
-            mavlink_measurement_t measurement;
-            mavlink_msg_measurement_decode(msg, &measurement);
-            QString line;
-            line =  "M " + QString::number(measurement.x) + " " + QString::number(measurement.y) + " " + QString::number(measurement.z)
-                    + " " + QString::number(measurement.r) + " " + QString::number(measurement.yaw) + "\n";
-            g_file_control_measurement.write(line.toStdString().c_str());
-            ui->pteMeasurement->appendHtml(line);
+        mavlink_measurement_t measurement;
+        mavlink_msg_measurement_decode(msg, &measurement);
+        QString line;
+        line =  "M " + QString::number(measurement.x) + " " + QString::number(measurement.y) + " " + QString::number(measurement.z)
+                + " " + QString::number(measurement.r) + " " + QString::number(measurement.yaw) + "\n";
+        ui->pteMeasurement->appendHtml(line);
+        if(g_logging) g_file_control_measurement.write(line.toStdString().c_str());
+        if(g_ekf_mode == REAL_TIME){
+            if(g_ekf_initing){
+                sphere_t sphere = {
+                    .x = measurement.x,
+                    .y = measurement.y,
+                    .z = 3,
+                    .r = measurement.r,
+                };
+                g_spheres.append(sphere);
+                g_yaw = -measurement.yaw/180.0f*M_PI;
+                if(g_spheres.size() >= 3){
+                    sphere_t spheres[3] = {g_spheres[0], g_spheres[1], g_spheres[2]};
+                    g_spheres.clear();
+                    trilateration_result_t trilateration_result;
+                    trilaterate(spheres, &trilateration_result);
+                    ekf_reset(trilateration_result.PA.x, trilateration_result.PA.y, g_yaw - (-0.52359877559));
+                    g_ekf_initing = false;
+                    ui->btn_init_ekf->setText("Init EKF");
+                }
+            }
+            else if(g_ekf_running){
+                ekf_measurement_t m;
+                m.rx = measurement.x;
+                m.ry = measurement.y;
+                m.range = measurement.r;
+                m.range = sqrt(m.range*m.range-3.0f*3.0f);
+                if(isnanf(m.range)) return;
+                m.yaw = - (measurement.yaw/180.0f*M_PI - (-0.52359877559));
+                ekf_correct(&g_ekf, &m);
+
+                qDebug() << g_ekf.x << " " << g_ekf.y << " " << g_ekf.theta;
+
+                QScatterDataArray data;
+                data << QVector3D(g_ekf.x, g_ekf.y, 0.0f);
+                g_state->dataProxy()->deleteLater();
+                g_state->setDataProxy(new QScatterDataProxy());
+                g_state->dataProxy()->addItems(data);
+                g_qs3s_trajectory->dataProxy()->addItems(data);
+            }
         }
     }
 }
@@ -189,36 +252,188 @@ void Mode_run::on_btn_cm_clicked()
 
 void Mode_run::on_btn_run_ekf_clicked()
 {
-    QFile in(ui->tb_cm->text());
-    QFile out("correction.txt");
-    if (!in.open(QIODevice::ReadOnly | QIODevice::Text))
-        return;
-    if (!out.open(QIODevice::WriteOnly | QIODevice::Text))
-        return;
-
-    sphere_t spheres[3];
-    uint8_t sphere_idx = 0;
-    float yaw = 0;
-    while (!in.atEnd()) {
-        QString line = in.readLine();
-        QStringList sl = line.split(" ");
-        if(sl.at(0) == "M"){
-            qDebug() << sl << endl;
-            spheres[sphere_idx].x = sl.at(1).toFloat();
-            spheres[sphere_idx].y = sl.at(2).toFloat();
-            spheres[sphere_idx].z = 3;
-            spheres[sphere_idx].r = sl.at(4).toFloat();
-            yaw = sl.at(5).toFloat()/180*M_PI;
-            sphere_idx++;
-            if(sphere_idx == 3) break;
+    if(g_ekf_mode == REAL_TIME || g_ekf_mode == RT_PREDICT){
+        if(g_ekf_running == true){
+            g_ekf_running = false;
+            ui->btn_run_ekf->setText("Run EKF");
+        }else{
+            g_ekf_running = true;
+            ui->btn_run_ekf->setText("Running");
         }
     }
+    else if(g_ekf_mode == FROM_FILE){
+        QFile in(ui->tb_cm->text());
+        QFile out("correction.txt");
+        if (!in.open(QIODevice::ReadOnly | QIODevice::Text))
+            return;
+        if (!out.open(QIODevice::WriteOnly | QIODevice::Text))
+            return;
 
-    trilateration_result_t trilateration_result;
-    trilaterate(spheres, &trilateration_result);
-    ui->tb_initial_state_x->setText(QString::number(trilateration_result.PA.x));
-    ui->tb_initial_state_y->setText(QString::number(trilateration_result.PA.y));
-    ui->tb_initial_state_z->setText(QString::number(yaw));
+        QScatterDataArray data;
+        g_trajectory.clear();
+
+        while (!in.atEnd()) {
+            QString line = in.readLine();
+            QStringList sl = line.split(" ");
+            if(sl.at(0) == "C"){
+                ekf_control_t c;
+                float l = -sl.at(1).toFloat();
+                float r = -sl.at(2).toFloat();
+                c.l = l/g_ekf_params.pule_per_revolution*(M_PI*g_ekf_params.wheel_diameter);
+                c.r = r/g_ekf_params.pule_per_revolution*(M_PI*g_ekf_params.wheel_diameter);
+                ekf_predict(&g_ekf, &c);
+                data << QVector3D(g_ekf.x, g_ekf.y, 0.0f);
+                ekf_state_t ekf_state = {
+                    .x = g_ekf.x,
+                    .y = g_ekf.y,
+                    .w = g_ekf.theta,
+                };
+                g_trajectory.append(ekf_state);
+            }
+            else if (sl.at(0) == "M"){
+                ekf_measurement_t m;
+                m.rx = sl.at(1).toFloat();
+                m.ry = sl.at(2).toFloat();
+                if(fabs(m.rx) < 1 && fabs(m.ry) < 1) continue;
+                m.range = sl.at(4).toFloat();
+                m.range = sqrt(m.range*m.range-3.0f*3.0f);
+                m.yaw = sl.at(5).toFloat()/180*M_PI - (-0.52359877559);
+                ekf_correct(&g_ekf, &m);
+                QTextStream stream(&out);
+                stream << "F " << g_ekf.x*300+500 << " " << g_ekf.y*300+3000 << " " << g_ekf.theta << endl;
+                data << QVector3D(g_ekf.x, g_ekf.y, 0.0f);
+                ekf_state_t ekf_state = {
+                    .x = g_ekf.x,
+                    .y = g_ekf.y,
+                    .w = g_ekf.theta,
+                };
+                g_trajectory.append(ekf_state);
+            }
+        }
+
+        g_qs3s_trajectory->dataProxy()->deleteLater();
+        g_qs3s_trajectory->setDataProxy(new QScatterDataProxy());
+        g_qs3s_trajectory->dataProxy()->addItems(data);
+
+        ui->hs_ekf_state->setMaximum(g_trajectory.size()-1);
+        ui->lb_total_state->setText(QString::number(g_trajectory.size()));
+
+        in.close();
+        out.close();
+    }
+    else if(g_ekf_mode == FILE_PREDICT){
+        QFile in(ui->tb_cm->text());
+        QFile out("correction.txt");
+        if (!in.open(QIODevice::ReadOnly | QIODevice::Text))
+            return;
+        if (!out.open(QIODevice::WriteOnly | QIODevice::Text))
+            return;
+
+        QScatterDataArray data;
+        g_trajectory.clear();
+
+        while (!in.atEnd()) {
+            QString line = in.readLine();
+            QStringList sl = line.split(" ");
+            if(sl.at(0) == "C"){
+                ekf_control_t c;
+                float l = -sl.at(1).toFloat();
+                float r = -sl.at(2).toFloat();
+                c.l = l/g_ekf_params.pule_per_revolution*(M_PI*g_ekf_params.wheel_diameter);
+                c.r = r/g_ekf_params.pule_per_revolution*(M_PI*g_ekf_params.wheel_diameter);
+                ekf_predict(&g_ekf, &c);
+                data << QVector3D(g_ekf.x, g_ekf.y, 0.0f);
+                ekf_state_t ekf_state = {
+                    .x = g_ekf.x,
+                    .y = g_ekf.y,
+                    .w = g_ekf.theta,
+                };
+                g_trajectory.append(ekf_state);
+            }
+        }
+
+        g_qs3s_trajectory->dataProxy()->deleteLater();
+        g_qs3s_trajectory->setDataProxy(new QScatterDataProxy());
+        g_qs3s_trajectory->dataProxy()->addItems(data);
+
+        ui->hs_ekf_state->setMaximum(g_trajectory.size()-1);
+        ui->lb_total_state->setText(QString::number(g_trajectory.size()));
+
+        in.close();
+        out.close();
+    }
+}
+
+void Mode_run::on_hs_ekf_state_sliderMoved(int position)
+{
+    ui->lb_curren_state->setText(QString::number(position));
+    if(g_trajectory.size() == 0) return;
+
+    QScatterDataArray data;
+    data << QVector3D(g_trajectory[position].x, g_trajectory[position].y, 0.0f);
+    g_state->dataProxy()->deleteLater();
+    g_state->setDataProxy(new QScatterDataProxy());
+    g_state->dataProxy()->addItems(data);
+}
+
+void Mode_run::on_btn_init_ekf_clicked()
+{
+
+    g_qs3s_trajectory->dataProxy()->deleteLater();
+    g_qs3s_trajectory->setDataProxy(new QScatterDataProxy());
+
+    if(g_ekf_mode == REAL_TIME){
+        if(g_ekf_initing){
+            g_ekf_initing = false;
+            ui->btn_init_ekf->setText("Init EKF");
+        }else{
+            g_ekf_initing = true;
+            ui->btn_init_ekf->setText("Initializing");
+        }
+    }
+    else if(g_ekf_mode == FROM_FILE){
+        QFile in(ui->tb_cm->text());
+        if (!in.open(QIODevice::ReadOnly | QIODevice::Text))
+            return;
+
+        sphere_t spheres[3];
+        uint8_t sphere_idx = 0;
+        float yaw = 0;
+        while (!in.atEnd()) {
+            QString line = in.readLine();
+            QStringList sl = line.split(" ");
+            if(sl.at(0) == "M"){
+                qDebug() << sl << endl;
+                spheres[sphere_idx].x = sl.at(1).toFloat();
+                spheres[sphere_idx].y = sl.at(2).toFloat();
+                spheres[sphere_idx].z = 3;
+                spheres[sphere_idx].r = sl.at(4).toFloat();
+                yaw = sl.at(5).toFloat()/180*M_PI;
+                sphere_idx++;
+                if(sphere_idx == 3) break;
+            }
+        }
+
+        trilateration_result_t trilateration_result;
+        trilaterate(spheres, &trilateration_result);
+        ekf_reset(trilateration_result.PA.x, trilateration_result.PA.y, yaw - (-0.52359877559));
+    }
+    else if(g_ekf_mode == RT_PREDICT || g_ekf_mode == FILE_PREDICT){
+        ekf_reset(ui->tb_initial_state_x->text().toFloat(), ui->tb_initial_state_y->text().toFloat(), ui->tb_initial_state_w->text().toFloat());
+    }
+}
+
+void Mode_run::on_cb_ekf_mode_currentIndexChanged(int index)
+{
+    QSettings setting;
+    setting.setValue("ekf_mode", index);
+    g_ekf_mode = (ekf_mode_t)index;
+}
+
+void Mode_run::ekf_reset(float x, float y, float w){
+    ui->tb_initial_state_x->setText(QString::number(x));
+    ui->tb_initial_state_y->setText(QString::number(y));
+    ui->tb_initial_state_w->setText(QString::number(w));
 
     g_ekf_params.robot_width = ui->tb_pm_w->text().toFloat();
     g_ekf_params.control_motion_factor = ui->tb_pm_cmf->text().toFloat();
@@ -232,9 +447,9 @@ void Mode_run::on_btn_run_ekf_clicked()
     g_ekf_params.wheel_diameter = ui->tb_pm_wd->text().toFloat();
 
 
-    g_ekf.x = trilateration_result.PA.x;
-    g_ekf.y = trilateration_result.PA.y;
-    g_ekf.theta = 90.0f/180.0f*M_PI;
+    g_ekf.x = x;
+    g_ekf.y = y;
+    g_ekf.theta = w;
 
     g_ekf.cov[0][1] = g_ekf.cov[0][2] = 0.0f;
     g_ekf.cov[1][0] = g_ekf.cov[1][2] = 0.0f;
@@ -250,67 +465,8 @@ void Mode_run::on_btn_run_ekf_clicked()
 
     ekf_init(&g_ekf, &g_ekf_params);
 
-    QScatterDataArray data;
-    g_trajectory.clear();
-
-    while (!in.atEnd()) {
-        QString line = in.readLine();
-        QStringList sl = line.split(" ");
-        if(sl.at(0) == "C"){
-            ekf_control_t c;
-            float l = -sl.at(1).toFloat();
-            float r = -sl.at(2).toFloat();
-            c.l = l/g_ekf_params.pule_per_revolution*(M_PI*g_ekf_params.wheel_diameter);
-            c.r = r/g_ekf_params.pule_per_revolution*(M_PI*g_ekf_params.wheel_diameter);
-            ekf_predict(&g_ekf, &c);
-            data << QVector3D(g_ekf.x, g_ekf.y, 0.0f);
-            ekf_state_t ekf_state = {
-                .x = g_ekf.x,
-                .y = g_ekf.y,
-                .w = g_ekf.theta,
-            };
-            g_trajectory.append(ekf_state);
-        }
-        else if (sl.at(0) == "M"){
-            ekf_measurement_t m;
-            m.rx = sl.at(1).toFloat();
-            m.ry = sl.at(2).toFloat();
-            if(fabs(m.rx) < 1 && fabs(m.ry) < 1) continue;
-            m.range = sl.at(4).toFloat();
-            m.range = sqrt(m.range*m.range-3.0f*3.0f);
-            m.yaw = sl.at(5).toFloat()/180*M_PI - (-0.525876);
-            ekf_correct(&g_ekf, &m);
-            QTextStream stream(&out);
-            stream << "F " << g_ekf.x*300+500 << " " << g_ekf.y*300+3000 << " " << g_ekf.theta << endl;
-            data << QVector3D(g_ekf.x, g_ekf.y, 0.0f);
-            ekf_state_t ekf_state = {
-                .x = g_ekf.x,
-                .y = g_ekf.y,
-                .w = g_ekf.theta,
-            };
-            g_trajectory.append(ekf_state);
-        }
-    }
-
-    g_qs3s_trajectory->dataProxy()->deleteLater();
-    g_qs3s_trajectory->setDataProxy(new QScatterDataProxy());
-    g_qs3s_trajectory->dataProxy()->addItems(data);
-
-    ui->hs_ekf_state->setMaximum(g_trajectory.size()-1);
-    ui->lb_total_state->setText(QString::number(g_trajectory.size()));
-
-    in.close();
-    out.close();
-}
-
-void Mode_run::on_hs_ekf_state_sliderMoved(int position)
-{
-    ui->lb_curren_state->setText(QString::number(position));
-    if(g_trajectory.size() == 0) return;
-
-    QScatterDataArray data;
-    data << QVector3D(g_trajectory[position].x, g_trajectory[position].y, 0.0f);
-    g_state->dataProxy()->deleteLater();
-    g_state->setDataProxy(new QScatterDataProxy());
-    g_state->dataProxy()->addItems(data);
+    QString str;
+    QTextStream tr(&str);
+    tr << "Intial state: " << g_ekf.x << " " << g_ekf.y << " " << g_ekf.theta << " ";
+    show_status(str, 1000);
 }

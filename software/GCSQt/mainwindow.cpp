@@ -15,7 +15,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Prepare joystick
     g_qjs = QJoysticks::getInstance();
-    g_qjs->setVirtualJoystickRange(1);
     connect(g_qjs,SIGNAL(axisChanged(const int, const int, const qreal)),this,SLOT(js_axis_change(const int, const int, const qreal)));
 
     // Com
@@ -127,24 +126,8 @@ void MainWindow::app_main_on_data_recv(QByteArray bytes){
                 qDebug() << "Mode: " << g_current_mode;
             }
             else{
-                switch (g_current_mode) {
-                case MODE_RUN:
-                    g_mode_run->mav_recv(&msg);
-                    break;
-                case MODE_IMU:
-                    g_mode_imu->mav_recv(&msg);
-                    break;
-                case MODE_PIDT_TW:
-                    g_mode_pidt_tw->mav_recv(&msg);
-                    break;
-                case MODE_PIDT_TA:
-                    g_mode_pidt_ta->mav_recv(&msg);
-                    break;
-                case MODE_HW:
-                    g_mode_hw_tw->mav_recv(&msg);
-                    break;
-                default:
-                    break;
+                for (Mode_common* &mode : g_mode){
+                    mode->mav_recv(&msg);
                 }
             }
         }

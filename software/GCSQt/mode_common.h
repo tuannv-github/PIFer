@@ -2,6 +2,7 @@
 #define MODE_COMMON_H
 
 #include <QTimer>
+#include <QSettings>
 #include <QtWidgets/QStatusBar>
 #include <MAVLink/protocol/mavlink.h>
 #include <QCustomPlot/qcustomplot.h>
