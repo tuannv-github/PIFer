@@ -1,8 +1,10 @@
 #include "mode_run.h"
 #include "ui_mode_run.h"
 
-#include <EKF/ekf.h>
-#include <EKF/utils.h>
+#include <limits>
+#include <DWA/dwa.h>
+#include <DWA/dwa_utils.h>
+#include <EKF/ekf_utils.h>
 
 Mode_run::Mode_run(QWidget *parent, CommonObject *co) :
     Mode_common(parent, co),
@@ -68,6 +70,21 @@ Mode_run::Mode_run(QWidget *parent, CommonObject *co) :
     QSettings settings;
     ui->cb_ekf_mode->setCurrentIndex(settings.value("ekf_mode", 0).toInt());
     g_ekf_mode = (ekf_mode_t)ui->cb_ekf_mode->currentIndex();
+
+    g_qs3s_ref_trajectory = new QScatter3DSeries();
+    g_qs3s_ref_trajectory->setItemSize(0.02);
+    g_qs3s_ref_trajectory->setBaseColor(QColor(0,255,255));
+    g_3d_scatter->addSeries(g_qs3s_ref_trajectory);
+
+    g_qs3s_dwa_trajectory = new QScatter3DSeries();
+    g_qs3s_dwa_trajectory->setItemSize(0.035);
+    g_qs3s_dwa_trajectory->setBaseColor(QColor(0,255,0));
+    g_3d_scatter->addSeries(g_qs3s_dwa_trajectory);
+
+    g_qs3s_dwa_ref_trajectory = new QScatter3DSeries();
+    g_qs3s_dwa_ref_trajectory->setItemSize(0.035);
+    g_qs3s_dwa_ref_trajectory->setBaseColor(QColor(255,0,255));
+    g_3d_scatter->addSeries(g_qs3s_dwa_ref_trajectory);
 }
 
 Mode_run::~Mode_run()
@@ -469,4 +486,68 @@ void Mode_run::ekf_reset(float x, float y, float w){
     QTextStream tr(&str);
     tr << "Intial state: " << g_ekf.x << " " << g_ekf.y << " " << g_ekf.theta << " ";
     show_status(str, 1000);
+}
+
+void Mode_run::on_btn_trajectory_gen_clicked()
+{
+    if(ui->cb_trajectory->currentText() == "Lemniscate"){
+        float cx = ui->tb_trajectory_params_0->text().toFloat();
+        float cy = ui->tb_trajectory_params_1->text().toFloat();
+        float a = ui->tb_trajectory_params_2->text().toFloat();
+        float size = ui->tb_trajectory_params_3->text().toFloat();
+        g_ref_trajectory_2d =  lemniscate_2d(cx, cy, a, size);
+
+        QScatterDataArray data = to_scatter_data_array(g_ref_trajectory_2d);
+        g_qs3s_ref_trajectory->dataProxy()->deleteLater();
+        g_qs3s_ref_trajectory->setDataProxy(new QScatterDataProxy());
+        g_qs3s_ref_trajectory->dataProxy()->addItems(data);
+    }
+}
+
+void Mode_run::on_btn_follow_clicked()
+{
+    if(g_ref_trajectory_2d.size() == 0) return;
+
+    float min_dist = std::numeric_limits<float>::max();
+    int min_dist_idx = 0;
+    for (int i=0; i<g_ref_trajectory_2d.size(); i++){
+        float dx = g_ekf.x -  g_ref_trajectory_2d[i].x;
+        float dy = g_ekf.y - g_ref_trajectory_2d[i].y;
+        float dist = dx*dx + dy*dy;
+        if(dist < min_dist){
+            min_dist = dist;
+            min_dist_idx = i;
+        }
+    }
+
+    QVector<trajectory_point_2d_t> traj;
+    for(int i=min_dist_idx; i<min_dist_idx+DWA_SIM_SIZE; i++){
+        int idx = i>=g_ref_trajectory_2d.size() ? i-g_ref_trajectory_2d.size() : i;
+        traj.append(g_ref_trajectory_2d[idx]);
+    }
+    QScatterDataArray data;
+    data = to_scatter_data_array(traj);
+    g_qs3s_dwa_ref_trajectory->dataProxy()->deleteLater();
+    g_qs3s_dwa_ref_trajectory->setDataProxy(new QScatterDataProxy());
+    g_qs3s_dwa_ref_trajectory->dataProxy()->addItems(data);
+
+    dwa_t dwa;
+    dwa_params_t params;
+    params.v_max = ui->tb_dwa_v->text().toFloat();
+    params.v_min = -params.v_max;
+    params.w_max = ui->tb_dwa_w->text().toFloat();
+    params.w_min = -params.w_max;
+    dwa_state_t state;
+    state.x = g_ekf.x;
+    state.y = g_ekf.y;
+    state.w = g_ekf.theta;
+
+    dwa_init(&dwa, &params);
+    dwa_gen(&dwa,&state);
+    dwa_score(&dwa,traj);
+
+    data = to_scatter_data_array(&dwa);
+    g_qs3s_dwa_trajectory->dataProxy()->deleteLater();
+    g_qs3s_dwa_trajectory->setDataProxy(new QScatterDataProxy());
+    g_qs3s_dwa_trajectory->dataProxy()->addItems(data);
 }

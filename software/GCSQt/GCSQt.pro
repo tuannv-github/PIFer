@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui serialport network gamepad printsupport opengl datavisualization
+QT       += core gui serialport network gamepad printsupport opengl datavisualization quick
 UI_DIR = $$PWD
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -26,10 +26,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+    DWA/dwa.cpp \
+    DWA/dwa_utils.cpp \
     EKF/ekf.cpp \
-    EKF/utils.cpp \
+    EKF/ekf_utils.cpp \
     QCustomPlot/qcustomplot.cpp \
     QPlot3D/QPlot3D.cpp \
+    TrajectoryGen/trajectory_utils.cpp \
+    TrajectoryGen/trajectorygen.cpp \
     com.cpp \
     com_gui.cpp \
     commonobject.cpp \
@@ -44,7 +48,10 @@ SOURCES += \
     mode_run.cpp \
 
 HEADERS += \
+    DWA/dwa.h \
+    DWA/dwa_utils.h \
     EKF/ekf.h \
+    EKF/ekf_utils.h \
     MAVLink/checksum.h \
     MAVLink/mavlink_conversions.h \
     MAVLink/mavlink_helpers.h \
@@ -100,9 +107,12 @@ HEADERS += \
     QCustomPlot/qcustomplot.h \
     QPlot3D/QPlot3D.h \
     QPlot3D/QPlot3D.h \
+    TrajectoryGen/trajectory_utils.h \
+    TrajectoryGen/trajectorygen.h \
     com.h \
     com_gui.h \
     commonobject.h \
+    dwa/dwa.h \
     led_indicator.h \
     mainwindow.h \
     mainwindow.h \
@@ -112,7 +122,7 @@ HEADERS += \
     mode_pidt_tw.h \
     mode_run.h \
     mode_hw_tw.h \
-    qcustomplot/qcustomplot.h
+    qcustomplot/qcustomplot.h \
 
 FORMS += \
     com.ui \

@@ -5,9 +5,12 @@
 #include <QTimer>
 #include <QtWidgets/QStatusBar>
 #include <QFile>
-#include <EKF/ekf.h>
-#include <EKF/utils.h>
 #include <mode_common.h>
+
+#include <EKF/ekf.h>
+#include <EKF/ekf_utils.h>
+#include <TrajectoryGen/trajectorygen.h>
+#include <TrajectoryGen/trajectory_utils.h>
 
 namespace Ui {
 class Mode_run;
@@ -50,6 +53,10 @@ private slots:
 
     void on_cb_ekf_mode_currentIndexChanged(int index);
 
+    void on_btn_trajectory_gen_clicked();
+
+    void on_btn_follow_clicked();
+
 private:
     Ui::Mode_run *ui;
     QTimer *g_controller_timer;
@@ -67,6 +74,10 @@ private:
     float g_yaw;
 
     QFile g_file_control_measurement;
+    QVector<trajectory_point_2d_t> g_ref_trajectory_2d;
+    QScatter3DSeries *g_qs3s_ref_trajectory;
+    QScatter3DSeries *g_qs3s_dwa_trajectory;
+    QScatter3DSeries *g_qs3s_dwa_ref_trajectory;
 
     void ekf_reset(float x, float y, float w);
 };

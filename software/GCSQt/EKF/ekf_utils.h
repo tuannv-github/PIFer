@@ -1,8 +1,11 @@
-#ifndef _UTILS_H_
-#define _UTILS_H_
+#ifndef EKF_UTILS_H
+#define EKF_UTILS_H
 
-#include <vector>
+#include <math.h>
 #include <string>
+#include <vector>
+
+#include "ekf.h"
 
 using namespace std;
 
@@ -29,4 +32,4 @@ typedef struct trilateration_result{
 vector<string> split(string s, string delimiter);
 void trilaterate(sphere_t sphere[3], trilateration_result_t *trilateration_result);
 
-#endif
+#endif // EKF_UTILS_H
