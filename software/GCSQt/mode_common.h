@@ -10,7 +10,6 @@
 #include <Q3DInputHandler>
 #include <commonobject.h>
 #include <Q3DInputHandler>
-#include <QPlot3D/QPlot3D.h>
 
 #define PID_VECTOR_LEN  40
 
@@ -45,7 +44,6 @@ protected:
     Q3DScatter *g_3d_scatter;
     Q3DInputHandler *g_input_handler;
     QWidget *g_3d_container;
-    QPlot3D *g_plot_3d;
 
     void show_status(QString q_str, int timeout);
 

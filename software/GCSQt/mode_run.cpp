@@ -18,6 +18,10 @@ Mode_run::Mode_run(QWidget *parent, CommonObject *co) :
     connect(g_controller_timer, SIGNAL(timeout()), this, SLOT(remote_controll_cmd()));
     g_logging = false;
 
+    g_dwa_follow_timer = new QTimer(this);
+    connect(g_dwa_follow_timer, SIGNAL(timeout()), this, SLOT(dwa_follow_callback()));
+    dwa_following = false;
+
     g_3d_scatter = new Q3DScatter();
     g_input_handler = new Q3DInputHandler();
     g_3d_container = QWidget::createWindowContainer(g_3d_scatter);
@@ -41,28 +45,10 @@ Mode_run::Mode_run(QWidget *parent, CommonObject *co) :
     series->setItemSize(0.01);
     g_3d_scatter->addSeries(series);
 
-    g_plot_3d = new QPlot3D();
-    QCurve3D *skeleton = new QCurve3D();
-    skeleton->addData(0,0,0);
-    skeleton->addData(QVector3D(13.2,0,0));
-    skeleton->addData(QVector3D(13.2,3.6,0));
-    skeleton->addData(QVector3D(0,3.6,0));
-    skeleton->addData(QVector3D(0,0,3));
-    skeleton->addData(QVector3D(13.2,0,3));
-    skeleton->addData(QVector3D(13.2,3.6,3));
-    skeleton->addData(QVector3D(0,3.6,3));
-    skeleton->setColor(Qt::green);
-    g_plot_3d->addCurve(skeleton);
-
     g_qs3s_trajectory = new QScatter3DSeries();
     g_qs3s_trajectory->setItemSize(0.02);
     g_qs3s_trajectory->setBaseColor(QColor(0,0,255));
     g_3d_scatter->addSeries(g_qs3s_trajectory);
-
-    g_state = new QScatter3DSeries();
-    g_state->setItemSize(0.1);
-    g_state->setBaseColor(QColor(255,0,0));
-    g_3d_scatter->addSeries(g_state);
 
     g_ekf_initing = false;
     g_ekf_running = false;
@@ -85,6 +71,18 @@ Mode_run::Mode_run(QWidget *parent, CommonObject *co) :
     g_qs3s_dwa_ref_trajectory->setItemSize(0.035);
     g_qs3s_dwa_ref_trajectory->setBaseColor(QColor(255,0,255));
     g_3d_scatter->addSeries(g_qs3s_dwa_ref_trajectory);
+
+    g_qs3s_state = new QScatter3DSeries();
+    g_qs3s_state->setItemSize(0.02);
+    g_qs3s_state->setBaseColor(QColor(255,0,0));
+    g_3d_scatter->addSeries(g_qs3s_state);
+
+    g_qs3s_state_origin= new QScatter3DSeries();
+    g_qs3s_state_origin->setItemSize(0.05);
+    g_qs3s_state_origin->setBaseColor(QColor(4, 255, 0));
+    g_3d_scatter->addSeries(g_qs3s_state_origin);
+
+    g_3d_scatter->axisX()->setReversed(true);
 }
 
 Mode_run::~Mode_run()
@@ -144,10 +142,9 @@ void Mode_run::mav_recv(mavlink_message_t *msg){
 
             QScatterDataArray data;
             data << QVector3D(g_ekf.x, g_ekf.y, 0.0f);
-            g_state->dataProxy()->deleteLater();
-            g_state->setDataProxy(new QScatterDataProxy());
-            g_state->dataProxy()->addItems(data);
             g_qs3s_trajectory->dataProxy()->addItems(data);
+            show_current_state(g_ekf.x, g_ekf.y, g_ekf.theta);
+
         }
     }
         break;
@@ -189,14 +186,10 @@ void Mode_run::mav_recv(mavlink_message_t *msg){
                 m.yaw = - (measurement.yaw/180.0f*M_PI - (-0.52359877559));
                 ekf_correct(&g_ekf, &m);
 
-                qDebug() << g_ekf.x << " " << g_ekf.y << " " << g_ekf.theta;
-
                 QScatterDataArray data;
                 data << QVector3D(g_ekf.x, g_ekf.y, 0.0f);
-                g_state->dataProxy()->deleteLater();
-                g_state->setDataProxy(new QScatterDataProxy());
-                g_state->dataProxy()->addItems(data);
                 g_qs3s_trajectory->dataProxy()->addItems(data);
+                show_current_state(g_ekf.x, g_ekf.y, g_ekf.theta);
             }
         }
     }
@@ -333,7 +326,7 @@ void Mode_run::on_btn_run_ekf_clicked()
         g_qs3s_trajectory->dataProxy()->addItems(data);
 
         ui->hs_ekf_state->setMaximum(g_trajectory.size()-1);
-        ui->lb_total_state->setText(QString::number(g_trajectory.size()));
+        ui->lb_total_state->setText(QString::number(g_trajectory.size()-1));
 
         in.close();
         out.close();
@@ -374,7 +367,7 @@ void Mode_run::on_btn_run_ekf_clicked()
         g_qs3s_trajectory->dataProxy()->addItems(data);
 
         ui->hs_ekf_state->setMaximum(g_trajectory.size()-1);
-        ui->lb_total_state->setText(QString::number(g_trajectory.size()));
+        ui->lb_total_state->setText(QString::number(g_trajectory.size()-1));
 
         in.close();
         out.close();
@@ -386,11 +379,7 @@ void Mode_run::on_hs_ekf_state_sliderMoved(int position)
     ui->lb_curren_state->setText(QString::number(position));
     if(g_trajectory.size() == 0) return;
 
-    QScatterDataArray data;
-    data << QVector3D(g_trajectory[position].x, g_trajectory[position].y, 0.0f);
-    g_state->dataProxy()->deleteLater();
-    g_state->setDataProxy(new QScatterDataProxy());
-    g_state->dataProxy()->addItems(data);
+    show_current_state(g_trajectory[position].x, g_trajectory[position].y, g_trajectory[position].w);
 }
 
 void Mode_run::on_btn_init_ekf_clicked()
@@ -436,7 +425,7 @@ void Mode_run::on_btn_init_ekf_clicked()
         ekf_reset(trilateration_result.PA.x, trilateration_result.PA.y, yaw - (-0.52359877559));
     }
     else if(g_ekf_mode == RT_PREDICT || g_ekf_mode == FILE_PREDICT){
-        ekf_reset(ui->tb_initial_state_x->text().toFloat(), ui->tb_initial_state_y->text().toFloat(), ui->tb_initial_state_w->text().toFloat());
+        ekf_reset(ui->tb_initial_state_x->text().toFloat(), ui->tb_initial_state_y->text().toFloat(), ui->tb_initial_state_w->text().toFloat()/180*M_PI);
     }
 }
 
@@ -450,7 +439,7 @@ void Mode_run::on_cb_ekf_mode_currentIndexChanged(int index)
 void Mode_run::ekf_reset(float x, float y, float w){
     ui->tb_initial_state_x->setText(QString::number(x));
     ui->tb_initial_state_y->setText(QString::number(y));
-    ui->tb_initial_state_w->setText(QString::number(w));
+    ui->tb_initial_state_w->setText(QString::number(w*180/M_PI));
 
     g_ekf_params.robot_width = ui->tb_pm_w->text().toFloat();
     g_ekf_params.control_motion_factor = ui->tb_pm_cmf->text().toFloat();
@@ -462,7 +451,6 @@ void Mode_run::ekf_reset(float x, float y, float w){
 
     g_ekf_params.pule_per_revolution = ui->tb_pm_ppr->text().toFloat();
     g_ekf_params.wheel_diameter = ui->tb_pm_wd->text().toFloat();
-
 
     g_ekf.x = x;
     g_ekf.y = y;
@@ -486,6 +474,8 @@ void Mode_run::ekf_reset(float x, float y, float w){
     QTextStream tr(&str);
     tr << "Intial state: " << g_ekf.x << " " << g_ekf.y << " " << g_ekf.theta << " ";
     show_status(str, 1000);
+
+    show_current_state(g_ekf.x, g_ekf.y, g_ekf.theta);
 }
 
 void Mode_run::on_btn_trajectory_gen_clicked()
@@ -502,16 +492,25 @@ void Mode_run::on_btn_trajectory_gen_clicked()
         g_qs3s_ref_trajectory->setDataProxy(new QScatterDataProxy());
         g_qs3s_ref_trajectory->dataProxy()->addItems(data);
     }
+    else if(ui->cb_trajectory->currentText() == "Circle"){
+        float cx = ui->tb_trajectory_params_0->text().toFloat();
+        float cy = ui->tb_trajectory_params_1->text().toFloat();
+        float a = ui->tb_trajectory_params_2->text().toFloat();
+        float size = ui->tb_trajectory_params_3->text().toFloat();
+        g_ref_trajectory_2d =  circle_2d(cx, cy, a, size);
+
+        QScatterDataArray data = to_scatter_data_array(g_ref_trajectory_2d);
+        g_qs3s_ref_trajectory->dataProxy()->deleteLater();
+        g_qs3s_ref_trajectory->setDataProxy(new QScatterDataProxy());
+        g_qs3s_ref_trajectory->dataProxy()->addItems(data);
+    }
 }
 
-void Mode_run::on_btn_follow_clicked()
-{
-    if(g_ref_trajectory_2d.size() == 0) return;
-
+void Mode_run::dwa_follow_callback(){
     float min_dist = std::numeric_limits<float>::max();
     int min_dist_idx = 0;
     for (int i=0; i<g_ref_trajectory_2d.size(); i++){
-        float dx = g_ekf.x -  g_ref_trajectory_2d[i].x;
+        float dx = g_ekf.x - g_ref_trajectory_2d[i].x;
         float dy = g_ekf.y - g_ref_trajectory_2d[i].y;
         float dist = dx*dx + dy*dy;
         if(dist < min_dist){
@@ -534,7 +533,8 @@ void Mode_run::on_btn_follow_clicked()
     dwa_t dwa;
     dwa_params_t params;
     params.v_max = ui->tb_dwa_v->text().toFloat();
-    params.v_min = -params.v_max;
+    //params.v_min = -params.v_max;
+    params.v_min = 0;
     params.w_max = ui->tb_dwa_w->text().toFloat();
     params.w_min = -params.w_max;
     dwa_state_t state;
@@ -550,4 +550,62 @@ void Mode_run::on_btn_follow_clicked()
     g_qs3s_dwa_trajectory->dataProxy()->deleteLater();
     g_qs3s_dwa_trajectory->setDataProxy(new QScatterDataProxy());
     g_qs3s_dwa_trajectory->dataProxy()->addItems(data);
+
+    ui->tb_dwa_result_v->setText(QString::number(dwa.v[dwa.v_idx]));
+    ui->tb_dwa_result_w->setText(QString::number(dwa.w[dwa.w_idx]));
+    float alpha_v = ui->tb_dwa_alpha_v->text().toFloat();
+    float alpha_w = ui->tb_dwa_alpha_w->text().toFloat();
+
+    float v = dwa.v[dwa.v_idx]*alpha_v;
+    float w = dwa.w[dwa.w_idx]*alpha_w;
+
+    ui->tb_dwa_send_v->setText(QString::number(v));
+    ui->tb_dwa_send_w->setText(QString::number(w));
+
+    mavlink_message_t msg;
+    uint8_t mav_send_buf[255];
+    mavlink_msg_cmd_velocity_pack(0,0,&msg,v,w);
+    uint16_t len = mavlink_msg_to_send_buffer(mav_send_buf, &msg);
+    emit mav_send(QByteArray::fromRawData(reinterpret_cast<char*>(mav_send_buf),len));
+}
+
+
+void Mode_run::on_btn_follow_clicked()
+{
+    if(g_ref_trajectory_2d.size() == 0) return;
+    if(dwa_following){
+        dwa_following = false;
+        ui->btn_follow->setText("Follow");
+        g_dwa_follow_timer->stop();
+        ui->btn_control_enable->setEnabled(true);
+    }else{
+        dwa_following = true;
+        ui->btn_follow->setText("Following");
+        g_dwa_follow_timer->start(200);
+
+        g_control_enable=false;
+        ui->btn_control_enable->setText("Disabled");
+        g_controller_timer->stop();
+        ui->btn_control_enable->setEnabled(false);
+    }
+}
+
+void Mode_run::show_current_state(float x, float y, float w){
+    ui->tb_current_state_x->setText(QString::number(x));
+    ui->tb_current_state_y->setText(QString::number(y));
+    ui->tb_current_state_w->setText(QString::number(w/M_PI*180.0f));
+
+    QScatterDataArray data;
+    for(int i=0; i<100; i++){
+        data << QVector3D(x+i*0.01*cos(w), y+i*0.01*sin(w), 0.0f);
+    }
+    g_qs3s_state->dataProxy()->deleteLater();
+    g_qs3s_state->setDataProxy(new QScatterDataProxy());
+    g_qs3s_state->dataProxy()->addItems(data);
+
+    data.clear();
+    data << QVector3D(x, y, 0.0f);
+    g_qs3s_state_origin->dataProxy()->deleteLater();
+    g_qs3s_state_origin->setDataProxy(new QScatterDataProxy());
+    g_qs3s_state_origin->dataProxy()->addItems(data);
 }

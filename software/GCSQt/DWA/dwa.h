@@ -4,9 +4,9 @@
 #include <QVector>
 #include <TrajectoryGen/trajectorygen.h>
 
-#define DWA_WIDTH_V     10
-#define DWA_WIDTH_W     20
-#define DWA_SIM_PERIOD  4
+#define DWA_WIDTH_V     50
+#define DWA_WIDTH_W     50
+#define DWA_SIM_PERIOD  5
 #define DWA_SIM_STEP    0.1
 #define DWA_SIM_SIZE    ((int)(DWA_SIM_PERIOD/DWA_SIM_STEP))
 
@@ -26,7 +26,7 @@ typedef struct{
 typedef struct{
     float v[DWA_WIDTH_V];
     float w[DWA_WIDTH_W];
-    dwa_state_t hypothesis[DWA_WIDTH_V*DWA_WIDTH_W][DWA_SIM_SIZE];
+    dwa_state_t hypothesis[DWA_WIDTH_V][DWA_WIDTH_W][DWA_SIM_SIZE];
     int v_idx;
     int w_idx;
 }dwa_t;

@@ -31,7 +31,6 @@ SOURCES += \
     EKF/ekf.cpp \
     EKF/ekf_utils.cpp \
     QCustomPlot/qcustomplot.cpp \
-    QPlot3D/QPlot3D.cpp \
     TrajectoryGen/trajectory_utils.cpp \
     TrajectoryGen/trajectorygen.cpp \
     com.cpp \
@@ -105,8 +104,6 @@ HEADERS += \
     MAVLink/protocol/testsuite.h \
     MAVLink/protocol/version.h \
     QCustomPlot/qcustomplot.h \
-    QPlot3D/QPlot3D.h \
-    QPlot3D/QPlot3D.h \
     TrajectoryGen/trajectory_utils.h \
     TrajectoryGen/trajectorygen.h \
     com.h \

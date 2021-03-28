@@ -57,9 +57,12 @@ private slots:
 
     void on_btn_follow_clicked();
 
+    void dwa_follow_callback();
+
 private:
     Ui::Mode_run *ui;
     QTimer *g_controller_timer;
+    QTimer *g_dwa_follow_timer;
     bool g_control_enable;
     bool g_logging;
     bool g_ekf_initing;
@@ -69,7 +72,6 @@ private:
     ekf_params_t g_ekf_params;
     QVector<ekf_state_t> g_trajectory;
     QScatter3DSeries *g_qs3s_trajectory;
-    QScatter3DSeries *g_state;
     QVector<sphere_t> g_spheres;
     float g_yaw;
 
@@ -78,8 +80,13 @@ private:
     QScatter3DSeries *g_qs3s_ref_trajectory;
     QScatter3DSeries *g_qs3s_dwa_trajectory;
     QScatter3DSeries *g_qs3s_dwa_ref_trajectory;
+    bool dwa_following;
+
+    QScatter3DSeries *g_qs3s_state;
+    QScatter3DSeries *g_qs3s_state_origin;
 
     void ekf_reset(float x, float y, float w);
+    void show_current_state(float x, float y, float w);
 };
 
 #endif // MODE_RUN_H

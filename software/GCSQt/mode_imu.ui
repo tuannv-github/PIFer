@@ -18,8 +18,8 @@
     <rect>
      <x>10</x>
      <y>70</y>
-     <width>291</width>
-     <height>141</height>
+     <width>301</width>
+     <height>151</height>
     </rect>
    </property>
    <property name="title">
@@ -28,8 +28,8 @@
    <widget class="QLineEdit" name="tb_my">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>80</y>
+      <x>140</x>
+      <y>90</y>
       <width>71</width>
       <height>20</height>
      </rect>
@@ -38,8 +38,8 @@
    <widget class="QLineEdit" name="tb_mx">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>80</y>
+      <x>60</x>
+      <y>90</y>
       <width>71</width>
       <height>20</height>
      </rect>
@@ -48,8 +48,8 @@
    <widget class="QLineEdit" name="tb_mz">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>80</y>
+      <x>220</x>
+      <y>90</y>
       <width>71</width>
       <height>20</height>
      </rect>
@@ -59,8 +59,8 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>80</y>
-      <width>31</width>
+      <y>90</y>
+      <width>41</width>
       <height>16</height>
      </rect>
     </property>
@@ -71,8 +71,8 @@
    <widget class="QLineEdit" name="tb_ay">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>50</y>
+      <x>140</x>
+      <y>60</y>
       <width>71</width>
       <height>20</height>
      </rect>
@@ -81,8 +81,8 @@
    <widget class="QLineEdit" name="tb_ax">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>50</y>
+      <x>60</x>
+      <y>60</y>
       <width>71</width>
       <height>20</height>
      </rect>
@@ -91,8 +91,8 @@
    <widget class="QLineEdit" name="tb_az">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>50</y>
+      <x>220</x>
+      <y>60</y>
       <width>71</width>
       <height>20</height>
      </rect>
@@ -102,8 +102,8 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>50</y>
-      <width>31</width>
+      <y>60</y>
+      <width>41</width>
       <height>16</height>
      </rect>
     </property>
@@ -114,8 +114,8 @@
    <widget class="QLineEdit" name="tb_gx">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>20</y>
+      <x>60</x>
+      <y>30</y>
       <width>71</width>
       <height>20</height>
      </rect>
@@ -124,8 +124,8 @@
    <widget class="QLineEdit" name="tb_gz">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>20</y>
+      <x>220</x>
+      <y>30</y>
       <width>71</width>
       <height>20</height>
      </rect>
@@ -135,8 +135,8 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>20</y>
-      <width>31</width>
+      <y>30</y>
+      <width>41</width>
       <height>16</height>
      </rect>
     </property>
@@ -147,8 +147,8 @@
    <widget class="QLineEdit" name="tb_gy">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>20</y>
+      <x>140</x>
+      <y>30</y>
       <width>71</width>
       <height>20</height>
      </rect>
@@ -157,8 +157,8 @@
    <widget class="QLineEdit" name="tb_tilt_raw">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>110</y>
+      <x>60</x>
+      <y>120</y>
       <width>71</width>
       <height>20</height>
      </rect>
@@ -168,7 +168,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>110</y>
+      <y>120</y>
       <width>31</width>
       <height>16</height>
      </rect>
@@ -195,9 +195,9 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>210</y>
-     <width>591</width>
-     <height>171</height>
+     <y>220</y>
+     <width>621</width>
+     <height>181</height>
     </rect>
    </property>
    <property name="title">
@@ -206,9 +206,9 @@
    <widget class="QLineEdit" name="tb_gbelieve">
     <property name="geometry">
      <rect>
-      <x>490</x>
-      <y>20</y>
-      <width>91</width>
+      <x>510</x>
+      <y>30</y>
+      <width>101</width>
       <height>20</height>
      </rect>
     </property>
@@ -216,8 +216,8 @@
    <widget class="QLineEdit" name="tb_my_scale">
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>110</y>
+      <x>190</x>
+      <y>120</y>
       <width>91</width>
       <height>20</height>
      </rect>
@@ -226,9 +226,9 @@
    <widget class="QLabel" name="label_27">
     <property name="geometry">
      <rect>
-      <x>380</x>
-      <y>20</y>
-      <width>61</width>
+      <x>390</x>
+      <y>30</y>
+      <width>81</width>
       <height>16</height>
      </rect>
     </property>
@@ -240,8 +240,8 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>110</y>
-      <width>61</width>
+      <y>120</y>
+      <width>81</width>
       <height>16</height>
      </rect>
     </property>
@@ -253,8 +253,8 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>80</y>
-      <width>51</width>
+      <y>90</y>
+      <width>71</width>
       <height>16</height>
      </rect>
     </property>
@@ -265,8 +265,8 @@
    <widget class="QLineEdit" name="tb_mz_scale">
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>110</y>
+      <x>290</x>
+      <y>120</y>
       <width>91</width>
       <height>20</height>
      </rect>
@@ -275,8 +275,8 @@
    <widget class="QLineEdit" name="tb_gx_bias">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>20</y>
+      <x>90</x>
+      <y>30</y>
       <width>91</width>
       <height>20</height>
      </rect>
@@ -285,8 +285,8 @@
    <widget class="QLineEdit" name="tb_my_bias">
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>80</y>
+      <x>190</x>
+      <y>90</y>
       <width>91</width>
       <height>20</height>
      </rect>
@@ -295,8 +295,8 @@
    <widget class="QLineEdit" name="tb_mz_bias">
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>80</y>
+      <x>290</x>
+      <y>90</y>
       <width>91</width>
       <height>20</height>
      </rect>
@@ -305,8 +305,8 @@
    <widget class="QLineEdit" name="tb_angle_adjust">
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>140</y>
+      <x>290</x>
+      <y>150</y>
       <width>91</width>
       <height>20</height>
      </rect>
@@ -315,8 +315,8 @@
    <widget class="QLineEdit" name="tb_mx_bias">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>80</y>
+      <x>90</x>
+      <y>90</y>
       <width>91</width>
       <height>20</height>
      </rect>
@@ -326,8 +326,8 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>20</y>
-      <width>51</width>
+      <y>30</y>
+      <width>71</width>
       <height>16</height>
      </rect>
     </property>
@@ -338,8 +338,8 @@
    <widget class="QLineEdit" name="tb_gy_bias">
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>20</y>
+      <x>190</x>
+      <y>30</y>
       <width>91</width>
       <height>20</height>
      </rect>
@@ -348,8 +348,8 @@
    <widget class="QLineEdit" name="tb_gz_bias">
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>20</y>
+      <x>290</x>
+      <y>30</y>
       <width>91</width>
       <height>20</height>
      </rect>
@@ -358,8 +358,8 @@
    <widget class="QLineEdit" name="tb_mx_scale">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>110</y>
+      <x>90</x>
+      <y>120</y>
       <width>91</width>
       <height>20</height>
      </rect>
@@ -369,8 +369,8 @@
     <property name="geometry">
      <rect>
       <x>200</x>
-      <y>140</y>
-      <width>61</width>
+      <y>150</y>
+      <width>71</width>
       <height>16</height>
      </rect>
     </property>
@@ -381,8 +381,8 @@
    <widget class="QComboBox" name="cb_tilt">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>140</y>
+      <x>90</x>
+      <y>150</y>
       <width>91</width>
       <height>22</height>
      </rect>
@@ -392,7 +392,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>140</y>
+      <y>150</y>
       <width>51</width>
       <height>16</height>
      </rect>
@@ -404,8 +404,8 @@
    <widget class="QLineEdit" name="tb_ay_bias">
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>50</y>
+      <x>190</x>
+      <y>60</y>
       <width>91</width>
       <height>20</height>
      </rect>
@@ -415,8 +415,8 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>50</y>
-      <width>51</width>
+      <y>60</y>
+      <width>71</width>
       <height>16</height>
      </rect>
     </property>
@@ -427,8 +427,8 @@
    <widget class="QLineEdit" name="tb_ax_bias">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>50</y>
+      <x>90</x>
+      <y>60</y>
       <width>91</width>
       <height>20</height>
      </rect>
@@ -437,8 +437,8 @@
    <widget class="QLineEdit" name="tb_az_bias">
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>50</y>
+      <x>290</x>
+      <y>60</y>
       <width>91</width>
       <height>20</height>
      </rect>
@@ -447,9 +447,9 @@
    <widget class="QLineEdit" name="tb_complementary_gain">
     <property name="geometry">
      <rect>
-      <x>490</x>
-      <y>50</y>
-      <width>91</width>
+      <x>510</x>
+      <y>60</y>
+      <width>101</width>
       <height>20</height>
      </rect>
     </property>
@@ -457,9 +457,9 @@
    <widget class="QLabel" name="label_32">
     <property name="geometry">
      <rect>
-      <x>380</x>
-      <y>80</y>
-      <width>81</width>
+      <x>390</x>
+      <y>90</y>
+      <width>111</width>
       <height>16</height>
      </rect>
     </property>
@@ -470,9 +470,9 @@
    <widget class="QLineEdit" name="tb_madgwick_beta">
     <property name="geometry">
      <rect>
-      <x>490</x>
-      <y>80</y>
-      <width>91</width>
+      <x>510</x>
+      <y>90</y>
+      <width>101</width>
       <height>20</height>
      </rect>
     </property>
@@ -483,14 +483,14 @@
    <widget class="QLabel" name="label_34">
     <property name="geometry">
      <rect>
-      <x>380</x>
-      <y>50</y>
-      <width>101</width>
+      <x>390</x>
+      <y>60</y>
+      <width>151</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>Complementary gain:</string>
+     <string>Comp gain:</string>
     </property>
    </widget>
   </widget>
@@ -536,10 +536,10 @@
   <widget class="QGroupBox" name="groupBox">
    <property name="geometry">
     <rect>
-     <x>310</x>
+     <x>320</x>
      <y>70</y>
-     <width>291</width>
-     <height>141</height>
+     <width>301</width>
+     <height>151</height>
     </rect>
    </property>
    <property name="title">
@@ -548,8 +548,8 @@
    <widget class="QLineEdit" name="tb_cab_mz">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>80</y>
+      <x>220</x>
+      <y>90</y>
       <width>71</width>
       <height>20</height>
      </rect>
@@ -558,8 +558,8 @@
    <widget class="QLineEdit" name="tb_cab_my">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>80</y>
+      <x>140</x>
+      <y>90</y>
       <width>71</width>
       <height>20</height>
      </rect>
@@ -568,8 +568,8 @@
    <widget class="QLineEdit" name="tb_cab_mx">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>80</y>
+      <x>60</x>
+      <y>90</y>
       <width>71</width>
       <height>20</height>
      </rect>
@@ -578,8 +578,8 @@
    <widget class="QLineEdit" name="tb_cab_az">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>50</y>
+      <x>220</x>
+      <y>60</y>
       <width>71</width>
       <height>20</height>
      </rect>
@@ -588,8 +588,8 @@
    <widget class="QLineEdit" name="tb_cab_ay">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>50</y>
+      <x>140</x>
+      <y>60</y>
       <width>71</width>
       <height>20</height>
      </rect>
@@ -598,8 +598,8 @@
    <widget class="QLineEdit" name="tb_cab_ax">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>50</y>
+      <x>60</x>
+      <y>60</y>
       <width>71</width>
       <height>20</height>
      </rect>
@@ -609,8 +609,8 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>50</y>
-      <width>31</width>
+      <y>60</y>
+      <width>41</width>
       <height>16</height>
      </rect>
     </property>
@@ -622,8 +622,8 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>80</y>
-      <width>31</width>
+      <y>90</y>
+      <width>41</width>
       <height>16</height>
      </rect>
     </property>
@@ -634,8 +634,8 @@
    <widget class="QLineEdit" name="tb_cab_gz">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>20</y>
+      <x>220</x>
+      <y>30</y>
       <width>71</width>
       <height>20</height>
      </rect>
@@ -644,8 +644,8 @@
    <widget class="QLineEdit" name="tb_cab_gx">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>20</y>
+      <x>60</x>
+      <y>30</y>
       <width>71</width>
       <height>20</height>
      </rect>
@@ -655,8 +655,8 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>20</y>
-      <width>31</width>
+      <y>30</y>
+      <width>41</width>
       <height>16</height>
      </rect>
     </property>
@@ -667,8 +667,8 @@
    <widget class="QLineEdit" name="tb_cab_gy">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>20</y>
+      <x>140</x>
+      <y>30</y>
       <width>71</width>
       <height>20</height>
      </rect>
@@ -677,8 +677,8 @@
    <widget class="QLineEdit" name="tb_tilt_cal">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>110</y>
+      <x>60</x>
+      <y>120</y>
       <width>71</width>
       <height>20</height>
      </rect>
@@ -688,7 +688,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>110</y>
+      <y>120</y>
       <width>31</width>
       <height>16</height>
      </rect>
@@ -754,9 +754,9 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>390</y>
-     <width>371</width>
-     <height>51</height>
+     <y>400</y>
+     <width>621</width>
+     <height>61</height>
     </rect>
    </property>
    <property name="title">
@@ -765,8 +765,8 @@
    <widget class="QLineEdit" name="tb_yaw">
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>20</y>
+      <x>290</x>
+      <y>30</y>
       <width>91</width>
       <height>20</height>
      </rect>
@@ -775,8 +775,8 @@
    <widget class="QLineEdit" name="tb_pitch">
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>20</y>
+      <x>190</x>
+      <y>30</y>
       <width>91</width>
       <height>20</height>
      </rect>
@@ -785,8 +785,8 @@
    <widget class="QLineEdit" name="tb_roll">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>20</y>
+      <x>90</x>
+      <y>30</y>
       <width>91</width>
       <height>20</height>
      </rect>
@@ -796,8 +796,8 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>20</y>
-      <width>21</width>
+      <y>30</y>
+      <width>41</width>
       <height>16</height>
      </rect>
     </property>

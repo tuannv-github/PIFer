@@ -134,8 +134,8 @@ void Mode_pidt_tw::pid_report_recv(mavlink_message_t *msg){
         pid_tilt[4].append(static_cast<double>(pid_report_msg.U));
         truncate_matrix(pid_tilt);
 
-        pid_plot(tilt_cnt, pid_tilt_sp_fb, g_co->getCustomPlot()[0]);
-        pid_plot(tilt_cnt, pid_tilt, g_co->getCustomPlot()[1]);
+        pid_plot(tilt_cnt, pid_tilt_sp_fb, g_custom_plot[0]);
+        pid_plot(tilt_cnt, pid_tilt, g_custom_plot[1]);
 
         tilt_cnt++;
         break;
@@ -152,8 +152,8 @@ void Mode_pidt_tw::pid_report_recv(mavlink_message_t *msg){
         pid_vel[4].append(static_cast<double>(pid_report_msg.U));
         truncate_matrix(pid_vel);
 
-        pid_plot(vel_cnt, pid_vel_sp_fb, g_co->getCustomPlot()[2]);
-        pid_plot(vel_cnt, pid_vel, g_co->getCustomPlot()[3]);
+        pid_plot(vel_cnt, pid_vel_sp_fb, g_custom_plot[2]);
+        pid_plot(vel_cnt, pid_vel, g_custom_plot[3]);
 
         vel_cnt++;
         break;
@@ -170,8 +170,8 @@ void Mode_pidt_tw::pid_report_recv(mavlink_message_t *msg){
         pid_pos[4].append(static_cast<double>(pid_report_msg.U));
         truncate_matrix(pid_pos);
 
-        pid_plot(pos_cnt,pid_pos_sp_fb, g_co->getCustomPlot()[4]);
-        pid_plot(pos_cnt,pid_pos, g_co->getCustomPlot()[5]);
+        pid_plot(pos_cnt,pid_pos_sp_fb, g_custom_plot[4]);
+        pid_plot(pos_cnt,pid_pos, g_custom_plot[5]);
 
         pos_cnt++;
         break;
