@@ -16,7 +16,6 @@ typedef struct{
 	float vy;
 	float omega;
 	uint8_t cnt;
-	bool is_dir_change;
 }cmd_velocity_t;
 
 TID(gtid_tilt_controller);
@@ -148,13 +147,10 @@ void on_mode_run_mavlink_recv(mavlink_message_t *msg){
 			mavlink_cmd_velocity_t cmd_velocity;
 			mavlink_msg_cmd_velocity_decode(msg, &cmd_velocity);
 
-			if(cmd_velocity.v > -0.15 && cmd_velocity.v < 0.15) cmd_velocity.v = 0;
-			if(cmd_velocity.v*gcmd_velocity.vx <= 0) gcmd_velocity.is_dir_change = true;
-			gcmd_velocity.vx += 0.5*(cmd_velocity.v-gcmd_velocity.vx);
+			gcmd_velocity.vx += 0.2*(cmd_velocity.v-gcmd_velocity.vx);
 			if(gcmd_velocity.vx > 1) gcmd_velocity.vx=1;
 			if(gcmd_velocity.vx < -1) gcmd_velocity.vx=-1;
 
-			if(cmd_velocity.omega > -0.15 && cmd_velocity.omega < 0.15) cmd_velocity.omega=0;
 			gcmd_velocity.omega = cmd_velocity.omega;
 			if(gcmd_velocity.omega > 1) gcmd_velocity.omega=1;
 			if(gcmd_velocity.omega < -1) gcmd_velocity.omega=-1;

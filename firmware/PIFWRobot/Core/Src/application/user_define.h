@@ -123,8 +123,8 @@
 #define MODE_RUN_REPORT_PERIOD		100
 #define CONTROL_TIMEOUT_MS			1000
 #define VX_TO_TILT					0.04f
-#define OMEGA_COEFF					200.0f
-#define VELOC_COEFF					150.0f
+#define OMEGA_COEFF					150.0f
+#define VELOC_COEFF					250.0f
 #define TILT_REPORT_PERIOD			100
 
 // ROBOT_MODEL_TANK general define
