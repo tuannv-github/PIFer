@@ -26,9 +26,10 @@ Mode_run::Mode_run(QWidget *parent, CommonObject *co) :
     g_input_handler = new Q3DInputHandler();
     g_3d_container = QWidget::createWindowContainer(g_3d_scatter);
     g_3d_scatter->setActiveInputHandler(g_input_handler);
-
     g_3d_scatter->scene()->activeCamera()->setZoomLevel(150.0f);
     g_3d_scatter->scene()->activeCamera()->setCameraPreset( Q3DCamera::CameraPresetBehindBelow);
+    connect(g_3d_scatter->axisX(), SIGNAL(rangeChanged(float, float)), this, SLOT(on_rangeChanged(float, float)));
+    connect(g_3d_scatter->axisY(), SIGNAL(rangeChanged(float, float)), this, SLOT(on_rangeChanged(float, float)));
 
     QScatter3DSeries *series = new QScatter3DSeries;
     QScatterDataArray data;
@@ -53,8 +54,7 @@ Mode_run::Mode_run(QWidget *parent, CommonObject *co) :
     g_ekf_initing = false;
     g_ekf_running = false;
 
-    QSettings settings;
-    ui->cb_ekf_mode->setCurrentIndex(settings.value("ekf_mode", 0).toInt());
+    ui->cb_ekf_mode->setCurrentIndex(g_settings.value("ekf_mode", 0).toInt());
     g_ekf_mode = (ekf_mode_t)ui->cb_ekf_mode->currentIndex();
 
     g_qs3s_ref_trajectory = new QScatter3DSeries();
@@ -83,11 +83,22 @@ Mode_run::Mode_run(QWidget *parent, CommonObject *co) :
     g_3d_scatter->addSeries(g_qs3s_state_origin);
 
     g_3d_scatter->axisX()->setReversed(true);
+    g_3d_scatter->setAspectRatio((g_3d_scatter->axisX()->max()-g_3d_scatter->axisX()->min())/(g_3d_scatter->axisY()->max()-g_3d_scatter->axisY()->min()));
+
+     ui->cb_trajectory->setCurrentIndex(g_settings.value("trajectory", 0).toInt());
+     ui->tb_dwa_v->setText(g_settings.value("dwa_v", 0).toString());
+     ui->tb_dwa_w->setText(g_settings.value("dwa_w", 0).toString());
+     ui->tb_dwa_alpha_v->setText(g_settings.value("dwa_alpha_v", 0).toString());
+     ui->tb_dwa_alpha_w->setText(g_settings.value("dwa_alpha_w", 0).toString());
+     ui->tb_trajectory_params_cx->setText(g_settings.value("trajectory_params_cx", 0).toString());
+     ui->tb_trajectory_params_cy->setText(g_settings.value("trajectory_params_cy", 0).toString());
+     ui->tb_trajectory_params_a->setText(g_settings.value("trajectory_params_a", 0).toString());
+     ui->tb_trajectory_params_b->setText(g_settings.value("trajectory_params_b", 0).toString());
+     ui->tb_trajectory_params_size->setText(g_settings.value("trajectory_params_size", 0).toString());
 }
 
 Mode_run::~Mode_run()
 {
-    delete g_controller_timer;
     delete ui;
 }
 
@@ -409,7 +420,7 @@ void Mode_run::on_btn_init_ekf_clicked()
             QString line = in.readLine();
             QStringList sl = line.split(" ");
             if(sl.at(0) == "M"){
-                qDebug() << sl << endl;
+                //qDebug() << sl << endl;
                 spheres[sphere_idx].x = sl.at(1).toFloat();
                 spheres[sphere_idx].y = sl.at(2).toFloat();
                 spheres[sphere_idx].z = 3;
@@ -431,8 +442,7 @@ void Mode_run::on_btn_init_ekf_clicked()
 
 void Mode_run::on_cb_ekf_mode_currentIndexChanged(int index)
 {
-    QSettings setting;
-    setting.setValue("ekf_mode", index);
+    g_settings.setValue("ekf_mode", index);
     g_ekf_mode = (ekf_mode_t)index;
 }
 
@@ -480,44 +490,72 @@ void Mode_run::ekf_reset(float x, float y, float w){
 
 void Mode_run::on_btn_trajectory_gen_clicked()
 {
-    if(ui->cb_trajectory->currentText() == "Lemniscate"){
-        float cx = ui->tb_trajectory_params_0->text().toFloat();
-        float cy = ui->tb_trajectory_params_1->text().toFloat();
-        float a = ui->tb_trajectory_params_2->text().toFloat();
-        float size = ui->tb_trajectory_params_3->text().toFloat();
-        g_ref_trajectory_2d =  lemniscate_2d(cx, cy, a, size);
+    float cx = ui->tb_trajectory_params_cx->text().toFloat();
+    float cy = ui->tb_trajectory_params_cy->text().toFloat();
+    float a = ui->tb_trajectory_params_a->text().toFloat();
+    float b = ui->tb_trajectory_params_b->text().toFloat();
+    float size = ui->tb_trajectory_params_size->text().toFloat();
 
-        QScatterDataArray data = to_scatter_data_array(g_ref_trajectory_2d);
-        g_qs3s_ref_trajectory->dataProxy()->deleteLater();
-        g_qs3s_ref_trajectory->setDataProxy(new QScatterDataProxy());
-        g_qs3s_ref_trajectory->dataProxy()->addItems(data);
+    if(ui->cb_trajectory->currentText() == "Lemniscate"){
+        g_ref_trajectory_2d =  lemniscate_2d(cx, cy, a, size);
     }
     else if(ui->cb_trajectory->currentText() == "Circle"){
-        float cx = ui->tb_trajectory_params_0->text().toFloat();
-        float cy = ui->tb_trajectory_params_1->text().toFloat();
-        float a = ui->tb_trajectory_params_2->text().toFloat();
-        float size = ui->tb_trajectory_params_3->text().toFloat();
-        g_ref_trajectory_2d =  circle_2d(cx, cy, a, size);
 
-        QScatterDataArray data = to_scatter_data_array(g_ref_trajectory_2d);
-        g_qs3s_ref_trajectory->dataProxy()->deleteLater();
-        g_qs3s_ref_trajectory->setDataProxy(new QScatterDataProxy());
-        g_qs3s_ref_trajectory->dataProxy()->addItems(data);
+        g_ref_trajectory_2d =  circle_2d(cx, cy, a, size);
     }
+    else if(ui->cb_trajectory->currentText() == "Rectangle"){
+        g_ref_trajectory_2d =  rect_2d(cx, cy, a, b, size);
+    }
+    else if(ui->cb_trajectory->currentText() == "Ellipse"){
+        g_ref_trajectory_2d =  ellipse_2d(cx, cy, a, b, size);
+    }
+    else if(ui->cb_trajectory->currentText() == "Torpedor"){
+        g_ref_trajectory_2d =  torpedor_2d(cx, cy, a, size);
+    }
+
+    g_ref_last_trajectory_point_idx = 0;
+
+    QScatterDataArray data = to_scatter_data_array(g_ref_trajectory_2d);
+    g_qs3s_ref_trajectory->dataProxy()->deleteLater();
+    g_qs3s_ref_trajectory->setDataProxy(new QScatterDataProxy());
+    g_qs3s_ref_trajectory->dataProxy()->addItems(data);
 }
 
 void Mode_run::dwa_follow_callback(){
     float min_dist = std::numeric_limits<float>::max();
     int min_dist_idx = 0;
-    for (int i=0; i<g_ref_trajectory_2d.size(); i++){
-        float dx = g_ekf.x - g_ref_trajectory_2d[i].x;
-        float dy = g_ekf.y - g_ref_trajectory_2d[i].y;
-        float dist = dx*dx + dy*dy;
-        if(dist < min_dist){
-            min_dist = dist;
-            min_dist_idx = i;
+    int max_idx = (g_ref_last_trajectory_point_idx + 10);
+    if(max_idx < g_ref_trajectory_2d.size()){
+        for (int i=g_ref_last_trajectory_point_idx; i<max_idx; i++){
+            float dx = g_ekf.x - g_ref_trajectory_2d[i].x;
+            float dy = g_ekf.y - g_ref_trajectory_2d[i].y;
+            float dist = dx*dx + dy*dy;
+            if(dist < min_dist){
+                min_dist = dist;
+                min_dist_idx = i;
+            }
+        }
+    }else{
+        for (int i=g_ref_last_trajectory_point_idx; i<g_ref_trajectory_2d.size(); i++){
+            float dx = g_ekf.x - g_ref_trajectory_2d[i].x;
+            float dy = g_ekf.y - g_ref_trajectory_2d[i].y;
+            float dist = dx*dx + dy*dy;
+            if(dist < min_dist){
+                min_dist = dist;
+                min_dist_idx = i;
+            }
+        }
+        for (int i=0; i<max_idx%g_ref_trajectory_2d.size(); i++){
+            float dx = g_ekf.x - g_ref_trajectory_2d[i].x;
+            float dy = g_ekf.y - g_ref_trajectory_2d[i].y;
+            float dist = dx*dx + dy*dy;
+            if(dist < min_dist){
+                min_dist = dist;
+                min_dist_idx = i;
+            }
         }
     }
+    g_ref_last_trajectory_point_idx = min_dist_idx;
 
     QVector<trajectory_point_2d_t> traj;
     for(int i=min_dist_idx; i<min_dist_idx+DWA_SIM_SIZE; i++){
@@ -608,4 +646,62 @@ void Mode_run::show_current_state(float x, float y, float w){
     g_qs3s_state_origin->dataProxy()->deleteLater();
     g_qs3s_state_origin->setDataProxy(new QScatterDataProxy());
     g_qs3s_state_origin->dataProxy()->addItems(data);
+}
+
+void Mode_run::on_cb_trajectory_currentIndexChanged(int index)
+{
+    g_settings.setValue("trajectory", index);
+}
+
+void Mode_run::on_rangeChanged(float min, float max){
+    Q_UNUSED(min);
+    Q_UNUSED(max);
+    g_3d_scatter->setAspectRatio((g_3d_scatter->axisX()->max()-g_3d_scatter->axisX()->min())/(g_3d_scatter->axisY()->max()-g_3d_scatter->axisY()->min()));
+}
+
+
+
+void Mode_run::on_tb_dwa_v_textChanged(const QString &arg1)
+{
+    g_settings.setValue("dwa_v", arg1);
+}
+
+void Mode_run::on_tb_dwa_w_textChanged(const QString &arg1)
+{
+    g_settings.setValue("dwa_w", arg1);
+}
+
+void Mode_run::on_tb_dwa_alpha_v_textChanged(const QString &arg1)
+{
+    g_settings.setValue("dwa_alpha_v", arg1);
+}
+
+void Mode_run::on_tb_dwa_alpha_w_textChanged(const QString &arg1)
+{
+    g_settings.setValue("dwa_alpha_w", arg1);
+}
+
+void Mode_run::on_tb_trajectory_params_cx_textChanged(const QString &arg1)
+{
+    g_settings.setValue("trajectory_params_cx", arg1);
+}
+
+void Mode_run::on_tb_trajectory_params_cy_textChanged(const QString &arg1)
+{
+    g_settings.setValue("trajectory_params_cy", arg1);
+}
+
+void Mode_run::on_tb_trajectory_params_a_textChanged(const QString &arg1)
+{
+    g_settings.setValue("trajectory_params_a", arg1);
+}
+
+void Mode_run::on_tb_trajectory_params_b_textChanged(const QString &arg1)
+{
+    g_settings.setValue("trajectory_params_b", arg1);
+}
+
+void Mode_run::on_tb_trajectory_params_size_textChanged(const QString &arg1)
+{
+    g_settings.setValue("trajectory_params_size", arg1);
 }

@@ -59,6 +59,28 @@ private slots:
 
     void dwa_follow_callback();
 
+    void on_cb_trajectory_currentIndexChanged(int index);
+
+    void on_rangeChanged(float min, float max);
+
+    void on_tb_dwa_v_textChanged(const QString &arg1);
+
+    void on_tb_dwa_w_textChanged(const QString &arg1);
+
+    void on_tb_dwa_alpha_v_textChanged(const QString &arg1);
+
+    void on_tb_dwa_alpha_w_textChanged(const QString &arg1);
+
+    void on_tb_trajectory_params_cx_textChanged(const QString &arg1);
+
+    void on_tb_trajectory_params_cy_textChanged(const QString &arg1);
+
+    void on_tb_trajectory_params_a_textChanged(const QString &arg1);
+
+    void on_tb_trajectory_params_b_textChanged(const QString &arg1);
+
+    void on_tb_trajectory_params_size_textChanged(const QString &arg1);
+
 private:
     Ui::Mode_run *ui;
     QTimer *g_controller_timer;
@@ -77,6 +99,8 @@ private:
 
     QFile g_file_control_measurement;
     QVector<trajectory_point_2d_t> g_ref_trajectory_2d;
+    int g_ref_last_trajectory_point_idx;
+
     QScatter3DSeries *g_qs3s_ref_trajectory;
     QScatter3DSeries *g_qs3s_dwa_trajectory;
     QScatter3DSeries *g_qs3s_dwa_ref_trajectory;

@@ -44,6 +44,7 @@ protected:
     Q3DScatter *g_3d_scatter;
     Q3DInputHandler *g_input_handler;
     QWidget *g_3d_container;
+    QSettings g_settings;
 
     void show_status(QString q_str, int timeout);
 
@@ -60,7 +61,7 @@ protected:
     double vector_min(QVector<double> q_vector);
     double vector_max(QVector<double> q_vector);
 
-    void clear_drawing_area() ;
+    void clear_drawing_area();
 
 signals:
     void mav_send(QByteArray ba);
