@@ -17,17 +17,19 @@ static on_mav_recv_t gon_mav_recv;
 
 static uart_drv_t uart_drv[] = {
 		{
-			.huart = &STD_USART,
-			.cb_period = STD_PERIOD,
-		},
-		{
 			.huart = &SOE_USART,
 			.cb_period = SOE_PERIOD,
 		},
 		{
+			.huart = &STD_USART,
+			.cb_period = STD_PERIOD,
+		},
+#if ENABLE_NEOPIXEL==0
+		{
 			.huart = &SOU_USART,
 			.cb_period = SOU_PERIOD,
-		}
+		},
+#endif
 };
 
 void mavlink_callback(void* ctx){
@@ -48,8 +50,9 @@ void mavlink_callback(void* ctx){
 void mav_init(){
 	uart_init(&uart_drv[0]);
 	uart_init(&uart_drv[1]);
+#if ENABLE_NEOPIXEL==0
 	uart_init(&uart_drv[2]);
-
+#endif
 	timer_register_callback(mavlink_callback, MAVLINK_CB_PERIOD, 0, TIMER_MODE_REPEAT);
 }
 
@@ -58,9 +61,11 @@ void mav_set_on_mav_recv(on_mav_recv_t on_mav_recv){
 }
 
 void mav_send(char *data, uint16_t len){
-//	uart_send(&uart_drv[0], data, len);
-	uart_send(&uart_drv[1], data, len);
+	uart_send(&uart_drv[0], data, len);
+	// uart_send(&uart_drv[1], data, len);
+#if ENABLE_NEOPIXEL==0
 	uart_send(&uart_drv[2], data, len);
+#endif
 }
 
 void mav_send_msg(mavlink_message_t *msg){

@@ -6,6 +6,7 @@ from utils import *
 from ahrs.filters.complementary import Complementary
 from ahrs.filters.madgwick import Madgwick
 from ahrs.filters.mahony import Mahony
+from ahrs.filters.ekf import EKF
 
 DATASET_FOLDER = "imu_data/"
 
@@ -50,9 +51,10 @@ g = np.array([gx, gy, gz]).T
 a = np.array([ax, ay, az]).T
 m = np.array([mx, my, mz]).T
 
-ahrs = Complementary(gyr=g, acc=a, mag=m, gain=0.2, frequency=1000/45)
+# ahrs = Complementary(gyr=g, acc=a, mag=m, gain=0.2, frequency=1000/45)
 # ahrs = Madgwick(gyr=g, acc=a, mag=m, frequency=1000/45)
 # ahrs = Mahony(gyr=g, acc=a, mag=m, frequency=1000/45)
+ahrs = EKF(gyr=g, acc=a, mag=m, frame='ENU', frequency=1000/45)
 
 print(ahrs.Q)
 
@@ -85,20 +87,20 @@ ax2.plot(x, mz, label='mz')
 ax2.legend()
 
 fig, (ax0,ax1,ax2)  = plt.subplots(3)
-ax0.plot(rx, r_roll, label='mcu roll')
-ax0.plot(x, roll, label='cpu roll')
+ax0.plot(rx, r_roll, label='ref roll')
+ax0.plot(x, roll, label='roll')
 # ax0.set_ylim([-pi-0.1, pi+0.1])
 ax0.set_ylim([-190, 190])
 ax0.legend()
 
-ax1.plot(rx, r_pitch, label='mcu pitch')
-ax1.plot(x, pitch, label='cpu pitch')
+ax1.plot(rx, r_pitch, label='ref pitch')
+ax1.plot(x, pitch, label='pitch')
 # ax1.set_ylim([-pi-0.1, pi+0.1])
 ax1.set_ylim([-190, 190])
 ax1.legend()
 
-ax2.plot(rx, r_yaw, label='mcu yaw')
-ax2.plot(x, yaw, label='cpu yaw')
+ax2.plot(rx, r_yaw, label='ref yaw')
+ax2.plot(x, yaw, label='yaw')
 # ax2.set_ylim([-pi-0.1, pi+0.1])
 ax2.set_ylim([-190, 190])
 ax2.legend()

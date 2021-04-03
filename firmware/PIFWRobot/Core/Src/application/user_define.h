@@ -20,6 +20,10 @@
 // Turtle-Step			--> 1
 #define ROBOT_MODEL		0
 
+// Enable				--> 1
+// Disable				--> 0
+#define ENABLE_NEOPIXEL	1
+
 // Timer callback define
 #define MAX_CALLBACK_FUNC	15
 
@@ -136,8 +140,6 @@
 #define SPEED_REPORT_PERIOD			100
 
 #define CONST_G 					9.807f
-
-#define ENABLE_NEOPIXEL				0
 
 
 // STEP MOTOR DEFINE

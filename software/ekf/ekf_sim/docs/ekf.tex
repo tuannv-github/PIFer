@@ -1,0 +1,35 @@
+\documentclass[oneside, 12pt, a4paper]{book}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+
+\providecommand{\main}{.}
+
+\begin{document}
+\chapter{EKF}
+
+\section{Prediction}
+\begin{equation}
+    \begin{split}
+        \bar{\mu}_t &= g(\mu_{t-1}, u_t) \\
+        \bar{\Sigma}_t &= G_t \Sigma_{t-1} G_t^T + R_t = G_t \Sigma_{t-1} G_t^T + V_t \Sigma_{control} V_t^T 
+    \end{split}
+\end{equation}
+
+$r \neq l$:
+\begin{equation}
+    g(\mu, u) = 
+    \begin{bmatrix}
+        x \\ y \\ z \\
+        q_w \\ q_x \\ q_y \\ q_z 
+    \end{bmatrix}
+    +
+    \begin{bmatrix}
+        (R+w/2)(\sin{(\theta + \alpha)} - \sin{\theta}) \\
+        (R+w/2)(-\cos{(\theta + \alpha)} + \cos{\theta}) \\
+        \alpha \\
+    \end{bmatrix}\\
+\end{equation}
+
+\end{document}
