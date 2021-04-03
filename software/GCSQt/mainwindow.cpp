@@ -87,8 +87,11 @@ void MainWindow::com_connection_evt(Com::com_evt_t evt){
 
 void MainWindow::js_axis_change(const int js, const int axis, const qreal value){
     Q_UNUSED(js)
+    float v = value;
+    if (fabs(v) < 0.05 )
+        v = 0;
     for (Mode_common* &mode : g_mode){
-        mode->update_joystick(axis, -value);
+        mode->update_joystick(axis, -v);
     }
 }
 

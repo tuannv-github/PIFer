@@ -18,11 +18,11 @@
 
 // Self-balancing-DC	--> 0
 // Turtle-Step			--> 1
-#define ROBOT_MODEL		0
+#define ROBOT_MODEL		1
 
 // Enable				--> 1
 // Disable				--> 0
-#define ENABLE_NEOPIXEL	1
+#define ENABLE_NEOPIXEL	0
 
 // Timer callback define
 #define MAX_CALLBACK_FUNC	15
