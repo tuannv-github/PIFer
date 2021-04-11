@@ -1,4 +1,5 @@
 from serial import Serial
+import argparse
 import numpy as np
 import signal
 import time
@@ -7,36 +8,25 @@ import os
 
 from mavlink import *
 
-# PORT = "/dev/ttyUSB0"
-PORT = "COM9"
-BAUD = 57600
-
 class TAG:
-    def __init__(self):
-        self.DATASET_FOLDER = "imu_data/"
+    def __init__(self,  port, baud, out):
+        self.port = port
+        self.baud = baud
+        self.data_folder = out
+
         self.stop = False
-        self.gx=[]
-        self.gy=[]
-        self.gz=[]
-        self.ax=[]
-        self.ay=[]
-        self.az=[]
-        self.mx=[]
-        self.my=[]
-        self.mz=[]
-        self.roll=[]
-        self.pitch=[]
-        self.yaw=[]
+        self.raw = []
+        self.cal = []
+        self.ref = []
         try:
-            os.mkdir(self.DATASET_FOLDER)
+            os.mkdir(self.data_folder)
         except:
             pass
-
 
     def run(self):
         while not self.stop:
             try:
-                serial = Serial(PORT, BAUD)
+                serial = Serial(self.port, self.baud)
                 mav = MAVLink(serial)
                 self.mav = mav
                 break
@@ -45,6 +35,7 @@ class TAG:
         ok = False
         while not ok and not self.stop:
             counter = 0
+            print("mode MODE_IMU")
             self.mav.cmd_change_mode_send(MODE_IMU)
             while not self.stop:
                 try:
@@ -69,60 +60,36 @@ class TAG:
                 if msg is not None:
                     print(msg.to_json())
                     if msg.id == MAVLINK_MSG_ID_EVT_GYRO_ACCEL_MAG_CALIBRATED:
-                    # if msg.id == MAVLINK_MSG_ID_EVT_GYRO_ACCEL_MAG_RAW:
-                        self.gx.append(msg.gx)
-                        self.gy.append(msg.gy)
-                        self.gz.append(msg.gz)
-                        self.ax.append(msg.ax)
-                        self.ay.append(msg.ay)
-                        self.az.append(msg.az)
-                        self.mx.append(msg.mx)
-                        self.my.append(msg.my)
-                        self.mz.append(msg.mz)
+                        self.cal.append([msg.gx, msg.gy, msg.gz, msg.ax, msg.ay, msg.az, msg.mx, msg.my, msg.mz])
+                    if msg.id == MAVLINK_MSG_ID_EVT_GYRO_ACCEL_MAG_RAW:
+                        self.raw.append([msg.gx, msg.gy, msg.gz, msg.ax, msg.ay, msg.az, msg.mx, msg.my, msg.mz])
                     elif msg.id == MAVLINK_MSG_ID_EVT_RPY:
-                        self.roll.append(msg.roll)
-                        self.pitch.append(msg.pitch)
-                        self.yaw.append(msg.yaw)
+                        self.ref.append([msg.roll, msg.pitch, msg.yaw])
             except:
                 pass
 
     def stop_now(self):
-        gx = np.array(self.gx)
-        gy = np.array(self.gy)
-        gz = np.array(self.gz)
-        np.save(self.DATASET_FOLDER + 'gx.npy', gx)
-        np.save(self.DATASET_FOLDER + 'gy.npy', gy)
-        np.save(self.DATASET_FOLDER + 'gz.npy', gz)
-
-        ax = np.array(self.ax)
-        ay = np.array(self.ay)
-        az = np.array(self.az)
-        np.save(self.DATASET_FOLDER + 'ax.npy', ax)
-        np.save(self.DATASET_FOLDER + 'ay.npy', ay)
-        np.save(self.DATASET_FOLDER + 'az.npy', az)
-
-        mx = np.array(self.mx)
-        my = np.array(self.my)
-        mz = np.array(self.mz)
-        np.save(self.DATASET_FOLDER + 'mx.npy', mx)
-        np.save(self.DATASET_FOLDER + 'my.npy', my)
-        np.save(self.DATASET_FOLDER + 'mz.npy', mz)
-
-        roll = np.array(self.roll)
-        pitch = np.array(self.pitch)
-        yaw = np.array(self.yaw)
-        np.save(self.DATASET_FOLDER + 'roll.npy', roll)
-        np.save(self.DATASET_FOLDER + 'pitch.npy', pitch)
-        np.save(self.DATASET_FOLDER + 'yaw.npy', yaw)
+        raw = np.array(self.raw)
+        cal = np.array(self.cal)
+        ref = np.array(self.ref)
+        np.save(self.data_folder + '/raw.npy', raw)
+        np.save(self.data_folder + '/cal.npy', cal)
+        np.save(self.data_folder + '/ref.npy', ref)
 
         self.stop = True
 
 if __name__ == "__main__":
-    tag = TAG()
+    parser = argparse.ArgumentParser(description='IMU data logger')
+    parser.add_argument('-p', '--port',metavar='PORT', help='port name', default="/dev/ttyUSB0")
+    parser.add_argument('-b', '--baud', metavar='BAUD', type=int, help='baudrate', default=57600)
+    parser.add_argument('-o', '--out', metavar='OUT', help='Output folder', default="./imu")
+    args = parser.parse_args()
+    print(args)
+
+    tag = TAG(port=args.port, baud=args.baud, out=args.out)
     def signal_int(sig, frame):
         tag.stop_now()
         print(" Ctrl+C ---> Stop")
         sys.exit(0)
     signal.signal(signal.SIGINT, signal_int)
     tag.run()
-

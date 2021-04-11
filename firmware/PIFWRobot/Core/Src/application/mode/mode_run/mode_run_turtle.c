@@ -48,7 +48,7 @@ void on_mode_run_mavlink_recv(mavlink_message_t *msg){
 			imu_get_rpy(rpy);
 			mavlink_msg_distance_decode(msg, &distance);
 
-			mavlink_msg_measurement_pack(0, 0, msg, distance.x, distance.y, distance.z, distance.r, rpy[2]);
+			mavlink_msg_measurement_pack(0, 0, msg, distance.id, distance.x, distance.y, distance.z, distance.r, rpy[2]);
 			mav_send_msg(msg);
 		}
 		break;

@@ -9,27 +9,305 @@
 \begin{document}
 \chapter{EKF}
 
-\section{Prediction}
+\section{EKF Requirements}
+\subsubsection{State vector}
+\begin{equation} 
+    \begin{bmatrix}
+        x \\ y \\ \theta \\
+        v_x \\ v_y \\ v_\theta \\
+        \gamma
+    \end{bmatrix}
+\end{equation}
+\subsubsection{Process model}
+
 \begin{equation}
     \begin{split}
-        \bar{\mu}_t &= g(\mu_{t-1}, u_t) \\
-        \bar{\Sigma}_t &= G_t \Sigma_{t-1} G_t^T + R_t = G_t \Sigma_{t-1} G_t^T + V_t \Sigma_{control} V_t^T 
+        \alpha &= \frac{r-l}{w} \\
+        R &= \frac{l}{\alpha} = \frac{lw}{r-l}\\
     \end{split}
 \end{equation}
 
-$r \neq l$:
+% \begin{equation}
+%     \begin{bmatrix}
+%         \hat{v}_x \\ \hat{v}_y \\ \hat{v}_\theta
+%     \end{bmatrix}
+%     = 
+%     \begin{cases}
+%         \begin{bmatrix}
+%             (R+w/2)(\sin{(\theta + \alpha)} - \sin{\theta}) \\
+%             (R+w/2)(-\cos{(\theta + \alpha)} + \cos{\theta}) \\
+%             \alpha \\
+%         \end{bmatrix} \text{if } l \neq r\\
+%         \begin{bmatrix}
+%             l \cos(\theta) \\
+%             l \sin(\theta) \\
+%             0 \\
+%         \end{bmatrix}\ \text{if } l = r\\
+%     \end{cases}
+% \end{equation}
+
 \begin{equation}
-    g(\mu, u) = 
     \begin{bmatrix}
-        x \\ y \\ z \\
-        q_w \\ q_x \\ q_y \\ q_z 
+        \hat{v}_x \\ \hat{v}_y \\ \hat{v}_\theta
+    \end{bmatrix}
+    = 
+    \begin{bmatrix}
+        v_x \\ v_y \\ 0
     \end{bmatrix}
     +
     \begin{bmatrix}
-        (R+w/2)(\sin{(\theta + \alpha)} - \sin{\theta}) \\
-        (R+w/2)(-\cos{(\theta + \alpha)} + \cos{\theta}) \\
-        \alpha \\
-    \end{bmatrix}\\
+        (a_x\cos\theta + a_y\sin\theta)\Delta t \\ (a_x\sin\theta + a_y\cos\theta)\Delta t \\ v_\theta
+    \end{bmatrix}
+\end{equation}
+
+\begin{equation}
+    \begin{bmatrix}
+        \hat{x} \\ \hat{y} \\ \hat{\theta}
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        x \\ y \\ \theta
+    \end{bmatrix}
+    +
+    \begin{bmatrix}
+        \hat{v}_x \Delta t \\ \hat{v}_y \Delta t \\ \hat{v}_\theta \Delta t
+    \end{bmatrix}
+    =     
+    \begin{bmatrix}
+        x + \hat{v}_x \Delta t \\ y + \hat{v}_y \Delta t \\ \theta + \hat{v}_\theta \Delta t
+    \end{bmatrix}
+\end{equation}
+
+% \begin{equation}
+%     \begin{bmatrix}
+%         \hat{q}_w \\ \hat{q}_x \\ \hat{q}_y \\ \hat{q}_z \\
+%     \end{bmatrix}
+%     =
+%     \begin{bmatrix}
+%         1 & -\frac{\Delta t}{2} \omega_x & -\frac{\Delta t}\omega_y & -\frac{\Delta t}{2}\omega_z \\
+%         \frac{\Delta t}{2}\omega_x & 1 & \frac{\Delta t}{2}\omega_z & -\frac{\Delta t}{2}\omega_y \\
+%         \frac{\Delta t}{2}\omega_y & -\frac{\Delta t}{2}\omega_z & 1 & \frac{\Delta t}{2}\omega_x \\
+%         \frac{\Delta t}{2}\omega_z & \frac{\Delta t}{2}\omega_y & -\frac{\Delta t}{2}\omega_x & 1
+%     \end{bmatrix}
+%     \begin{bmatrix}
+%         q_w \\ q_x \\ q_y \\ q_z \\
+%     \end{bmatrix}
+% \end{equation}
+
+\begin{equation}
+    \hat{\gamma} = \gamma
+\end{equation}
+
+\begin{equation}
+    \begin{bmatrix}
+        \hat{x} \\ \hat{y} \\ \hat{\theta} \\
+        \hat{v}_x \\ \hat{v}_y \\ \hat{v}_\theta \\
+        \hat{\gamma}
+    \end{bmatrix}
+    =     
+    \begin{bmatrix}
+        x + \hat{v}_x \\ y + \hat{v}_y \\ \theta + \hat{v}_\theta \\
+        v_x + (a^c_x\cos\theta + a^c_y\sin\theta) \\ v_y + (a^c_x\sin\theta + a^c_y\cos\theta)\\ v^c_\theta \\
+        \gamma
+    \end{bmatrix}
+\end{equation}
+
+\subsubsection{Observation model}
+
+\begin{equation}
+    \begin{split}
+        v_x &= \frac{1}{2}(v_r+v_l)\cos\theta \\
+        v_y &= \frac{1}{2}(v_r+v_l)\sin\theta \\
+        v_\theta &= \frac{1}{w} (v_r-v_l) 
+    \end{split}
+\end{equation}
+
+\begin{equation}
+    \begin{split}
+        v_r + v_l &= \frac{2 v_x}{\cos\theta} \\
+        v_r + v_l &= \frac{2 v_y}{\sin\theta} \\
+        v_r - v_l &= v_\theta w
+    \end{split}
+\end{equation}
+
+\begin{equation}
+    \begin{split}
+        v_r &= \frac{1}{2}\left( \frac{2 v_x}{\cos\theta} + v_\theta w\right) \\
+        v_l &= \frac{1}{2}\left( \frac{2 v_x}{\cos\theta} - v_\theta w\right)
+    \end{split}
+\end{equation}
+
+\begin{equation}
+    \begin{split}
+        v_r &= \frac{1}{2}\left( \frac{2 v_y}{\sin\theta} + v_\theta w\right) \\
+        v_l &= \frac{1}{2}\left( \frac{2 v_y}{\sin\theta} - v_\theta w\right)
+    \end{split}
+\end{equation}
+
+\begin{equation}
+    h(x,y,\theta, v_x, v_y, v_\theta) = 
+    \begin{cases}
+        \text{range} &= \sqrt{(x_a - x)^2 + (y_a-y)^2}\\
+        \text{right} &= \frac{1}{2}\left( \frac{2 v_x}{\cos\theta} + v_\theta w\right) \\
+        \text{left} &= \frac{1}{2}\left( \frac{2 v_x}{\cos\theta} - v_\theta w\right) \\
+        \text{yaw} &= \gamma + \theta
+      \end{cases}
+\end{equation}
+
+% \subsubsection{Process model}
+
+% \begin{equation}
+%     \begin{split}
+%         \alpha &= \frac{r-l}{w} \\
+%         R &= \frac{l}{\alpha} = \frac{lw}{r-l}\\
+%     \end{split}
+% \end{equation}
+
+% \begin{equation}
+%     \begin{bmatrix}
+%         \hat{x} \\ \hat{y} \\ \hat{\theta} \\
+%         \hat{v}_x \\ \hat{v}_y \\ \hat{v}_\theta \\
+%         \hat{\gamma}
+%     \end{bmatrix}
+%     =     
+%     \begin{bmatrix}
+%         x + \hat{v}_x \\ y + \hat{v}_y \\ \theta + \hat{v}_\theta \\
+%         (R+w/2)(\sin{(\theta + \alpha)} - \sin{\theta}) \\(R+w/2)(-\cos{(\theta + \alpha)} + \cos{\theta})\\ v^c_\theta \\
+%         \gamma
+%     \end{bmatrix}
+% \end{equation}
+
+% \begin{equation}
+%     \begin{bmatrix}
+%         \hat{x} \\ \hat{y} \\ \hat{\theta} \\
+%         \hat{v}_x \\ \hat{v}_y \\ \hat{v}_\theta \\
+%         \hat{\gamma}
+%     \end{bmatrix}
+%     =     
+%     \begin{bmatrix}
+%         x + \hat{v}_x \\ y + \hat{v}_y \\ \theta + \hat{v}_\theta \\
+%         l \cos(\theta) \\ l \sin(\theta) \\ 0 \\
+%         \gamma
+%     \end{bmatrix}
+% \end{equation}
+
+\section{Differential}
+
+\begin{equation}
+    \frac{\partial f_1}{\partial x} = 1 \qquad
+    \frac{\partial f_1}{\partial y} = 0 \qquad
+    \frac{\partial f_1}{\partial \theta} = 0 \qquad
+    \frac{\partial f_1}{\partial v_x} = 1 \qquad
+    \frac{\partial f_1}{\partial v_y} = 0 \qquad
+    \frac{\partial f_1}{\partial v_\theta} = 0 \qquad
+    \frac{\partial f_1}{\partial \gamma} = 0 \qquad
+\end{equation}
+
+\begin{equation}
+    \frac{\partial f_2}{\partial x} = 0 \qquad
+    \frac{\partial f_2}{\partial y} = 1 \qquad
+    \frac{\partial f_2}{\partial \theta} = 0 \qquad
+    \frac{\partial f_2}{\partial v_x} = 0 \qquad
+    \frac{\partial f_2}{\partial v_y} = 1 \qquad
+    \frac{\partial f_2}{\partial v_\theta} = 0 \qquad
+    \frac{\partial f_2}{\partial \gamma} = 0 \qquad
+\end{equation}
+
+\begin{equation}
+    \frac{\partial f_3}{\partial x} = 0 \qquad
+    \frac{\partial f_3}{\partial y} = 0 \qquad
+    \frac{\partial f_3}{\partial \theta} = 1 \qquad
+    \frac{\partial f_3}{\partial v_x} = 0 \qquad
+    \frac{\partial f_3}{\partial v_y} = 0 \qquad
+    \frac{\partial f_3}{\partial v_\theta} = 1 \qquad
+    \frac{\partial f_3}{\partial \gamma} = 0 \qquad
+\end{equation}
+
+\begin{equation}
+    \begin{split}
+    \frac{\partial f_4}{\partial x} = 0 \qquad
+    \frac{\partial f_4}{\partial y} = 0 \qquad
+    \frac{\partial f_4}{\partial \theta} = -a^c_x\sin{\theta} + a^c_y\cos{\theta}\\
+    \frac{\partial f_4}{\partial v_x} = 1 \qquad
+    \frac{\partial f_4}{\partial v_y} = 0 \qquad
+    \frac{\partial f_4}{\partial v_\theta} = 0 \qquad
+    \frac{\partial f_4}{\partial \gamma} = 0 \qquad
+\end{split}
+\end{equation}
+
+\begin{equation}
+    \begin{split}
+        \frac{\partial f_5}{\partial x} = 0 \qquad
+        \frac{\partial f_5}{\partial y} = 0 \qquad
+        \frac{\partial f_5}{\partial \theta} = a^c_x\cos{\theta} - a^c_y\sin{\theta}\\
+        \frac{\partial f_5}{\partial v_x} = 0 \qquad
+        \frac{\partial f_5}{\partial v_y} = 1 \qquad
+        \frac{\partial f_5}{\partial v_\theta} = 0 \qquad
+        \frac{\partial f_5}{\partial \gamma} = 0 \qquad
+    \end{split}
+\end{equation}
+
+\begin{equation}
+    \frac{\partial f_6}{\partial x} = 0 \qquad
+    \frac{\partial f_6}{\partial y} = 0 \qquad
+    \frac{\partial f_6}{\partial \theta} = 0 \qquad
+    \frac{\partial f_6}{\partial v_x} = 0 \qquad
+    \frac{\partial f_6}{\partial v_y} = 0 \qquad
+    \frac{\partial f_6}{\partial v_\theta} = 0 \qquad
+    \frac{\partial f_6}{\partial \gamma} = 0 \qquad
+\end{equation}
+
+\begin{equation}
+    \frac{\partial f_7}{\partial x} = 0 \qquad
+    \frac{\partial f_7}{\partial y} = 0 \qquad
+    \frac{\partial f_7}{\partial \theta} = 0 \qquad
+    \frac{\partial f_7}{\partial v_x} = 0 \qquad
+    \frac{\partial f_7}{\partial v_y} = 0 \qquad
+    \frac{\partial f_7}{\partial v_\theta} = 0 \qquad
+    \frac{\partial f_7}{\partial \gamma} = 0 \qquad
+\end{equation}
+
+
+\begin{equation}
+    \frac{\partial f_1}{\partial a^c_x} = 0 \qquad
+    \frac{\partial f_1}{\partial a^c_y} = 0 \qquad
+    \frac{\partial f_1}{\partial v^c_\theta} = 0
+\end{equation}
+
+\begin{equation}
+    \frac{\partial f_2}{\partial a^c_x} = 0 \qquad
+    \frac{\partial f_2}{\partial a^c_y} = 0 \qquad
+    \frac{\partial f_2}{\partial v^c_\theta} = 0
+\end{equation}
+
+\begin{equation}
+    \frac{\partial f_3}{\partial a^c_x} = 0 \qquad
+    \frac{\partial f_3}{\partial a^c_y} = 0 \qquad
+    \frac{\partial f_3}{\partial v^c_\theta} = 0
+\end{equation}
+
+\begin{equation}
+    \frac{\partial f_4}{\partial a^c_x} = \cos \theta \qquad
+    \frac{\partial f_4}{\partial a^c_y} = \sin \theta \qquad
+    \frac{\partial f_4}{\partial v^c_\theta} = 0
+\end{equation}
+
+\begin{equation}
+    \frac{\partial f_5}{\partial a^c_x} = \sin \theta \qquad
+    \frac{\partial f_5}{\partial a^c_y} = \cos \theta \qquad
+    \frac{\partial f_5}{\partial v^c_\theta} = 0
+\end{equation}
+
+\begin{equation}
+    \frac{\partial f_6}{\partial a^c_x} = 0 \qquad
+    \frac{\partial f_6}{\partial a^c_y} = 0 \qquad
+    \frac{\partial f_6}{\partial v^c_\theta} = 1
+\end{equation}
+
+\begin{equation}
+    \frac{\partial f_7}{\partial a^c_x} = 0 \qquad
+    \frac{\partial f_7}{\partial a^c_y} = 0 \qquad
+    \frac{\partial f_7}{\partial v^c_\theta} = 0
 \end{equation}
 
 \end{document}

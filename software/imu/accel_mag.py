@@ -4,78 +4,71 @@ from math import *
 
 from utils import *
 
-DATASET_FOLDER = "imu_data/"
+import argparse
 
-# r_roll = np.load(DATASET_FOLDER + 'roll.npy')
-# r_pitch = np.load(DATASET_FOLDER + 'pitch.npy')
-# r_yaw = np.load(DATASET_FOLDER + 'yaw.npy')
+GYRO_FOLDER = "calib_gyro/"
+MAG_FOLDER = "calib_mag/"
+DATASET_FOLDER = "imu_data_roll/"
 
-# gx_bias = (-0.9616763967158748, 0.01716347107127141)
-# gy_bias = (0.6969435718363407, 0.02303707571665565)
-# gz_bias = (-0.732405328727236, 0.023635633242456173)
+parser = argparse.ArgumentParser(description='Filter from raw')
+parser.add_argument('-i', '--input', metavar='IN', help='Input folder', default=DATASET_FOLDER)
+args = parser.parse_args()
+print(args)
 
-gx = np.load(DATASET_FOLDER + 'gx.npy')
-gy = np.load(DATASET_FOLDER + 'gy.npy')
-gz = np.load(DATASET_FOLDER + 'gz.npy')
+raw = np.load(args.input + '/raw.npy')
+g, a, m = raw[:,0:3], raw[:,3:6], raw[:,6:9]
 
-# gx = [(g-gx_bias[0])/180.0*pi for g in  gx]
-# gy = [(g-gy_bias[0])/180.0*pi for g in  gy]
-# gz = [(g-gz_bias[0])/180.0*pi for g in  gz]
+cal = np.load(GYRO_FOLDER + '/calib_gyro.npy')
+g = np.array([[(r[0] - cal[0][0])*pi/180, (r[1] - cal[1][0])*pi/180, (r[2] - cal[2][0])*pi/180] for r in g])
 
-ax = np.load(DATASET_FOLDER + 'ax.npy')
-ay = np.load(DATASET_FOLDER + 'ay.npy')
-az = np.load(DATASET_FOLDER + 'az.npy')
-
-mx = np.load(DATASET_FOLDER + 'mx.npy')
-my = np.load(DATASET_FOLDER + 'my.npy')
-mz = np.load(DATASET_FOLDER + 'mz.npy')
+cal = np.load(MAG_FOLDER + '/calib_mag.npy')
+m = np.array([[(r[0] - cal[0][0])/cal[0][1], (r[1] - cal[1][0])/cal[1][1], (r[2] - cal[2][0])/cal[2][1]] for r in m])
+# m = np.array([[(r[1] - cal[1][0])/cal[1][1], (r[0] - cal[0][0])/cal[0][1], -(r[2] - cal[2][0])/cal[2][1]] for r in m])
 
 roll = []
 pitch = []
 yaw = []
+for i in range(0, len(a)):
+    r = atan2(a[i,1], a[i,2])
+    p = atan2(-a[i][0], sqrt(a[i,1]**2 + a[i,2]**2))
 
-for i in range(0, len(ay)):
-    r = atan2(ay[i], az[i])
-    p = atan2(-ax[i], sqrt(ay[i]**2 + az[i]**2))
-
-    by = my[i]*cos(p) - mz[i]*sin(p)
-    bx = mx[i]*cos(r) + my[i]*sin(r)*sin(p) + mz[i]*sin(r)*cos(p)
-    print((-by,bx))
+    by = m[i,1]*cos(p) - m[i,2]*sin(p)
+    bx = m[i,0]*cos(r) + m[i,1]*sin(r)*sin(p) + m[i,2]*sin(r)*cos(p)
     y = atan2(-by, bx)
 
     roll.append(r*180/pi)
     pitch.append(p*180/pi)
     yaw.append(y*180/pi)
 
-x = np.linspace(0, len(gx), len(gx))
+x = np.linspace(0, len(g), len(g))
 
 fig, (ax0,ax1,ax2)  = plt.subplots(3)
-# ax0.plot(x, r_roll, label='reference roll')
-ax0.plot(x, roll, label='roll')
+ax0.plot(x, g[:,0], label='gx')
+ax0.plot(x, g[:,1], label='gy')
+ax0.plot(x, g[:,2], label='gz')
 ax0.legend()
 
-# ax1.plot(x, r_pitch, label='reference pitch')
-ax1.plot(x, pitch, label='pitch')
+ax1.plot(x, a[:,0], label='ax')
+ax1.plot(x, a[:,1], label='ay')
+ax1.plot(x, a[:,2], label='az')
 ax1.legend()
 
-# ax2.plot(x, r_yaw, label='reference yaw')
-ax2.plot(x, yaw, label='yaw')
+ax2.plot(x, m[:,0], label='mx')
+ax2.plot(x, m[:,1], label='my')
+ax2.plot(x, m[:,2], label='mz')
 ax2.legend()
 
 fig, (ax0,ax1,ax2)  = plt.subplots(3)
-ax0.plot(x, gx, label='gx')
-ax0.plot(x, gy, label='gy')
-ax0.plot(x, gz, label='gz')
+ax0.plot(x, roll, label='roll')
+ax0.set_ylim([-190, 190])
 ax0.legend()
 
-ax1.plot(x, ax, label='ax')
-ax1.plot(x, ay, label='ay')
-ax1.plot(x, az, label='az')
+ax1.plot(x, pitch, label='pitch')
+ax1.set_ylim([-190, 190])
 ax1.legend()
 
-ax2.plot(x, mx, label='mx')
-ax2.plot(x, my, label='my')
-ax2.plot(x, mz, label='mz')
+ax2.plot(x, yaw, label='yaw')
+ax2.set_ylim([-190, 190])
 ax2.legend()
 
 plt.show()

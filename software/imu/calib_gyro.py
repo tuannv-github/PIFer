@@ -2,23 +2,22 @@ import numpy as np
 from matplotlib import pyplot as plt
 from math import *
 
-DATASET_FOLDER = "imu_data/"
+from utils import *
+import statistics
 
-def variance(data):
-    # Number of observations
-    n = len(data)
-    # Mean of the data
-    mean = sum(data) / n
-    # Square deviations
-    deviations = [(x - mean) ** 2 for x in data]
-    # Variance
-    variance = sum(deviations) / n
-    return mean, variance
+DATASET_FOLDER = "calib_gyro/"
 
-gx = np.load(DATASET_FOLDER + 'gx.npy')
-gy = np.load(DATASET_FOLDER + 'gy.npy')
-gz = np.load(DATASET_FOLDER + 'gz.npy')
+raw = np.load(DATASET_FOLDER + 'raw.npy')
+gx,gy,gz = raw[:,0], raw[:,1], raw[:,2]
 
-print(variance(gx))
-print(variance(gy))
-print(variance(gz))
+gxb, gxs = statistics.mean(gx), statistics.stdev(gx)
+gyb, gys = statistics.mean(gy), statistics.stdev(gy)
+gzb, gzs = statistics.mean(gz), statistics.stdev(gz)
+
+calib_gyro = np.array([[gxb, gxs], [gyb, gys], [gzb, gzs]])
+
+np.save(DATASET_FOLDER + 'calib_gyro.npy', calib_gyro)
+
+print([gxb, gxs])
+print([gyb, gys])
+print([gzb, gzs])

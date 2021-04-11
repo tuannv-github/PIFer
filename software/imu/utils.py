@@ -20,7 +20,7 @@ def quaternion_to_euler(x, y, z, w):
     yaw = atan2(t3, t4)
     return [roll, pitch, yaw]
 
-def normal(data):
+def variance(data):
     # Number of observations
     n = len(data)
     # Mean of the data
