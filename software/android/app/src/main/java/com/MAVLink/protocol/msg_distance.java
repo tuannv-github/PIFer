@@ -23,7 +23,7 @@ public class msg_distance extends MAVLinkMessage {
     /**
      * 
      */
-    public int id;
+    public int node_id;
       
     /**
      * 
@@ -57,7 +57,7 @@ public class msg_distance extends MAVLinkMessage {
         packet.compid = 190;
         packet.msgid = MAVLINK_MSG_ID_DISTANCE;
         
-        packet.payload.putInt(id);
+        packet.payload.putInt(node_id);
         packet.payload.putFloat(x);
         packet.payload.putFloat(y);
         packet.payload.putFloat(z);
@@ -78,7 +78,7 @@ public class msg_distance extends MAVLinkMessage {
     public void unpack(MAVLinkPayload payload) {
         payload.resetIndex();
         
-        this.id = payload.getInt();
+        this.node_id = payload.getInt();
         this.x = payload.getFloat();
         this.y = payload.getFloat();
         this.z = payload.getFloat();
@@ -99,10 +99,10 @@ public class msg_distance extends MAVLinkMessage {
     /**
      * Constructor for a new message, initializes msgid and all payload variables
      */
-    public msg_distance( int id, float x, float y, float z, float r) {
+    public msg_distance( int node_id, float x, float y, float z, float r) {
         this.msgid = MAVLINK_MSG_ID_DISTANCE;
 
-        this.id = id;
+        this.node_id = node_id;
         this.x = x;
         this.y = y;
         this.z = z;
@@ -113,13 +113,13 @@ public class msg_distance extends MAVLinkMessage {
     /**
      * Constructor for a new message, initializes everything
      */
-    public msg_distance( int id, float x, float y, float z, float r, int sysid, int compid, boolean isMavlink2) {
+    public msg_distance( int node_id, float x, float y, float z, float r, int sysid, int compid, boolean isMavlink2) {
         this.msgid = MAVLINK_MSG_ID_DISTANCE;
         this.sysid = sysid;
         this.compid = compid;
         this.isMavlink2 = isMavlink2;
 
-        this.id = id;
+        this.node_id = node_id;
         this.x = x;
         this.y = y;
         this.z = z;
@@ -147,7 +147,7 @@ public class msg_distance extends MAVLinkMessage {
      */
     @Override
     public String toString() {
-        return "MAVLINK_MSG_ID_DISTANCE - sysid:"+sysid+" compid:"+compid+" id:"+id+" x:"+x+" y:"+y+" z:"+z+" r:"+r+"";
+        return "MAVLINK_MSG_ID_DISTANCE - sysid:"+sysid+" compid:"+compid+" node_id:"+node_id+" x:"+x+" y:"+y+" z:"+z+" r:"+r+"";
     }
     
     /**

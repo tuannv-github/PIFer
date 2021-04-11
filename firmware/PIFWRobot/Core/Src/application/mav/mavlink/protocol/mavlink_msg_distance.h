@@ -5,7 +5,7 @@
 
 
 typedef struct __mavlink_distance_t {
- int32_t id; /*<  */
+ int32_t node_id; /*<  */
  float x; /*<  */
  float y; /*<  */
  float z; /*<  */
@@ -17,8 +17,8 @@ typedef struct __mavlink_distance_t {
 #define MAVLINK_MSG_ID_24_LEN 20
 #define MAVLINK_MSG_ID_24_MIN_LEN 20
 
-#define MAVLINK_MSG_ID_DISTANCE_CRC 212
-#define MAVLINK_MSG_ID_24_CRC 212
+#define MAVLINK_MSG_ID_DISTANCE_CRC 24
+#define MAVLINK_MSG_ID_24_CRC 24
 
 
 
@@ -27,7 +27,7 @@ typedef struct __mavlink_distance_t {
     24, \
     "DISTANCE", \
     5, \
-    {  { "id", NULL, MAVLINK_TYPE_INT32_T, 0, 0, offsetof(mavlink_distance_t, id) }, \
+    {  { "node_id", NULL, MAVLINK_TYPE_INT32_T, 0, 0, offsetof(mavlink_distance_t, node_id) }, \
          { "x", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_distance_t, x) }, \
          { "y", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_distance_t, y) }, \
          { "z", NULL, MAVLINK_TYPE_FLOAT, 0, 12, offsetof(mavlink_distance_t, z) }, \
@@ -38,7 +38,7 @@ typedef struct __mavlink_distance_t {
 #define MAVLINK_MESSAGE_INFO_DISTANCE { \
     "DISTANCE", \
     5, \
-    {  { "id", NULL, MAVLINK_TYPE_INT32_T, 0, 0, offsetof(mavlink_distance_t, id) }, \
+    {  { "node_id", NULL, MAVLINK_TYPE_INT32_T, 0, 0, offsetof(mavlink_distance_t, node_id) }, \
          { "x", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_distance_t, x) }, \
          { "y", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_distance_t, y) }, \
          { "z", NULL, MAVLINK_TYPE_FLOAT, 0, 12, offsetof(mavlink_distance_t, z) }, \
@@ -53,7 +53,7 @@ typedef struct __mavlink_distance_t {
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param msg The MAVLink message to compress the data into
  *
- * @param id  
+ * @param node_id  
  * @param x  
  * @param y  
  * @param z  
@@ -61,11 +61,11 @@ typedef struct __mavlink_distance_t {
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_distance_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               int32_t id, float x, float y, float z, float r)
+                               int32_t node_id, float x, float y, float z, float r)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_DISTANCE_LEN];
-    _mav_put_int32_t(buf, 0, id);
+    _mav_put_int32_t(buf, 0, node_id);
     _mav_put_float(buf, 4, x);
     _mav_put_float(buf, 8, y);
     _mav_put_float(buf, 12, z);
@@ -74,7 +74,7 @@ static inline uint16_t mavlink_msg_distance_pack(uint8_t system_id, uint8_t comp
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_DISTANCE_LEN);
 #else
     mavlink_distance_t packet;
-    packet.id = id;
+    packet.node_id = node_id;
     packet.x = x;
     packet.y = y;
     packet.z = z;
@@ -93,7 +93,7 @@ static inline uint16_t mavlink_msg_distance_pack(uint8_t system_id, uint8_t comp
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param chan The MAVLink channel this message will be sent over
  * @param msg The MAVLink message to compress the data into
- * @param id  
+ * @param node_id  
  * @param x  
  * @param y  
  * @param z  
@@ -102,11 +102,11 @@ static inline uint16_t mavlink_msg_distance_pack(uint8_t system_id, uint8_t comp
  */
 static inline uint16_t mavlink_msg_distance_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   int32_t id,float x,float y,float z,float r)
+                                   int32_t node_id,float x,float y,float z,float r)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_DISTANCE_LEN];
-    _mav_put_int32_t(buf, 0, id);
+    _mav_put_int32_t(buf, 0, node_id);
     _mav_put_float(buf, 4, x);
     _mav_put_float(buf, 8, y);
     _mav_put_float(buf, 12, z);
@@ -115,7 +115,7 @@ static inline uint16_t mavlink_msg_distance_pack_chan(uint8_t system_id, uint8_t
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_DISTANCE_LEN);
 #else
     mavlink_distance_t packet;
-    packet.id = id;
+    packet.node_id = node_id;
     packet.x = x;
     packet.y = y;
     packet.z = z;
@@ -138,7 +138,7 @@ static inline uint16_t mavlink_msg_distance_pack_chan(uint8_t system_id, uint8_t
  */
 static inline uint16_t mavlink_msg_distance_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_distance_t* distance)
 {
-    return mavlink_msg_distance_pack(system_id, component_id, msg, distance->id, distance->x, distance->y, distance->z, distance->r);
+    return mavlink_msg_distance_pack(system_id, component_id, msg, distance->node_id, distance->x, distance->y, distance->z, distance->r);
 }
 
 /**
@@ -152,14 +152,14 @@ static inline uint16_t mavlink_msg_distance_encode(uint8_t system_id, uint8_t co
  */
 static inline uint16_t mavlink_msg_distance_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_distance_t* distance)
 {
-    return mavlink_msg_distance_pack_chan(system_id, component_id, chan, msg, distance->id, distance->x, distance->y, distance->z, distance->r);
+    return mavlink_msg_distance_pack_chan(system_id, component_id, chan, msg, distance->node_id, distance->x, distance->y, distance->z, distance->r);
 }
 
 /**
  * @brief Send a distance message
  * @param chan MAVLink channel to send the message
  *
- * @param id  
+ * @param node_id  
  * @param x  
  * @param y  
  * @param z  
@@ -167,11 +167,11 @@ static inline uint16_t mavlink_msg_distance_encode_chan(uint8_t system_id, uint8
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_distance_send(mavlink_channel_t chan, int32_t id, float x, float y, float z, float r)
+static inline void mavlink_msg_distance_send(mavlink_channel_t chan, int32_t node_id, float x, float y, float z, float r)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_DISTANCE_LEN];
-    _mav_put_int32_t(buf, 0, id);
+    _mav_put_int32_t(buf, 0, node_id);
     _mav_put_float(buf, 4, x);
     _mav_put_float(buf, 8, y);
     _mav_put_float(buf, 12, z);
@@ -180,7 +180,7 @@ static inline void mavlink_msg_distance_send(mavlink_channel_t chan, int32_t id,
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_DISTANCE, buf, MAVLINK_MSG_ID_DISTANCE_MIN_LEN, MAVLINK_MSG_ID_DISTANCE_LEN, MAVLINK_MSG_ID_DISTANCE_CRC);
 #else
     mavlink_distance_t packet;
-    packet.id = id;
+    packet.node_id = node_id;
     packet.x = x;
     packet.y = y;
     packet.z = z;
@@ -198,7 +198,7 @@ static inline void mavlink_msg_distance_send(mavlink_channel_t chan, int32_t id,
 static inline void mavlink_msg_distance_send_struct(mavlink_channel_t chan, const mavlink_distance_t* distance)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    mavlink_msg_distance_send(chan, distance->id, distance->x, distance->y, distance->z, distance->r);
+    mavlink_msg_distance_send(chan, distance->node_id, distance->x, distance->y, distance->z, distance->r);
 #else
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_DISTANCE, (const char *)distance, MAVLINK_MSG_ID_DISTANCE_MIN_LEN, MAVLINK_MSG_ID_DISTANCE_LEN, MAVLINK_MSG_ID_DISTANCE_CRC);
 #endif
@@ -212,11 +212,11 @@ static inline void mavlink_msg_distance_send_struct(mavlink_channel_t chan, cons
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_distance_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  int32_t id, float x, float y, float z, float r)
+static inline void mavlink_msg_distance_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  int32_t node_id, float x, float y, float z, float r)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
-    _mav_put_int32_t(buf, 0, id);
+    _mav_put_int32_t(buf, 0, node_id);
     _mav_put_float(buf, 4, x);
     _mav_put_float(buf, 8, y);
     _mav_put_float(buf, 12, z);
@@ -225,7 +225,7 @@ static inline void mavlink_msg_distance_send_buf(mavlink_message_t *msgbuf, mavl
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_DISTANCE, buf, MAVLINK_MSG_ID_DISTANCE_MIN_LEN, MAVLINK_MSG_ID_DISTANCE_LEN, MAVLINK_MSG_ID_DISTANCE_CRC);
 #else
     mavlink_distance_t *packet = (mavlink_distance_t *)msgbuf;
-    packet->id = id;
+    packet->node_id = node_id;
     packet->x = x;
     packet->y = y;
     packet->z = z;
@@ -242,11 +242,11 @@ static inline void mavlink_msg_distance_send_buf(mavlink_message_t *msgbuf, mavl
 
 
 /**
- * @brief Get field id from distance message
+ * @brief Get field node_id from distance message
  *
  * @return  
  */
-static inline int32_t mavlink_msg_distance_get_id(const mavlink_message_t* msg)
+static inline int32_t mavlink_msg_distance_get_node_id(const mavlink_message_t* msg)
 {
     return _MAV_RETURN_int32_t(msg,  0);
 }
@@ -300,7 +300,7 @@ static inline float mavlink_msg_distance_get_r(const mavlink_message_t* msg)
 static inline void mavlink_msg_distance_decode(const mavlink_message_t* msg, mavlink_distance_t* distance)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    distance->id = mavlink_msg_distance_get_id(msg);
+    distance->node_id = mavlink_msg_distance_get_node_id(msg);
     distance->x = mavlink_msg_distance_get_x(msg);
     distance->y = mavlink_msg_distance_get_y(msg);
     distance->z = mavlink_msg_distance_get_z(msg);

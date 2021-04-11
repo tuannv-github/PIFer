@@ -23,7 +23,7 @@ public class msg_measurement extends MAVLinkMessage {
     /**
      * 
      */
-    public int id;
+    public int node_id;
       
     /**
      * 
@@ -62,7 +62,7 @@ public class msg_measurement extends MAVLinkMessage {
         packet.compid = 190;
         packet.msgid = MAVLINK_MSG_ID_MEASUREMENT;
         
-        packet.payload.putInt(id);
+        packet.payload.putInt(node_id);
         packet.payload.putFloat(x);
         packet.payload.putFloat(y);
         packet.payload.putFloat(z);
@@ -84,7 +84,7 @@ public class msg_measurement extends MAVLinkMessage {
     public void unpack(MAVLinkPayload payload) {
         payload.resetIndex();
         
-        this.id = payload.getInt();
+        this.node_id = payload.getInt();
         this.x = payload.getFloat();
         this.y = payload.getFloat();
         this.z = payload.getFloat();
@@ -106,10 +106,10 @@ public class msg_measurement extends MAVLinkMessage {
     /**
      * Constructor for a new message, initializes msgid and all payload variables
      */
-    public msg_measurement( int id, float x, float y, float z, float r, float yaw) {
+    public msg_measurement( int node_id, float x, float y, float z, float r, float yaw) {
         this.msgid = MAVLINK_MSG_ID_MEASUREMENT;
 
-        this.id = id;
+        this.node_id = node_id;
         this.x = x;
         this.y = y;
         this.z = z;
@@ -121,13 +121,13 @@ public class msg_measurement extends MAVLinkMessage {
     /**
      * Constructor for a new message, initializes everything
      */
-    public msg_measurement( int id, float x, float y, float z, float r, float yaw, int sysid, int compid, boolean isMavlink2) {
+    public msg_measurement( int node_id, float x, float y, float z, float r, float yaw, int sysid, int compid, boolean isMavlink2) {
         this.msgid = MAVLINK_MSG_ID_MEASUREMENT;
         this.sysid = sysid;
         this.compid = compid;
         this.isMavlink2 = isMavlink2;
 
-        this.id = id;
+        this.node_id = node_id;
         this.x = x;
         this.y = y;
         this.z = z;
@@ -156,7 +156,7 @@ public class msg_measurement extends MAVLinkMessage {
      */
     @Override
     public String toString() {
-        return "MAVLINK_MSG_ID_MEASUREMENT - sysid:"+sysid+" compid:"+compid+" id:"+id+" x:"+x+" y:"+y+" z:"+z+" r:"+r+" yaw:"+yaw+"";
+        return "MAVLINK_MSG_ID_MEASUREMENT - sysid:"+sysid+" compid:"+compid+" node_id:"+node_id+" x:"+x+" y:"+y+" z:"+z+" r:"+r+" yaw:"+yaw+"";
     }
     
     /**

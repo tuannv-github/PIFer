@@ -5,7 +5,7 @@
 
 
 typedef struct __mavlink_measurement_t {
- int32_t id; /*<  */
+ int32_t node_id; /*<  */
  float x; /*<  */
  float y; /*<  */
  float z; /*<  */
@@ -18,8 +18,8 @@ typedef struct __mavlink_measurement_t {
 #define MAVLINK_MSG_ID_29_LEN 24
 #define MAVLINK_MSG_ID_29_MIN_LEN 24
 
-#define MAVLINK_MSG_ID_MEASUREMENT_CRC 175
-#define MAVLINK_MSG_ID_29_CRC 175
+#define MAVLINK_MSG_ID_MEASUREMENT_CRC 101
+#define MAVLINK_MSG_ID_29_CRC 101
 
 
 
@@ -28,7 +28,7 @@ typedef struct __mavlink_measurement_t {
     29, \
     "MEASUREMENT", \
     6, \
-    {  { "id", NULL, MAVLINK_TYPE_INT32_T, 0, 0, offsetof(mavlink_measurement_t, id) }, \
+    {  { "node_id", NULL, MAVLINK_TYPE_INT32_T, 0, 0, offsetof(mavlink_measurement_t, node_id) }, \
          { "x", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_measurement_t, x) }, \
          { "y", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_measurement_t, y) }, \
          { "z", NULL, MAVLINK_TYPE_FLOAT, 0, 12, offsetof(mavlink_measurement_t, z) }, \
@@ -40,7 +40,7 @@ typedef struct __mavlink_measurement_t {
 #define MAVLINK_MESSAGE_INFO_MEASUREMENT { \
     "MEASUREMENT", \
     6, \
-    {  { "id", NULL, MAVLINK_TYPE_INT32_T, 0, 0, offsetof(mavlink_measurement_t, id) }, \
+    {  { "node_id", NULL, MAVLINK_TYPE_INT32_T, 0, 0, offsetof(mavlink_measurement_t, node_id) }, \
          { "x", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_measurement_t, x) }, \
          { "y", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_measurement_t, y) }, \
          { "z", NULL, MAVLINK_TYPE_FLOAT, 0, 12, offsetof(mavlink_measurement_t, z) }, \
@@ -56,7 +56,7 @@ typedef struct __mavlink_measurement_t {
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param msg The MAVLink message to compress the data into
  *
- * @param id  
+ * @param node_id  
  * @param x  
  * @param y  
  * @param z  
@@ -65,11 +65,11 @@ typedef struct __mavlink_measurement_t {
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_measurement_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               int32_t id, float x, float y, float z, float r, float yaw)
+                               int32_t node_id, float x, float y, float z, float r, float yaw)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_MEASUREMENT_LEN];
-    _mav_put_int32_t(buf, 0, id);
+    _mav_put_int32_t(buf, 0, node_id);
     _mav_put_float(buf, 4, x);
     _mav_put_float(buf, 8, y);
     _mav_put_float(buf, 12, z);
@@ -79,7 +79,7 @@ static inline uint16_t mavlink_msg_measurement_pack(uint8_t system_id, uint8_t c
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_MEASUREMENT_LEN);
 #else
     mavlink_measurement_t packet;
-    packet.id = id;
+    packet.node_id = node_id;
     packet.x = x;
     packet.y = y;
     packet.z = z;
@@ -99,7 +99,7 @@ static inline uint16_t mavlink_msg_measurement_pack(uint8_t system_id, uint8_t c
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param chan The MAVLink channel this message will be sent over
  * @param msg The MAVLink message to compress the data into
- * @param id  
+ * @param node_id  
  * @param x  
  * @param y  
  * @param z  
@@ -109,11 +109,11 @@ static inline uint16_t mavlink_msg_measurement_pack(uint8_t system_id, uint8_t c
  */
 static inline uint16_t mavlink_msg_measurement_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   int32_t id,float x,float y,float z,float r,float yaw)
+                                   int32_t node_id,float x,float y,float z,float r,float yaw)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_MEASUREMENT_LEN];
-    _mav_put_int32_t(buf, 0, id);
+    _mav_put_int32_t(buf, 0, node_id);
     _mav_put_float(buf, 4, x);
     _mav_put_float(buf, 8, y);
     _mav_put_float(buf, 12, z);
@@ -123,7 +123,7 @@ static inline uint16_t mavlink_msg_measurement_pack_chan(uint8_t system_id, uint
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_MEASUREMENT_LEN);
 #else
     mavlink_measurement_t packet;
-    packet.id = id;
+    packet.node_id = node_id;
     packet.x = x;
     packet.y = y;
     packet.z = z;
@@ -147,7 +147,7 @@ static inline uint16_t mavlink_msg_measurement_pack_chan(uint8_t system_id, uint
  */
 static inline uint16_t mavlink_msg_measurement_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_measurement_t* measurement)
 {
-    return mavlink_msg_measurement_pack(system_id, component_id, msg, measurement->id, measurement->x, measurement->y, measurement->z, measurement->r, measurement->yaw);
+    return mavlink_msg_measurement_pack(system_id, component_id, msg, measurement->node_id, measurement->x, measurement->y, measurement->z, measurement->r, measurement->yaw);
 }
 
 /**
@@ -161,14 +161,14 @@ static inline uint16_t mavlink_msg_measurement_encode(uint8_t system_id, uint8_t
  */
 static inline uint16_t mavlink_msg_measurement_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_measurement_t* measurement)
 {
-    return mavlink_msg_measurement_pack_chan(system_id, component_id, chan, msg, measurement->id, measurement->x, measurement->y, measurement->z, measurement->r, measurement->yaw);
+    return mavlink_msg_measurement_pack_chan(system_id, component_id, chan, msg, measurement->node_id, measurement->x, measurement->y, measurement->z, measurement->r, measurement->yaw);
 }
 
 /**
  * @brief Send a measurement message
  * @param chan MAVLink channel to send the message
  *
- * @param id  
+ * @param node_id  
  * @param x  
  * @param y  
  * @param z  
@@ -177,11 +177,11 @@ static inline uint16_t mavlink_msg_measurement_encode_chan(uint8_t system_id, ui
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_measurement_send(mavlink_channel_t chan, int32_t id, float x, float y, float z, float r, float yaw)
+static inline void mavlink_msg_measurement_send(mavlink_channel_t chan, int32_t node_id, float x, float y, float z, float r, float yaw)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_MEASUREMENT_LEN];
-    _mav_put_int32_t(buf, 0, id);
+    _mav_put_int32_t(buf, 0, node_id);
     _mav_put_float(buf, 4, x);
     _mav_put_float(buf, 8, y);
     _mav_put_float(buf, 12, z);
@@ -191,7 +191,7 @@ static inline void mavlink_msg_measurement_send(mavlink_channel_t chan, int32_t 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_MEASUREMENT, buf, MAVLINK_MSG_ID_MEASUREMENT_MIN_LEN, MAVLINK_MSG_ID_MEASUREMENT_LEN, MAVLINK_MSG_ID_MEASUREMENT_CRC);
 #else
     mavlink_measurement_t packet;
-    packet.id = id;
+    packet.node_id = node_id;
     packet.x = x;
     packet.y = y;
     packet.z = z;
@@ -210,7 +210,7 @@ static inline void mavlink_msg_measurement_send(mavlink_channel_t chan, int32_t 
 static inline void mavlink_msg_measurement_send_struct(mavlink_channel_t chan, const mavlink_measurement_t* measurement)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    mavlink_msg_measurement_send(chan, measurement->id, measurement->x, measurement->y, measurement->z, measurement->r, measurement->yaw);
+    mavlink_msg_measurement_send(chan, measurement->node_id, measurement->x, measurement->y, measurement->z, measurement->r, measurement->yaw);
 #else
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_MEASUREMENT, (const char *)measurement, MAVLINK_MSG_ID_MEASUREMENT_MIN_LEN, MAVLINK_MSG_ID_MEASUREMENT_LEN, MAVLINK_MSG_ID_MEASUREMENT_CRC);
 #endif
@@ -224,11 +224,11 @@ static inline void mavlink_msg_measurement_send_struct(mavlink_channel_t chan, c
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_measurement_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  int32_t id, float x, float y, float z, float r, float yaw)
+static inline void mavlink_msg_measurement_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  int32_t node_id, float x, float y, float z, float r, float yaw)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
-    _mav_put_int32_t(buf, 0, id);
+    _mav_put_int32_t(buf, 0, node_id);
     _mav_put_float(buf, 4, x);
     _mav_put_float(buf, 8, y);
     _mav_put_float(buf, 12, z);
@@ -238,7 +238,7 @@ static inline void mavlink_msg_measurement_send_buf(mavlink_message_t *msgbuf, m
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_MEASUREMENT, buf, MAVLINK_MSG_ID_MEASUREMENT_MIN_LEN, MAVLINK_MSG_ID_MEASUREMENT_LEN, MAVLINK_MSG_ID_MEASUREMENT_CRC);
 #else
     mavlink_measurement_t *packet = (mavlink_measurement_t *)msgbuf;
-    packet->id = id;
+    packet->node_id = node_id;
     packet->x = x;
     packet->y = y;
     packet->z = z;
@@ -256,11 +256,11 @@ static inline void mavlink_msg_measurement_send_buf(mavlink_message_t *msgbuf, m
 
 
 /**
- * @brief Get field id from measurement message
+ * @brief Get field node_id from measurement message
  *
  * @return  
  */
-static inline int32_t mavlink_msg_measurement_get_id(const mavlink_message_t* msg)
+static inline int32_t mavlink_msg_measurement_get_node_id(const mavlink_message_t* msg)
 {
     return _MAV_RETURN_int32_t(msg,  0);
 }
@@ -324,7 +324,7 @@ static inline float mavlink_msg_measurement_get_yaw(const mavlink_message_t* msg
 static inline void mavlink_msg_measurement_decode(const mavlink_message_t* msg, mavlink_measurement_t* measurement)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    measurement->id = mavlink_msg_measurement_get_id(msg);
+    measurement->node_id = mavlink_msg_measurement_get_node_id(msg);
     measurement->x = mavlink_msg_measurement_get_x(msg);
     measurement->y = mavlink_msg_measurement_get_y(msg);
     measurement->z = mavlink_msg_measurement_get_z(msg);
