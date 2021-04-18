@@ -9,26 +9,28 @@
 
 #if ROBOT_MODEL==1
 
-TID(gtid_imu_report);
+//TID(gimu_report);
 
-static void mode_run_report_callback(void *ctx){
-	mavlink_message_t msg;
-	float rpy[3];
-	imu_get_rpy(rpy);
-	mavlink_msg_evt_rpy_pack(0,0,&msg,rpy[0],rpy[1],rpy[2]);
-	mav_send_msg(&msg);
-}
+//static void mode_run_report_callback(void *ctx){
+//	mavlink_message_t msg;
+//	float rpy[3];
+//	imu_get_rpy(rpy);
+//	mavlink_msg_evt_rpy_pack(0,0,&msg,rpy[0],rpy[1],rpy[2]);
+//	mav_send_msg(&msg);
+//}
 
 void mode_run_init(){
 	// Hardware initialization
 	stepmotor_init();
+	imu_init();
 
 	// Periodic task initialization
-	gtid_imu_report = timer_register_callback(mode_run_report_callback, MODE_RUN_REPORT_PERIOD, 0, TIMER_MODE_REPEAT);
+	// gimu_report = timer_register_callback(mode_run_report_callback, MODE_RUN_REPORT_PERIOD, 0, TIMER_MODE_REPEAT);
 }
 
 void mode_run_deinit(){
 	// Hardware de-initialization
+	// timer_unregister_callback(gimu_report);
 }
 
 void on_mode_run_mavlink_recv(mavlink_message_t *msg){
