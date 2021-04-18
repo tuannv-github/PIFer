@@ -39,7 +39,7 @@ void on_mode_run_mavlink_recv(mavlink_message_t *msg){
 		{
 			mavlink_cmd_velocity_t cmd_velocity;
 			mavlink_msg_cmd_velocity_decode(msg, &cmd_velocity);
-			stepmotor_vw(cmd_velocity.v*LINEAR_SPEED_MAX,  cmd_velocity.omega*ANGULAR_SPEED_MAX);
+			stepmotor_vw(cmd_velocity.v,  cmd_velocity.omega);
 		}
 		break;
 	case MAVLINK_MSG_ID_DISTANCE:

@@ -141,12 +141,8 @@
 
 #define CONST_G 					9.807f
 
-
 // STEP MOTOR DEFINE
-#define STEP_PER_REV 		200
-#define PULSES_PER_METER 	7643
+#define PULSES_PER_METER 	8027
 #define ROBOT_WIDTH 		0.16f
-#define	LINEAR_SPEED_MAX	0.30f
-#define ANGULAR_SPEED_MAX	3.0f
 
 #endif /* USERCODE_USER_DEFINE_H_ */
