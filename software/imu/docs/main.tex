@@ -4,10 +4,53 @@
 \usepackage[english]{babel}
 
 \usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
 
 \providecommand{\main}{.}
 
 \begin{document}
 \chapter{EKF}
+
+\section{Kalman filter}
+The simplest of state space models are linear models, which can be expressed with equations of the following form.
+
+\begin{equation}
+    \begin{split}
+        \mathbf{x}_t &= \mathbf{F}\mathbf{x}_{t-1}+\mathbf{w}_x\\
+        \mathbf{z}_t &= \mathbf{H}\mathbf{x}_t+\mathbf{w}_z
+     \end{split}
+\end{equation}
+where
+\begin{itemize}
+    \item $\mathbf{x}_t \in \mathbb{R}^n$ is the state of the system describing the condition of n elements at time $t$. 
+    \item $\mathbf{z}_t \in \mathbb{R}^m$ are the measurements at time $t$.
+    \item $\mathbf{w}_x \thicksim \mathcal{N}(0,\mathbf{Q}_t)$ is the process noise at time $t$.
+    \item $\mathbf{w}_z \thicksim \mathcal{N}(0,\mathbf{R}_t)$ is the measurement noise at time $t$.
+    \item $\mathbf{F}$ is called either \textbf{State Transition Matrix} or \textbf{Fundamental Matrix}.
+    \item $\mathbf{H}$ is the measurement model matrix.
+\end{itemize}
+
+\begin{equation}
+    x = x_0 + \dot{x}*t
+\end{equation}
+\begin{equation}
+    \dot{x} = (-1/t)x_0 + (1/t)x
+\end{equation}
+
+\begin{equation}
+    \begin{split}
+        x_1 &= x_0 + v_x t \\
+        x_2 &= x_0 + v_x t
+    \end{split}
+\end{equation}
+
+\begin{equation}
+    x_1 + x_2 = 2*x_0 + 2v_x t 
+\end{equation}
+
+\begin{equation}
+    x_3 = x_0 + 2v_x t
+\end{equation}
 
 \end{document}

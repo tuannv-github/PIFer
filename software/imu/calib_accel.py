@@ -3,13 +3,23 @@ from matplotlib import pyplot as plt
 from math import *
 
 from utils import *
+import statistics
 
-DATASET_FOLDER = "imu_data/"
+DATASET_FOLDER = "calib_accel/"
 
-ax = np.load(DATASET_FOLDER + 'ax.npy')
-ay = np.load(DATASET_FOLDER + 'ay.npy')
-az = np.load(DATASET_FOLDER + 'az.npy')
+raw = np.load(DATASET_FOLDER + 'raw.npy')
+ax,ay,az = raw[:,3], raw[:,4], raw[:,5]
 
-print(normal(ax))
-print(normal(ay))
-print(normal(az)[0]-1)
+f = open(DATASET_FOLDER + "calib_accel.txt", 'w')
+
+axb, axs = statistics.mean(ax), statistics.stdev(ax)
+ayb, ays = statistics.mean(ay), statistics.stdev(ay)
+azb, azs = statistics.mean(az), statistics.stdev(az)
+
+f.write(str(axb) + " " + str(axs)+ "\n")
+f.write(str(ayb) + " " + str(ayb)+ "\n")
+f.write(str(azb) + " " + str(azb)+ "\n")
+
+print([axb, axs])
+print([ayb, ays])
+print([azb, azs])

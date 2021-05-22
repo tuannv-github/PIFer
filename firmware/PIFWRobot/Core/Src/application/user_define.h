@@ -18,7 +18,11 @@
 
 // Self-balancing-DC	--> 0
 // Turtle-Step			--> 1
-#define ROBOT_MODEL		0
+#define ROBOT_MODEL		1
+
+// Enable				--> 1
+// Disable				--> 0
+#define ENABLE_NEOPIXEL	0
 
 // Timer callback define
 #define MAX_CALLBACK_FUNC	15
@@ -137,14 +141,8 @@
 
 #define CONST_G 					9.807f
 
-#define ENABLE_NEOPIXEL				0
-
-
 // STEP MOTOR DEFINE
-#define STEP_PER_REV 		200
-#define PULSES_PER_METER 	7643
+#define PULSES_PER_METER 	8027
 #define ROBOT_WIDTH 		0.16f
-#define	LINEAR_SPEED_MAX	0.30f
-#define ANGULAR_SPEED_MAX	3.0f
 
 #endif /* USERCODE_USER_DEFINE_H_ */

@@ -243,6 +243,7 @@
 
 		<message id="24" name="DISTANCE">
 			<description>Distance message</description>
+			<field type="int32_t" name="node_id"/>
 			<field type="float" name="x"/>
 			<field type="float" name="y"/>
 			<field type="float" name="z"/>
@@ -298,6 +299,7 @@
 
 		<message id="29" name="MEASUREMENT">
 			<description>Measument messeage</description>
+			<field type="int32_t" name="node_id"/>
 			<field type="float" name="x"/>
 			<field type="float" name="y"/>
 			<field type="float" name="z"/>
